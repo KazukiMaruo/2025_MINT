@@ -1,0 +1,8 @@
+>>> updating the changes to Github
+1. open terminal on VScode
+2. change the directory to project folder: 'MINT'
+3. command 'git status' to check the difference between github and local folder
+4. if you want to push your local folder, command 'git add -A'. This will add new files to the staging area. 
+   if you want to push github repo on your local folder; command 'git restore -A'.  
+5. leave the comment: 'git commit -m "comment"'
+6. 'git push origin "branch name"' to upload the files
