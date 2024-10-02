@@ -86,7 +86,7 @@ mon.setSizePix((Monitor_data[0], Monitor_data[1]))
 mon.save()
 
 _size = (Monitor_data[0], Monitor_data[1]) # size (resolution) of the window in pixels, e.g., [1920, 1080] for Full HD.
-_fullscr = True # whether the window is displayed in fullscreen mode
+_fullscr = False # whether the window is displayed in fullscreen mode
 _screen = 0 # which monitor to display
 _winType = 'pyglet' # Specifies the underlying graphics library to use for window management.
 _allowGUI=False # stencil buffer is allowed. The stencil buffer is used for more advanced graphical effects, such as masking.
@@ -244,6 +244,9 @@ for videoNum in all_videos: # loop through all the numbers
     movies[f'movie_{videoNum}'] = {'movie': movie, 'duration': movie_duration} # create the dictionary for the list of videos
 sampled_videos = random.choices(all_videos, k=len(catch_points)) # based on the number of catch trial, chose the videos randoemely
 
+# Image for pause
+image_path = _thisDir + os.sep + f'stimuli/catch/pause.png'  # Replace with the path to your image
+image_pause = visual.ImageStim(win, image=image_path)
 
 
 # ~~~~~~~~~~~~~~~ Create some handy timers
@@ -443,6 +446,20 @@ for trial_index, thisTrial in enumerate(trials): # thisTrial refers to each indi
                         core.wait(silent_duration)  # wait for 800ms before continuing
                     else:
                         core.wait(isi)
+            
+
+            # Pause logic - check if 'p' key is pressed
+            keys = defaultKeyboard.getKeys(keyList=['p', 'r']) # they key press is detected immediately. 
+            if 'p' in [key.name for key in keys]: # list the keys pressed
+                # Pause the routine
+                while True: # continuously checks for 'r' key
+                    image_pause.draw()
+                    win.flip()
+                    # Check for 'r' to resume
+                    keys_resume = defaultKeyboard.getKeys(keyList=['r'])
+                    if 'r' in [key.name for key in keys_resume]:
+                        break # once 'r' is pressed, break out the loop
+                    core.wait(0.1) 
 
             # check for quit (typically the Esc key)
             if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
