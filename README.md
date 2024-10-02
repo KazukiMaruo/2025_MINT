@@ -8,3 +8,4 @@
 > 🔬 Method
   * EEG + Eye-tracking
   * Visual + Auditory stimuli
+
