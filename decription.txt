@@ -1,8 +1,9 @@
->>> updating the changes to Github
+>>> Github updating the CHANGES or PULL
 1. open terminal on VScode
 2. change the directory to project folder: 'MINT'
-3. command 'git status' to check the difference between github and local folder
-4. if you want to push your local folder, command 'git add -A'. This will add new files to the staging area. 
-   if you want to push github repo on your local folder; command 'git restore -A'.  
-5. leave the comment: 'git commit -m "comment"'
-6. 'git push origin "branch name"' to upload the files
+3. 'git remote add origin https://github.com/SkeideLab/MINT.git' to connect with your local project folder
+4. 'git status' to check the difference between github and local folder
+5. 'git add -A' to add new files to the staging area. 
+   'git clone https://github.com/SkeideLab/MINT.git' to download the repo on local 
+6. 'git commit -m "comment"' to leave the comment
+7. 'git push origin "branch name"' to upload the files
