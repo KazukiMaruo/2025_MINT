@@ -1,12 +1,12 @@
 >>> Github updating the CHANGES
-1. open terminal on VScode
-2. change the directory to project folder: 'MINT'
-3. 'git remote add origin https://github.com/SkeideLab/MINT.git' to connect with your local project folder
-4. 'git status' to check the difference between github and local folder
-5. 'git add -A' to add new files to the staging area. 
-   'git clone https://github.com/SkeideLab/MINT.git' to download the repo on local 
-6. 'git commit -m "comment"' to leave the comment
-7. 'git push origin "branch name"' to upload the files
+    1. open terminal on VScode
+    2. change the directory to project folder: 'MINT'
+    3. 'git remote add origin https://github.com/SkeideLab/MINT.git' to connect with your local project folder
+    4. 'git status' to check the difference between github and local folder
+    5. 'git add -A' to add new files to the staging area. 
+    'git clone https://github.com/SkeideLab/MINT.git' to download the repo on local 
+    6. 'git commit -m "comment"' to leave the comment
+    7. 'git push origin "branch name"' to upload the files
 
 
 >>> Github error "you have divergent branches and need to specify how to reconcile them"
