@@ -1,0 +1,16 @@
+# Constants
+width, height = 1920, 1080  # Image dimensions
+visual_angle_deg = 1  # 1 or 2 Visual angle in degrees
+distance_cm = 50  # Distance from the viewer in cm
+screen_width_cm = 50  # Screen width in cm
+screen_height_cm = 28  # Screen width in cm
+circle_radius_pixels = 25  # when it's 1 degree https://www.sr-research.com/visual-angle-calculator/
+
+# Numerosity
+Numerosity = 6
+
+# Radius of each dot
+dot_radius_pixels = 3
+
+# Desired distance from the first dot in pixels
+desired_distance = 12

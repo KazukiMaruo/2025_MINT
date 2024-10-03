@@ -1,3 +1,9 @@
+>>> Install function on the local environment
+    1. Open the terminal
+    2. 'conda env list' to see the environment
+    3. 'conda activate [environemnt_name]' to activate
+    4. 'conda install [function_name]' to install on the local environment
+
 >>> Github updating the CHANGES
     1. open terminal on VScode
     2. change the directory to project folder: 'MINT'
