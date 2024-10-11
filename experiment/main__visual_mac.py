@@ -3,9 +3,10 @@
 TODOS:
     - Is the catch trial with audio or not?
     - Eye-tracker set-up
+    - 
 Info:
     - Numerosity from 1 ~ 6
-    - 35 trials for each condition (12 conditions) = 10min for one session
+    - 70 trials for each condition (18 conditions) = 9 min for one session
   
 """
 
@@ -39,7 +40,7 @@ _thisDir = os.path.dirname(os.path.abspath(__file__)) # '__file__' indicate the 
 os.chdir(_thisDir) # change the current working directory to the directory specified by '_thisdir'
 # Store info about the experiment session
 psychopyVersion = '2024.1.5'
-expName = 'audio'  # from the Builder filename that created this script
+expName = 'visual'  # from the Builder filename that created this script
 expInfo = {
     'participant': '1',
     'session': '1',
@@ -78,14 +79,14 @@ frameTolerance = 0.001  # how close to onset before 'same' frame
 
 
 # ~~~~~~~~~~~~~~~ Setup the Window
-Monitor_data = [1920, 1080, 60.5, 50] # my M1 window = [1440, 900, 30, 100] # 
+Monitor_data = [1440, 900, 50, 50] # my M1 window = [1440, 900, 50, 50] # [1920, 1080, 50, 50]  The thrid value indicate the width of screen, the fourth value indicates the distance between eyes and screen
 mon = monitors.Monitor(
     'stimulus_screen', width=Monitor_data[2], distance=Monitor_data[3]) # width (cm) is to calcurate the visual angle, distance (cm) is viewing distance.
 mon.setSizePix((Monitor_data[0], Monitor_data[1]))
 mon.save()
 
 _size = (Monitor_data[0], Monitor_data[1]) # size (resolution) of the window in pixels, e.g., [1920, 1080] for Full HD.
-_fullscr = False # whether the window is displayed in fullscreen mode
+_fullscr = True # whether the window is displayed in fullscreen mode
 _screen = 0 # which monitor to display
 _winType = 'pyglet' # Specifies the underlying graphics library to use for window management.
 _allowGUI=False # stencil buffer is allowed. The stencil buffer is used for more advanced graphical effects, such as masking.
@@ -198,17 +199,34 @@ line_diagonal_2 = visual.Line(
     )
 
 
-# Audio beep
-wav_file_path = _thisDir + os.sep + 'stimuli/audio/beep.wav' 
-beep = sound.Sound(value=wav_file_path, 
-                   stereo=True, #  This indicates that the sound should be played in stereo mode, which involves two channels (left and right) to provide a richer sound experience
-                   hamming=True, # A Hamming window is used to reduce spectral leakage in signal processing. It is generally applied to improve the quality of generated sounds by smoothing the edges.
-                   name='beep'
-                   )
-beep.setVolume(1.0)
+# Images for trials
+image_file_path = os.path.join(_thisDir,'stimuli', 'visual')
+all_condition_folders = [f for f in os.listdir(image_file_path) if os.path.isdir(os.path.join(image_file_path, f))] # Get list of folders (directories) only,  # number of condition, e.g., total size controlled, single size controlled
+images = {}
+# condition loop (dot, total_dot, circumference)
+for condition_name in all_condition_folders:
+    stimuli_folder = os.path.join(_thisDir, 'stimuli', 'visual', condition_name, 'angle_2_random')
+    all_numerosity_folders = [f for f in os.listdir(stimuli_folder) if os.path.isdir(os.path.join(stimuli_folder, f))]
+    images[condition_name] = []
+
+    # numerosity loop (1 ~ 6)
+    for numerosity in all_numerosity_folders:
+        each_numerosity_folder = os.path.join(_thisDir, 'stimuli', 'visual', condition_name, 'angle_2_random', numerosity)
+        each_image_name = [f for f in os.listdir(each_numerosity_folder) if os.path.isfile(os.path.join(each_numerosity_folder, f))]
+
+        # image loop (1 ~ 70)
+        for image_name in each_image_name:
+            image = visual.ImageStim(win, image= os.path.join(each_numerosity_folder, image_name))
+            images[condition_name].append({
+                                            'image': image, 
+                                            'numerosity': numerosity, 
+                                            'name': image_name
+                                            })
+
+
 
 # specify the trial just before the catch trial
-catch_points = list(range(11, 421, 12))
+catch_points = list(range(17, 1260, 18)) # insert the catch video after 18 trials and till 1260, stepsize is 18.
 i = 0 # catch_points_idx
 
 # Audio for catch trials
@@ -246,6 +264,10 @@ sampled_videos = random.choices(all_videos, k=len(catch_points)) # based on the 
 # Image for pause
 image_path = _thisDir + os.sep + f'stimuli/catch/pause.png'  # Replace with the path to your image
 image_pause = visual.ImageStim(win, image=image_path)
+
+# Image for no dot time. 
+image_nodot_path = _thisDir + os.sep + f'stimuli/visual/cross_nodot.png'  # Replace with the path to your image
+image_nodot = visual.ImageStim(win, image=image_nodot_path)
 
 
 # ~~~~~~~~~~~~~~~ Create some handy timers
@@ -334,35 +356,108 @@ if routineForceEnded:
 # ~~~~~~~~~~~~~~~ Prepare to start Routine "trial" 
 # This is an object in PsychoPy that manages the presentation of trial stimuli and conditions. It allows for looping over multiple trials, randomizing order, and repeating trials.
 isi = 0.1
+duration = 0.25
 _trialList =  [   
-    {'condition': '1_con_duration', 'single_duration': 0.62, 'numerosity': 1},
-    {'condition': '2_con_duration', 'single_duration': 0.26, 'numerosity': 2},
-    {'condition': '3_con_duration', 'single_duration': 0.14, 'numerosity': 3},
-    {'condition': '4_con_duration', 'single_duration': 0.08, 'numerosity': 4},
-    {'condition': '5_con_duration', 'single_duration': 0.044, 'numerosity': 5},
-    {'condition': '6_con_duration', 'single_duration': 0.02, 'numerosity': 6},
-    {'condition': '1_con_rate', 'single_duration': 0.02, 'numerosity': 1},
-    {'condition': '2_con_rate', 'single_duration': 0.02, 'numerosity': 2},
-    {'condition': '3_con_rate', 'single_duration': 0.02, 'numerosity': 3},
-    {'condition': '4_con_rate', 'single_duration': 0.02, 'numerosity': 4},
-    {'condition': '5_con_rate', 'single_duration': 0.02, 'numerosity': 5},
-    {'condition': '6_con_rate', 'single_duration': 0.02, 'numerosity': 6},
+    {'condition': '1_con_singledot', 'duration': duration, 'numerosity': 1},
+    {'condition': '2_con_singledot', 'duration': duration, 'numerosity': 2},
+    {'condition': '3_con_singledot', 'duration': duration, 'numerosity': 3},
+    {'condition': '4_con_singledot', 'duration': duration, 'numerosity': 4},
+    {'condition': '5_con_singledot', 'duration': duration, 'numerosity': 5},
+    {'condition': '6_con_singledot', 'duration': duration, 'numerosity': 6},
+    {'condition': '1_con_totaldot', 'duration': duration, 'numerosity': 1},
+    {'condition': '2_con_totaldot', 'duration': duration, 'numerosity': 2},
+    {'condition': '3_con_totaldot', 'duration': duration, 'numerosity': 3},
+    {'condition': '4_con_totaldot', 'duration': duration, 'numerosity': 4},
+    {'condition': '5_con_totaldot', 'duration': duration, 'numerosity': 5},
+    {'condition': '6_con_totaldot', 'duration': duration, 'numerosity': 6},
+    {'condition': '1_con_circum', 'duration': duration, 'numerosity': 1},
+    {'condition': '2_con_circum', 'duration': duration, 'numerosity': 2},
+    {'condition': '3_con_circum', 'duration': duration, 'numerosity': 3},
+    {'condition': '4_con_circum', 'duration': duration, 'numerosity': 4},
+    {'condition': '5_con_circum', 'duration': duration, 'numerosity': 5},
+    {'condition': '6_con_circum', 'duration': duration, 'numerosity': 6},
     ]
-trials = data.TrialHandler(nReps=5, # 35 for one day = 10min
+trials = data.TrialHandler(nReps=70, # 70  = 9 min
                            method='random', # randmise trials within 1 repetition
                            extraInfo=expInfo, # such as participant ID can be stored with the data 
                            originPath=-1,# This is used internally by PsychoPy to store the original path of the script. Setting it to -1 allows PsychoPy to track where the script originated.
                            trialList=_trialList, # creates a list of dictionaries where each dictionary corresponds to a row in the Excel file, representing a unique trial.
                            seed=None, # None means that the randomization will vary each time the script is run.
                            name='trials')
-n_trials = len(_trialList) * trials.nReps
+n_trials = len(_trialList) * trials.nReps 
+
+# trial count for each condition
+singledot_counter_1 = 0
+singledot_counter_2 = 0
+singledot_counter_3 = 0
+singledot_counter_4 = 0
+singledot_counter_5 = 0
+singledot_counter_6 = 0
+
+totatldot_counter_1 = 0
+totatldot_counter_2 = 0
+totatldot_counter_3 = 0
+totatldot_counter_4 = 0
+totatldot_counter_5 = 0
+totatldot_counter_6 = 0
+
+cicumference_counter_1 = 0
+cicumference_counter_2 = 0
+cicumference_counter_3 = 0
+cicumference_counter_4 = 0
+cicumference_counter_5 = 0
+cicumference_counter_6 = 0
+
+
+
+# ~~~~~~~~~~~~ Make the list of trials for each condition
+target_condition = 'singledotsize_cont'
+singledot_images_by_numerosity = {}
+for numerosity in range(1, 7):  # Range from 1 to 6 (inclusive)
+    numerosity_key = str(numerosity)  # Convert the numerosity to string if stored as string
+    target_images = []
+    # Iterate through all images in the target condition
+    for image_data in images[target_condition]:
+        # If the numerosity matches, add the image data to the target list
+        if image_data['numerosity'] == f'numerosity_{numerosity_key}':
+            target_images.append(image_data)
+    # Store the images for the current numerosity in the dictionary
+    singledot_images_by_numerosity[numerosity_key] = target_images
+
+target_condition = 'totaldotsize_cont'
+totaldot_images_by_numerosity = {}
+for numerosity in range(1, 7):  # Range from 1 to 6 (inclusive)
+    numerosity_key = str(numerosity)  # Convert the numerosity to string if stored as string
+    target_images = []
+    # Iterate through all images in the target condition
+    for image_data in images[target_condition]:
+        # If the numerosity matches, add the image data to the target list
+        if image_data['numerosity'] == f'numerosity_{numerosity_key}':
+            target_images.append(image_data)
+    # Store the images for the current numerosity in the dictionary
+    totaldot_images_by_numerosity[numerosity_key] = target_images
+
+target_condition = 'circumference_cont'
+circumference_images_by_numerosity = {}
+for numerosity in range(1, 7):  # Range from 1 to 6 (inclusive)
+    numerosity_key = str(numerosity)  # Convert the numerosity to string if stored as string
+    target_images = []
+    # Iterate through all images in the target condition
+    for image_data in images[target_condition]:
+        # If the numerosity matches, add the image data to the target list
+        if image_data['numerosity'] == f'numerosity_{numerosity_key}':
+            target_images.append(image_data)
+    # Store the images for the current numerosity in the dictionary
+    circumference_images_by_numerosity[numerosity_key] = target_images
+
+
 
 thisExp.addLoop(trials)  # add the loop to the experiment
 thisTrial = trials.trialList[0]  # so we can initialise stimuli with some values
 # abbreviate parameter names if possible (e.g. rgb = thisTrial.rgb)
 if thisTrial != None: # If a trial exists, it proceeds to the loop
     for paramName in thisTrial: # loop through all the keys
-        exec('{} = thisTrial[paramName]'.format(paramName)) # it constructs a string like condition = thisTrial['condition'], single_duration = thisTrial['single_duration']
+        exec('{} = thisTrial[paramName]'.format(paramName)) # it constructs a string like condition = thisTrial['condition'], duration = thisTrial['duration']
 
 for trial_index, thisTrial in enumerate(trials): # thisTrial refers to each individual trial
     currentLoop = trials # want to track which loop is currently active
@@ -371,115 +466,193 @@ for trial_index, thisTrial in enumerate(trials): # thisTrial refers to each indi
         for paramName in thisTrial:
             exec('{} = thisTrial[paramName]'.format(paramName)) # this creats local variables that refers to each trial parameter directly.
     
-    # ~~~~~~~~~~~~~~ make the trigger index       
-    if 'duration' in condition: 
-        idx_trigger = 0 + numerosity # duration is controlled
-    else:
-        idx_trigger = 100 + numerosity # rate is controlled 
-    
+    # ~~~~~~~~~~~~~~ make the trigger index and chose 1 stimuli from the specific condition 
+    # ~~~~~~~ single dot size is controlled
+    if 'singledot' in condition: 
+        idx_trigger = 0 + numerosity # singledot is controlled
+
+        if numerosity == 1:
+            image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_1]['image']
+            image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_1]['name']
+            singledot_counter_1 += 1 # add 1 to the counter
+        elif numerosity == 2:
+            image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_2]['image']
+            image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_2]['name']
+            singledot_counter_2 += 1
+        elif numerosity == 3:
+            image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_3]['image']
+            image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_3]['name']
+            singledot_counter_3 += 1
+        elif numerosity == 4:
+            image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_4]['image']
+            image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_4]['name']
+            singledot_counter_4 += 1
+        elif numerosity == 5:
+            image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_5]['image']
+            image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_5]['name']
+            singledot_counter_5 += 1
+        else:
+            image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_6]['image']
+            image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_6]['name']
+            singledot_counter_6 += 1
+
+
+    # ~~~~~~~ totaldot size is controlled
+    elif 'totaldot' in condition:
+        idx_trigger = 100 + numerosity # totaldot is controlled
+
+        if numerosity == 1:
+            image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_1]['image']
+            image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_1]['name']
+            totatldot_counter_1 += 1 # add 1 to the counter
+        elif numerosity == 2:
+            image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_2]['image']
+            image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_2]['name']
+            totatldot_counter_2 += 1
+        elif numerosity == 3:
+            image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_3]['image']
+            image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_3]['name']
+            totatldot_counter_3 += 1
+        elif numerosity == 4:
+            image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_4]['image']
+            image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_4]['name']
+            totatldot_counter_4 += 1
+        elif numerosity == 5:
+            image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_5]['image']
+            image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_5]['name']
+            totatldot_counter_5 += 1
+        else:
+            image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_6]['image']
+            image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_6]['name']
+            totatldot_counter_6 += 1
+
+
+    # ~~~~~~~ circumference is controlled
+    else: 
+        idx_trigger = 200 + numerosity # circumference is controlled
+
+        if numerosity == 1:
+            image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_1]['image']
+            image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_1]['name']
+            cicumference_counter_1 += 1 # add 1 to the counter
+        elif numerosity == 2:
+            image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_2]['image']
+            image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_2]['name']
+            cicumference_counter_2 += 1
+        elif numerosity == 3:
+            image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_3]['image']
+            image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_3]['name']
+            cicumference_counter_3 += 1
+        elif numerosity == 4:
+            image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_4]['image']
+            image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_4]['name']
+            cicumference_counter_4 += 1
+        elif numerosity == 5:
+            image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_5]['image']
+            image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_5]['name']
+            cicumference_counter_5 += 1
+        else:
+            image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_6]['image']
+            image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_6]['name']
+            cicumference_counter_6 += 1
+
+
+    image_name = f"{condition}_{image_to_show_name}"
+    thisExp.addData('image_name', image_name)  # Store the movie name in the CSV
+
     # ~~~~~~~~~~~~~~~ Prepare to start Routine "trial"
-    continueRoutine = True
+    continueRoutine = True   
 
+    trialComponents = [image_to_show] # list all invlved in trials
 
-    # ~~~~~~~~~~~~~~~　modify the single item duration depending on the condition
-    beep.setSound(value=beep, secs=single_duration)
-    beep.setVolume(1.0, log=False)
-    beep_loop = numerosity
-   
+    for thisComponent in trialComponents:
+        thisComponent.tStart = None # The time the component started relative to the trial start.
+        thisComponent.tStop = None # The time the component stopped relative to the trial start.
+        thisComponent.tStartRefresh = None # The exact time (global time) when the component started (when the screen refreshed).
+        thisComponent.tStopRefresh = None # The exact time (global time) when the component stopped (when the screen refreshed).
+        if hasattr(thisComponent, 'status'): #The hasattr() method returns true if an object has the 'status' attribute and false if it does not.
+            thisComponent.status = NOT_STARTED
 
-    #　~~~~~~~~~~~~~~~ Numerosity lOOP start, but if it's 1, no loop
-    for i in range(beep_loop):
-        trialComponents = [beep] # list all invlved in trials
-
-        for thisComponent in trialComponents:
-            thisComponent.tStart = None # The time the component started relative to the trial start.
-            thisComponent.tStop = None # The time the component stopped relative to the trial start.
-            thisComponent.tStartRefresh = None # The exact time (global time) when the component started (when the screen refreshed).
-            thisComponent.tStopRefresh = None # The exact time (global time) when the component stopped (when the screen refreshed).
-            if hasattr(thisComponent, 'status'): #The hasattr() method returns true if an object has the 'status' attribute and false if it does not.
-                thisComponent.status = NOT_STARTED
-
-        t = 0 # reset the local time
-        _timeToFirstFrame = win.getFutureFlipTime(clock="now") # Prepares to track when the first frame of the trial will be drawn
-        frameN = -1 # This variable keeps track of the number of frames
-        
-        # ~~~~~~~~~~~~~~~　Run Routine "trial"
-        continueRoutine = True
-        while continueRoutine: # and routineTimer.getTime() < answer_time:
-            t = routineTimer.getTime() # captures the current time
-            tThisFlip = win.getFutureFlipTime(clock=routineTimer) # It ensures that drawing stimuli or updating the screen happens right on the next refresh for precise timing.
-            tThisFlipGlobal = win.getFutureFlipTime(clock=None) # It's often used for timestamping events that need to be logged with respect to the overall experiment timeline.
-            frameN = frameN + 1  # It starts from -1 (initialized earlier) and increments by 1 with each iteration of the loop.
-
-            # show the diagonal lines on the screen
-            line_diagonal_1.draw()
-            line_diagonal_2.draw()
-
-            # if beep is starting this fram...
-            if beep.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance: # If both conditions are met, it means the beep should start this frame.
-                beep.framNstart = frameN # record the frame number when beep starts
-                beep.tStart = t # record the local trial time when beep starts
-                beep.tStartRefresh = tThisFlipGlobal # get the global time when the beep is presented
-                thisExp.addData(f'beep_{i+1}.started', tThisFlipGlobal)  # write in the datafile
-                """ win.callOnFlip(p_port.setData, idx_trigger) """
-                # update status
-                beep.status = STARTED
-                beep.play(when=win)  # sync with win flip
-
-            # if beep is stopping this frame...
-            if beep.status == STARTED:
-                # is it time to stop? (based on global clock, using actual start)
-                if tThisFlipGlobal > beep.tStartRefresh + (single_duration - frameTolerance): # if the current global time exceeds (tStartRefresh + single_duration) tStartRefresh is the globa time when beep started playing
-                    beep.tStop = t  # records the local trial time
-                    beep.frameNStop = frameN  # Records the frame number when beep ends
-                    beep.tStopRefresh = tThisFlipGlobal
-                    thisExp.addData(f'beep_{i+1}.stopped', beep.tStopRefresh)  # add timestamp to datafile
-                    # update status
-                    beep.status = FINISHED
-                    beep.stop()
-                    """ p_port.setData(0) # refresh the trigger """
-
-                    if i == beep_loop - 1:
-                        # Add 800ms silent period after the beep stops
-                        silent_duration = 0.800  # 800ms silent period
-                        core.wait(silent_duration)  # wait for 800ms before continuing
-                    else:
-                        core.wait(isi)
-            
-
-            # Pause logic - check if 'p' key is pressed
-            keys = defaultKeyboard.getKeys(keyList=['p', 'r']) # they key press is detected immediately. 
-            if 'p' in [key.name for key in keys]: # list the keys pressed
-                # Pause the routine
-                while True: # continuously checks for 'r' key
-                    image_pause.draw()
-                    win.flip()
-                    # Check for 'r' to resume
-                    keys_resume = defaultKeyboard.getKeys(keyList=['r'])
-                    if 'r' in [key.name for key in keys_resume]:
-                        break # once 'r' is pressed, break out the loop
-                    core.wait(0.1) 
-
-            # check for quit (typically the Esc key)
-            if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
-                core.quit() #  terminates the program and saves any data collected up to that point.
-            
-            # check if all components have finished
-            if not continueRoutine:  # a component has requested a forced-end of Routine
-                routineForceEnded = True
-                break
-            continueRoutine = False  # will revert to True if at least one component still running
-            for thisComponent in trialComponents:
-                if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-                    continueRoutine = True
-                    break  # at least one component has not yet finished
-            
-            # refresh the screen
-            if continueRoutine:  # if continueRoutine is False, the routine ends, and the screen won't be flipped.
-                win.flip()
-    #　~~~~~~~~~~~~~~~ Numerosity lOOP end, but if it's 1, no loop  
+    t = 0 # reset the local time
+    _timeToFirstFrame = win.getFutureFlipTime(clock="now") # Prepares to track when the first frame of the trial will be drawn
+    frameN = -1 # This variable keeps track of the number of frames
     
-    # insert catch trials
+    # ~~~~~~~~~~~~~~~　Run Routine "trial"
+    continueRoutine = True
+    while continueRoutine: # and routineTimer.getTime() < answer_time:
+        t = routineTimer.getTime() # captures the current time
+        tThisFlip = win.getFutureFlipTime(clock=routineTimer) # It ensures that drawing stimuli or updating the screen happens right on the next refresh for precise timing.
+        tThisFlipGlobal = win.getFutureFlipTime(clock=None) # It's often used for timestamping events that need to be logged with respect to the overall experiment timeline.
+        frameN = frameN + 1  # It starts from -1 (initialized earlier) and increments by 1 with each iteration of the loop.
+
+        # if image is starting this fram...
+        if image_to_show.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance: # If both conditions are met, it means the beep should start this frame.
+            image_to_show.framNstart = frameN # record the frame number when beep starts
+            image_to_show.tStart = t # record the local trial time when beep starts
+            image_to_show.tStartRefresh = tThisFlipGlobal # get the global time when the beep is presented
+            image_to_show.setAutoDraw(True)
+            thisExp.addData(f'image.started', tThisFlipGlobal)  # write in the datafile
+            """ win.callOnFlip(p_port.setData, idx_trigger) """
+            image_to_show.status = STARTED
+
+        # if beep is stopping this frame...
+        if image_to_show.status == STARTED:
+
+            # is it time to stop? (based on global clock, using actual start)
+            if image_to_show.status == STARTED and tThisFlipGlobal > image_to_show.tStartRefresh + (duration - frameTolerance): # if the current global time exceeds (tStartRefresh + duration) tStartRefresh is the globa time when beep started playing
+                image_to_show.tStop = t  # records the local trial time
+                image_to_show.frameNStop = frameN  # Records the frame number when beep ends
+                image_to_show.tStopRefresh = tThisFlipGlobal
+                thisExp.addData(f'image.stopped', image_to_show.tStopRefresh)  # add timestamp to datafile
+                # update status
+                image_to_show.setAutoDraw(False)
+                image_to_show.status = FINISHED
+                """ p_port.setData(0) # refresh the trigger """
+
+                image_nodot.setAutoDraw(True)
+                win.flip()
+
+                core.wait(isi) # 100ms wait for the next trial
+
+                image_nodot.setAutoDraw(False)
+
+        
+
+        # Pause logic - check if 'p' key is pressed
+        keys = defaultKeyboard.getKeys(keyList=['p', 'r']) # they key press is detected immediately. 
+        if 'p' in [key.name for key in keys]: # list the keys pressed
+            # Pause the routine
+            while True: # continuously checks for 'r' key
+                image_pause.draw()
+                win.flip()
+                # Check for 'r' to resume
+                keys_resume = defaultKeyboard.getKeys(keyList=['r'])
+                if 'r' in [key.name for key in keys_resume]:
+                    break # once 'r' is pressed, break out the loop
+                core.wait(0.1) 
+
+        # check for quit (typically the Esc key)
+        if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
+            core.quit() #  terminates the program and saves any data collected up to that point.
+        
+        # check if all components have finished
+        if not continueRoutine:  # a component has requested a forced-end of Routine
+            routineForceEnded = True
+            break
+        continueRoutine = False  # will revert to True if at least one component still running
+        for thisComponent in trialComponents:
+            if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
+                continueRoutine = True
+                break  # at least one component has not yet finished
+        
+        # refresh the screen
+        if continueRoutine:  # if continueRoutine is False, the routine ends, and the screen won't be flipped.
+            win.flip()
+    #　~~~~~~~~~~~~~~~ 1 trial end 
+
+    # if the 18 trials are done, a catch video should be presented
+
+    # ~~~~~~~~~~~~~~~~ insert catch trials
     if trial_index in catch_points:  
         start_time = core.getTime()
         # prepare an audio
@@ -508,8 +681,8 @@ for trial_index, thisTrial in enumerate(trials): # thisTrial refers to each indi
 
         # Play the video for only 1 second
         while core.getTime() - start_time < 1.0:  # 1 second duration
-            line_diagonal_1.draw() # show the diagonal lines on the screen
-            line_diagonal_2.draw()
+            image_nodot.draw() # show the diagonal lines on the screen
+            image_nodot.draw()
             movie_to_show.draw()  # Draw the current frame of the video
             """ win.callOnFlip(p_port.setData, 50 + int(sampled_videos[i])) # set the trigger based on the video """
             win.flip()
@@ -520,14 +693,14 @@ for trial_index, thisTrial in enumerate(trials): # thisTrial refers to each indi
         """ p_port.setData(0) # refresh the trigger """
         i += 1 # updates the index
         # Show the whole background with lines after movie pauses
-        line_diagonal_1.draw()
-        line_diagonal_2.draw()
+        image_nodot.draw()
+        image_nodot.draw()
         win.flip()
         # Add 800ms silence after the video finishes
         core.wait(0.8)
 
     # ~~~~~~~~~~~~~~~ Ending Routine "trial" 
-    beep.stop()  # ensure sound has stopped at end of routine
+    # beep.stop()  # ensure sound has stopped at end of routine
 
     # using non-slip timing so subtract the expected duration of this Routine (unless ended on request)
     if routineForceEnded:

@@ -79,7 +79,7 @@ frameTolerance = 0.001  # how close to onset before 'same' frame
 
 
 # ~~~~~~~~~~~~~~~ Setup the Window
-Monitor_data = [1920, 1080, 60.5, 50] # [1440, 900, 30, 100] # 
+Monitor_data = [1920, 1080, 50, 50] # [1440, 900, 30, 100] # [1920, 1080, 60.5, 50]
 mon = monitors.Monitor(
     'stimulus_screen', width=Monitor_data[2], distance=Monitor_data[3]) # width (cm) is to calcurate the visual angle, distance (cm) is viewing distance.
 mon.setSizePix((Monitor_data[0], Monitor_data[1]))
