@@ -162,42 +162,6 @@ text_welcome = visual.TextStim(win=win,
 
 
 # ~~~~~~~~~~~~~~~ components for Routine "trial" ---
-# Red diagnoal line
-line_diagonal_1 = visual.Line(
-    win=win,
-    name='line_diagonal_1',
-    start=(-1, 1),  # Start coordinate (top-left corner relative to window size)
-    end=(1, -1),    # End coordinate (bottom-right corner relative to window size)
-    ori=0,
-    pos=(0,0),
-    lineColor=[250, 0, 0],
-    colorSpace='rgb',
-    fillColor=[1, 1, 1],
-    opacity=1,
-    depth=0.0,
-    interpolate=True, 
-    autoDraw=False,
-    lineWidth=1,        # Width of the line
-    units='norm'
-    )
-line_diagonal_2 = visual.Line(
-    win=win,
-    name='line_diagonal_2',
-    start=(-1, -1),  # Start coordinate (top-left corner relative to window size)
-    end=(1, 1),    # End coordinate (bottom-right corner relative to window size)
-    ori=0,
-    pos=(0,0),
-    lineColor=[250, 0, 0],
-    colorSpace='rgb',
-    fillColor=[1, 1, 1],
-    opacity=1,
-    depth=0.0,
-    interpolate=True, 
-    autoDraw=False,
-    lineWidth=1,        # Width of the line
-    units='norm'
-    )
-
 
 # Images for trials
 image_file_path = os.path.join(_thisDir,'stimuli', 'visual')
@@ -421,6 +385,8 @@ for numerosity in range(1, 7):  # Range from 1 to 6 (inclusive)
         # If the numerosity matches, add the image data to the target list
         if image_data['numerosity'] == f'numerosity_{numerosity_key}':
             target_images.append(image_data)
+    # randomize the order
+    random.shuffle(target_images)
     # Store the images for the current numerosity in the dictionary
     singledot_images_by_numerosity[numerosity_key] = target_images
 
@@ -434,6 +400,8 @@ for numerosity in range(1, 7):  # Range from 1 to 6 (inclusive)
         # If the numerosity matches, add the image data to the target list
         if image_data['numerosity'] == f'numerosity_{numerosity_key}':
             target_images.append(image_data)
+    # randomize the order
+    random.shuffle(target_images)
     # Store the images for the current numerosity in the dictionary
     totaldot_images_by_numerosity[numerosity_key] = target_images
 
@@ -446,7 +414,9 @@ for numerosity in range(1, 7):  # Range from 1 to 6 (inclusive)
     for image_data in images[target_condition]:
         # If the numerosity matches, add the image data to the target list
         if image_data['numerosity'] == f'numerosity_{numerosity_key}':
-            target_images.append(image_data)
+            target_images.append(image_data) 
+    # randomize the order
+    random.shuffle(target_images)
     # Store the images for the current numerosity in the dictionary
     circumference_images_by_numerosity[numerosity_key] = target_images
 

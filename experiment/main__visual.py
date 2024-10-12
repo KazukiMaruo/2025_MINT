@@ -385,6 +385,8 @@ for numerosity in range(1, 7):  # Range from 1 to 6 (inclusive)
         # If the numerosity matches, add the image data to the target list
         if image_data['numerosity'] == f'numerosity_{numerosity_key}':
             target_images.append(image_data)
+    # randomize the order
+    random.shuffle(target_images)
     # Store the images for the current numerosity in the dictionary
     singledot_images_by_numerosity[numerosity_key] = target_images
 
@@ -398,6 +400,8 @@ for numerosity in range(1, 7):  # Range from 1 to 6 (inclusive)
         # If the numerosity matches, add the image data to the target list
         if image_data['numerosity'] == f'numerosity_{numerosity_key}':
             target_images.append(image_data)
+    # randomize the order
+    random.shuffle(target_images)
     # Store the images for the current numerosity in the dictionary
     totaldot_images_by_numerosity[numerosity_key] = target_images
 
@@ -411,6 +415,8 @@ for numerosity in range(1, 7):  # Range from 1 to 6 (inclusive)
         # If the numerosity matches, add the image data to the target list
         if image_data['numerosity'] == f'numerosity_{numerosity_key}':
             target_images.append(image_data)
+    # randomize the order
+    random.shuffle(target_images)
     # Store the images for the current numerosity in the dictionary
     circumference_images_by_numerosity[numerosity_key] = target_images
 
