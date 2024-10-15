@@ -42,6 +42,12 @@ This section outlines the pipeline, with step-by-step explanations of how to set
 　From the repository's homepage on GitHub, click on the green '< >Code' button, and then downlaod the Zip.
 
 ### 2. Generate the visual stimuli based on your experiment setting
+
+If you just want to take a look at the experiment, you can skip this process. All of the stimuli are alaready on the folder 
+  ```bash
+    cd MINT/experiment/stimuli/visual
+  ```
+
 1. Open 'visualstimuli_generator.py'
 2. Change the parameters and run the script.
 
@@ -55,6 +61,7 @@ This section outlines the pipeline, with step-by-step explanations of how to set
     # ~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~
   ```
 
+### 3. Generate the visual stimuli based on your experiment setting
 
 
 
