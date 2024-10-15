@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains numerosity stimuli and outlines the steps for the stimuli generation. The goal is to ensure transparency, reproducibility, and clarity of the experiment for all.
+This repository contains numerosity stimuli and outlines the steps for the experiment set up. The goal is to ensure transparency, reproducibility, and clarity of the experiment for all.
 
 ## Table of Contents
 
@@ -22,12 +22,16 @@ The objective of this experiment is to:
 
 ## Workflow
 
-This section outlines the pipeline, with step-by-step explanations of how the experiment is generalized.
+This section outlines the pipeline, with step-by-step explanations of how to set up the experiment.
 
-### 1. Stimuli generation
-- **Auditory**: download the 'audio folder'
-- **Visual**: use 'visualstimuli_generator.py' 
-- **Cacthy Video**: download the 'catch folder'
+### 1. Download the experiment repository. 
+- **Option 1**: Clone via Git (Recommended)
+If you have Git installed, open your terminal and run the following command:
+  ```bash
+  git clone https://github.com/yourusername/your-repo-name.git
+  cd your-repo-name
+  
+- **Option 2**: Download as a Zip file 
 
 ### 2. Exploratory Data Analysis (EDA)
 - **Visualization**: Use plots (histograms, scatter plots) to explore relationships between variables.
