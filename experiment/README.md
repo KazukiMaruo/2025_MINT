@@ -41,9 +41,21 @@ This section outlines the pipeline, with step-by-step explanations of how to set
 
 　From the repository's homepage on GitHub, click on the green '< >Code' button, and then downlaod the Zip.
 
-### 2. Exploratory Data Analysis (EDA)
-- **Visualization**: Use plots (histograms, scatter plots) to explore relationships between variables.
-- **Descriptive Statistics**: Compute measures such as mean, standard deviation, and correlations.
+### 2. Generate the visual stimuli based on your experiment setting
+1. Open 'visualstimuli_generator.py'
+2. Change the parameters and run the script.
+
+  ```bash
+    # ~~~~~~~~~~~~~ Parameters
+    width, height = 1920, 1080  # screen pixel dimensions
+    distance_cm = 50  # Distance from the viewer in cm
+    screen_width_cm = 50  # Screen width in cm
+    visual_angle = 2 # visual angle
+    circle_radius_pixels = compute_radius(width, screen_width_cm, distance_cm, visual_angle) # compute the raidus of circle within the specified visual angle
+    # ~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~
+  ```
+
+
 
 
 
