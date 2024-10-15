@@ -79,14 +79,14 @@ frameTolerance = 0.001  # how close to onset before 'same' frame
 
 
 # ~~~~~~~~~~~~~~~ Setup the Window
-Monitor_data = [1920, 1080, 50, 50] # [1440, 900, 30, 100] # [1920, 1080, 60.5, 50]
+Monitor_data = [1440, 900, 30, 50] # [1440, 900, 30, 50] # [1920, 1080, 50, 50]
 mon = monitors.Monitor(
     'stimulus_screen', width=Monitor_data[2], distance=Monitor_data[3]) # width (cm) is to calcurate the visual angle, distance (cm) is viewing distance.
 mon.setSizePix((Monitor_data[0], Monitor_data[1]))
 mon.save()
 
 _size = (Monitor_data[0], Monitor_data[1]) # size (resolution) of the window in pixels, e.g., [1920, 1080] for Full HD.
-_fullscr = False # whether the window is displayed in fullscreen mode
+_fullscr = True # whether the window is displayed in fullscreen mode
 _screen = 0 # which monitor to display
 _winType = 'pyglet' # Specifies the underlying graphics library to use for window management.
 _allowGUI=False # stencil buffer is allowed. The stencil buffer is used for more advanced graphical effects, such as masking.
@@ -349,7 +349,7 @@ _trialList =  [
     {'condition': '5_con_rate', 'single_duration': 0.02, 'numerosity': 5},
     {'condition': '6_con_rate', 'single_duration': 0.02, 'numerosity': 6},
     ]
-trials = data.TrialHandler(nReps=5, # 35 for one day = 10min
+trials = data.TrialHandler(nReps=35, # 35 for one day = 10min
                            method='random', # randmise trials within 1 repetition
                            extraInfo=expInfo, # such as participant ID can be stored with the data 
                            originPath=-1,# This is used internally by PsychoPy to store the original path of the script. Setting it to -1 allows PsychoPy to track where the script originated.
