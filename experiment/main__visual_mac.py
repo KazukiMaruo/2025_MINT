@@ -1,12 +1,11 @@
 
 """
 TODOS:
-    - Is the catch trial with audio or not?
     - Eye-tracker set-up
     - 
 Info:
     - Numerosity from 1 ~ 6
-    - 70 trials for each condition (18 conditions) = 10 min for one session
+    - 70 trials for each condition (18 conditions) = 9 min for one session
   
 """
 
@@ -169,13 +168,13 @@ all_condition_folders = [f for f in os.listdir(image_file_path) if os.path.isdir
 images = {}
 # condition loop (dot, total_dot, circumference)
 for condition_name in all_condition_folders:
-    stimuli_folder = os.path.join(_thisDir, 'stimuli', 'visual', condition_name, 'angle_2_random')
+    stimuli_folder = os.path.join(_thisDir, 'stimuli', 'visual', condition_name)
     all_numerosity_folders = [f for f in os.listdir(stimuli_folder) if os.path.isdir(os.path.join(stimuli_folder, f))]
     images[condition_name] = []
 
     # numerosity loop (1 ~ 6)
     for numerosity in all_numerosity_folders:
-        each_numerosity_folder = os.path.join(_thisDir, 'stimuli', 'visual', condition_name, 'angle_2_random', numerosity)
+        each_numerosity_folder = os.path.join(stimuli_folder, numerosity)
         each_image_name = [f for f in os.listdir(each_numerosity_folder) if os.path.isfile(os.path.join(each_numerosity_folder, f))]
 
         # image loop (1 ~ 70)
@@ -230,8 +229,8 @@ image_path = _thisDir + os.sep + f'stimuli/catch/pause.png'  # Replace with the 
 image_pause = visual.ImageStim(win, image=image_path)
 
 # Image for no dot time. 
-image_nodot_path = _thisDir + os.sep + f'stimuli/visual/cross_nodot.png'  # Replace with the path to your image
-image_nodot = visual.ImageStim(win, image=image_nodot_path)
+background_path = _thisDir + os.sep + f'stimuli/visual/background.png'  # Replace with the path to your image
+background_image = visual.ImageStim(win, image=background_path)
 
 
 # ~~~~~~~~~~~~~~~ Create some handy timers
@@ -579,12 +578,12 @@ for trial_index, thisTrial in enumerate(trials): # thisTrial refers to each indi
                 image_to_show.status = FINISHED
                 """ p_port.setData(0) # refresh the trigger """
 
-                image_nodot.setAutoDraw(True)
+                background_image.setAutoDraw(True)
                 win.flip()
 
                 core.wait(isi) # 100ms wait for the next trial
 
-                image_nodot.setAutoDraw(False)
+                background_image.setAutoDraw(False)
 
         
 
@@ -651,8 +650,8 @@ for trial_index, thisTrial in enumerate(trials): # thisTrial refers to each indi
 
         # Play the video for only 1 second
         while core.getTime() - start_time < 1.0:  # 1 second duration
-            image_nodot.draw() # show the diagonal lines on the screen
-            image_nodot.draw()
+            background_image.draw() # show the diagonal lines on the screen
+            background_image.draw()
             movie_to_show.draw()  # Draw the current frame of the video
             """ win.callOnFlip(p_port.setData, 50 + int(sampled_videos[i])) # set the trigger based on the video """
             win.flip()
@@ -663,8 +662,8 @@ for trial_index, thisTrial in enumerate(trials): # thisTrial refers to each indi
         """ p_port.setData(0) # refresh the trigger """
         i += 1 # updates the index
         # Show the whole background with lines after movie pauses
-        image_nodot.draw()
-        image_nodot.draw()
+        background_image.draw()
+        background_image.draw()
         win.flip()
         # Add 800ms silence after the video finishes
         core.wait(0.8)
