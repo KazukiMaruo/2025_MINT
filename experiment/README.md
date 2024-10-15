@@ -109,9 +109,9 @@ The experiment folder should be configured like this:
 
 
 ## Contact
-If you have any questions, feel free to send me email!
+If you have any questions, feel free to ask me!
  ```bash
-    email adress: kazuki@cbs.mpg.de
+    kazuki@cbs.mpg.de
  ```
 
 
