@@ -1,4 +1,4 @@
-# Protocol for the experiment
+# Protocol
 
 ## Overview
 
@@ -52,7 +52,7 @@ cd MINT/experiment/stimuli/visual
 1. Open 'visualstimuli_generator.py'
 2. Change the parameters and run the script.
 
-```bash
+```python
 # ~~~~~~~~~~~~~ Parameters
 width, height = 1920, 1080  # screen pixel dimensions
 distance_cm = 50  # Distance from the viewer in cm
@@ -62,6 +62,16 @@ circle_radius_pixels = compute_radius(width, screen_width_cm, distance_cm, visua
 # ~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~
 ```
 
+### 3. Run the experiment on Psychopy
+This experiment works well with
+```python 
+psychopyVersion = '2024.1.5'
+```
+1. Open Psychopy.
+2. Open two scripts: 'main__adudio_mac.py' 'main__visual_mac.py'
+3. Run either one.
+
+'main__adudio.py' and 'main__visual.py' include trigger for EEG recording.
 
 ## Directory Structure
 The experiment folder should be configured like this:
