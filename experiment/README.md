@@ -111,7 +111,7 @@ The experiment folder should be configured like this:
 ## Contact
 If you have any questions, feel free to ask me!
  ```bash
-    kazuki@cbs.mpg.de
+kazuki@cbs.mpg.de
  ```
 
 
