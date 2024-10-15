@@ -41,6 +41,7 @@ This section outlines the pipeline, with step-by-step explanations of how to set
 
 　From the repository's homepage on GitHub, click on the green '< >Code' button, and then downlaod the Zip.
 
+
 ### 2. Generate the visual stimuli based on your experiment setting
 
 If you just want to take a look at the experiment, you can skip this process. All of the stimuli are alaready on the folder 
@@ -61,7 +62,26 @@ If you just want to take a look at the experiment, you can skip this process. Al
     # ~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~
   ```
 
-### 3. Generate the visual stimuli based on your experiment setting
+
+### 3. Check stimuli directory
+The experiment folder should be configured like this:
+  ```bash
+    MINT/experiment
+        ├── stimuli/
+        │   ├── audio/  # Original raw data
+        │   ├── catch/  # Cleaned and processed data
+        │   └── visual/ # Description of the datasets
+        ├── data/
+        │   ├── .csv  # 
+        │   ├── .log  # 
+        │   └── .psydat 
+        ├── main__adudio_mac.py  
+        ├── main__visual_mac.py  
+        ├── main__adudio.py 
+        ├── main__visual.py
+        ├── visualstimuli_generator.py  
+        └── README.md  # Overview of the experiment directory
+  ```
 
 
 
