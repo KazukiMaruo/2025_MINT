@@ -7,7 +7,7 @@ This repository contains numerosity stimuli and outlines the steps for the stimu
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Workflow](#analysis-workflow)
+2. [Workflow](#workflow)
 3. [Steps for Reproducibility](#steps-for-reproducibility)
 4. [Directory Structure](#directory-structure)
 5. [Contact](#contact)
