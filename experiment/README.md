@@ -44,7 +44,7 @@ This section outlines the pipeline, with step-by-step explanations of how to set
 
 ### 2. Generate the visual stimuli based on your experiment setting
 
-If you just want to take a look at the experiment, you can skip this process. All of the stimuli are alaready on the folder 
+If you just want to take a look at the experiment, you can skip this process. All of the stimuli are already on the folder 
 ```bash
 cd MINT/experiment/stimuli/visual
 ```
