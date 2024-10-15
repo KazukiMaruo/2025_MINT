@@ -63,7 +63,7 @@ If you just want to take a look at the experiment, you can skip this process. Al
   ```
 
 
-### 3. Check stimuli directory
+## Directory Structure
 The experiment folder should be configured like this:
   ```bash
     experiment/
@@ -108,7 +108,11 @@ The experiment folder should be configured like this:
   ```
 
 
-
+## Contact
+If you have any questions, feel free to send me email!
+ ```bash
+    email adress: kazuki@cbs.mpg.de
+ ```
 
 
 
