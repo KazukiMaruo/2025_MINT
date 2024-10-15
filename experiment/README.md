@@ -1,4 +1,4 @@
-# Protocol for the experiment
+# Protocol
 
 ## Overview
 
@@ -26,20 +26,103 @@ This section outlines the pipeline, with step-by-step explanations of how to set
 ### 1. Download the experiment repository. 
 - **Option 1**: Clone via Git (Recommended)
 
-　If you have Git installed, open your terminal and run the following command:
+　If you have Git installed, open your terminal, go to the directory where you want to download, and run the following command:
 
   ```bash
-  git clone https://github.com/yourusername/your-repo-name.git
-  cd your-repo-name
+  git clone --no-checkout https://github.com/SkeideLab/MINT.git
+  cd MINT
+
+  git sparse-checkout init --cone
+  git sparse-checkout set experiment
+  git checkout main
   ```
 
 - **Option 2**: Download as a Zip file 
 
-### 2. Exploratory Data Analysis (EDA)
-- **Visualization**: Use plots (histograms, scatter plots) to explore relationships between variables.
-- **Descriptive Statistics**: Compute measures such as mean, standard deviation, and correlations.
+　From the repository's homepage on GitHub, click on the green '< >Code' button, and then downlaod the Zip.
 
 
+### 2. Generate the visual stimuli based on your experiment setting
+
+If you just want to take a look at the experiment, you can skip this process. All of the stimuli are already on the folder 
+```bash
+cd MINT/experiment/stimuli/visual
+```
+
+1. Open 'visualstimuli_generator.py'
+2. Change the parameters and run the script.
+
+```python
+# ~~~~~~~~~~~~~ Parameters
+width, height = 1920, 1080  # screen pixel dimensions
+distance_cm = 50  # Distance from the viewer in cm
+screen_width_cm = 50  # Screen width in cm
+visual_angle = 2 # visual angle
+circle_radius_pixels = compute_radius(width, screen_width_cm, distance_cm, visual_angle) # compute the raidus of circle within the specified visual angle
+# ~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~
+```
+
+### 3. Run the experiment on Psychopy
+This experiment works well with
+```python 
+psychopyVersion = '2024.1.5'
+```
+1. Open Psychopy.
+2. Open two scripts: 'main__adudio_mac.py' 'main__visual_mac.py'
+3. Run either one.
+
+'main__adudio.py' and 'main__visual.py' include trigger for EEG recording.
+
+## Directory Structure
+The experiment folder should be configured like this:
+```bash
+experiment/
+    ├── stimuli/   # contains all the stimuli you need
+    │   ├── audio/   # auditory numerosity
+    │   │   ├── beep.wav
+    │   ├── catch/   # catchy video and audio
+    │   │   ├── audio/
+    │   │   │   ├── 1.wav
+    │   │   │   │   ...
+    │   │   │   └── 5.wav
+    │   │   ├── video/
+    │   │   │   ├── 1.mp4
+    │   │   │   │   ...
+    │   │   │   └── 16.mp4        
+    │   │   └── pause.png   # an image for pause
+    │   └── visual/   # visual numerosity
+    │       ├── circumference_cont/   # total circumference is controlled across numerosity
+    │       │   ├── numerosity_1/
+    │       │   │   ...
+    │       │   ├── umerosity_6/
+    │       ├── singledotsize_cont/   # single dot size is controlled across numerosity
+    │       │   ├── numerosity_1/
+    │       │   │   ...
+    │       │   ├── umerosity_6/               
+    │       ├── totaldotsize_cont/   # total dot size is controlled across numerosity
+    │       │   ├── numerosity_1/
+    │       │   │   ...
+    │       │   ├── umerosity_6/ 
+    │       └── background.png   # background image
+    │
+    ├── data/   # output directory from psychopy 
+    │   ├── .csv   
+    │   ├── .log  
+    │   └── .psydat 
+    ├── main__adudio_mac.py   # Psychopy: auditory experiment on Mac
+    ├── main__visual_mac.py   # Psychopy: visual experiment on Mac
+    ├── main__adudio.py   # Psychopy: auditory experiment on window in EEG lab
+    ├── main__visual.py   # Psychopy: visual experiment on window in EEG lab
+    ├── visualstimuli_generator.py   # Generate the visual stimuli
+    └── README.md  # Overview of the experiment directory
+```
+
+
+## Contact
+If you have any questions, feel free to ask me!
+ ```bash
+kazuki@cbs.mpg.de
+ ```
 
 
 
