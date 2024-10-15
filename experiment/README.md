@@ -26,14 +26,20 @@ This section outlines the pipeline, with step-by-step explanations of how to set
 ### 1. Download the experiment repository. 
 - **Option 1**: Clone via Git (Recommended)
 
-　If you have Git installed, open your terminal and run the following command:
+　If you have Git installed, open your terminal, go to the directory where you want to download, and run the following command:
 
   ```bash
-  git clone https://github.com/yourusername/your-repo-name.git
-  cd your-repo-name
+  git clone --no-checkout https://github.com/SkeideLab/MINT.git
+  cd MINT
+
+  git sparse-checkout init --cone
+  git sparse-checkout set experiment
+  git checkout main
   ```
 
 - **Option 2**: Download as a Zip file 
+
+　From the repository's homepage on GitHub, click on the green '< >Code' button, and then downlaod the Zip.
 
 ### 2. Exploratory Data Analysis (EDA)
 - **Visualization**: Use plots (histograms, scatter plots) to explore relationships between variables.
