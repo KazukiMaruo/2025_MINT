@@ -7,10 +7,9 @@ This repository contains numerosity stimuli and outlines the steps for the exper
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Workflow](#workflow)
-3. [Steps for Reproducibility](#steps-for-reproducibility)
-4. [Directory Structure](#directory-structure)
-5. [Contact](#contact)
+2. [Steps for Reproducibility](#steps-for-reproducibility)
+3. [Directory Structure](#directory-structure)
+4. [Contact](#contact)
 
 
 ## Objective
@@ -20,17 +19,19 @@ The objective of this experiment is to:
 - Explore the cross-modality (auditory vs. visual).
 
 
-## Workflow
+## Steps for Reproducibility
 
 This section outlines the pipeline, with step-by-step explanations of how to set up the experiment.
 
 ### 1. Download the experiment repository. 
 - **Option 1**: Clone via Git (Recommended)
+
 If you have Git installed, open your terminal and run the following command:
+
   ```bash
   git clone https://github.com/yourusername/your-repo-name.git
   cd your-repo-name
-  
+
 - **Option 2**: Download as a Zip file 
 
 ### 2. Exploratory Data Analysis (EDA)
