@@ -26,11 +26,12 @@ This section outlines the pipeline, with step-by-step explanations of how to set
 ### 1. Download the experiment repository. 
 - **Option 1**: Clone via Git (Recommended)
 
-If you have Git installed, open your terminal and run the following command:
+　If you have Git installed, open your terminal and run the following command:
 
   ```bash
   git clone https://github.com/yourusername/your-repo-name.git
   cd your-repo-name
+  ```
 
 - **Option 2**: Download as a Zip file 
 
