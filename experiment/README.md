@@ -68,9 +68,33 @@ The experiment folder should be configured like this:
   ```bash
     MINT/experiment
         ├── stimuli/
-        │   ├── audio/  # Original raw data
-        │   ├── catch/  # Cleaned and processed data
-        │   └── visual/ # Description of the datasets
+        │   ├── audio/  
+        │   │   ├── beep.wav
+        │   ├── catch/ 
+        │   │   ├── audio/
+        │   │   │   ├── 1.wav
+        │   │   │   │   ...
+        │   │   │   └── 5.wav
+        │   │   ├── video/
+        │   │   │   ├── 1.mp4
+        │   │   │   │   ...
+        │   │   │   └── 16.mp4        
+        │   │   └── pause.png
+        │   └── visual/ 
+        │       ├── circumference_cont/
+        │       │   ├── numerosity_1/
+        │       │   │   ...
+        │       │   ├── umerosity_6/
+        │       ├── singledotsize_cont/
+        │       │   ├── numerosity_1/
+        │       │   │   ...
+        │       │   ├── umerosity_6/               
+        │       ├── totaldotsize_cont/
+        │       │   ├── numerosity_1/
+        │       │   │   ...
+        │       │   ├── umerosity_6/ 
+        │       └── background.png
+        │
         ├── data/
         │   ├── .csv  # 
         │   ├── .log  # 
