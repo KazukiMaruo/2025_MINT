@@ -1,9 +1,7 @@
 
 """
 TODOS:
-    - Is the catch trial with audio or not?
     - Eye-tracker set-up
-    - 
 Info:
     - Numerosity from 1 ~ 6
     - 70 trials for each condition (18 conditions) = 10 min for one session

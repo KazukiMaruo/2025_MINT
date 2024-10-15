@@ -1,9 +1,7 @@
 
 """
 TODOS:
-    - Is the catch trial with audio or not?
     - Eye-tracker set-up
-    - Try again in the EEG room
 Info:
     - Numerosity from 1 ~ 6
     - 35 trials for each condition (12 conditions) = 10min for one session
@@ -21,7 +19,6 @@ prefs.hardware['audioLatencyMode'] = '3'
 from psychopy import sound, gui, parallel, visual, core, data, event, logging, clock, colors, layout, monitors
 from psychopy.constants import (NOT_STARTED, STARTED, PLAYING, PAUSED,
                                 STOPPED, FINISHED, PRESSED, RELEASED, FOREVER)
-
 import numpy as np  # whole numpy lib is available, prepend 'np.'
 from numpy import (sin, cos, tan, log, log10, pi, average,
                    sqrt, std, deg2rad, rad2deg, linspace, asarray)
@@ -35,7 +32,7 @@ from psychopy.hardware import keyboard
 
 
 
-# ~~~~~~~~~~~~~~~ Ensure that relative paths start from the same directory as this script
+# ~~~~~~~~~~~~~~~ Directory path setting
 _thisDir = os.path.dirname(os.path.abspath(__file__)) # '__file__' indicate the current directory of this script
 os.chdir(_thisDir) # change the current working directory to the directory specified by '_thisdir'
 # Store info about the experiment session
@@ -48,6 +45,7 @@ expInfo = {
     'expName|hid': expName,
     'psychopyVersion|hid': psychopyVersion,
     }
+
 
 # ~~~~~~~~~~~~~~~ Show participant info dialog
 dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title=expName)

@@ -1,9 +1,7 @@
 
 """
 TODOS:
-    - Is the catch trial with audio or not?
     - Eye-tracker set-up
-    - Try again in the EEG room
 Info:
     - Numerosity from 1 ~ 6
     - 35 trials for each condition (12 conditions) = 10min for one session
