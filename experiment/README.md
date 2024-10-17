@@ -115,10 +115,8 @@ experiment/
     │   ├── .csv   
     │   ├── .log  
     │   └── .psydat 
-    ├── main__adudio_mac.py   # Psychopy: auditory experiment on Mac
-    ├── main__visual_mac.py   # Psychopy: visual experiment on Mac
-    ├── main__adudio.py   # Psychopy: auditory experiment on window in EEG lab
-    ├── main__visual.py   # Psychopy: visual experiment on window in EEG lab
+    ├── experiment.py   # Psychopy: auditory experiment on Mac
+    ├── functions.py   # Psychopy: visual experiment on Mac
     ├── visualstimuli_generator.py   # Generate the visual stimuli
     └── README.md  # Overview of the experiment directory
 ```
