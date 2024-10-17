@@ -1,0 +1,446 @@
+4.6188 	WARNING 	psychopy.parallel has been imported on a Mac (which doesn't have a parallel port?)
+11.5856 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, autoLog=True, backendConf=UNKNOWN, backgroundFit=<method-wrapper '__getattribute__' of attributeSetter object at 0x7f7fd314b760>, backgroundImage=<method-wrapper '__getattribute__' of attributeSetter object at 0x7f7fd314b700>, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([0, 0, 0]), colorSpace='rgb', depthBits=8, fullscr=<method-wrapper '__getattribute__' of attributeSetter object at 0x7f7fd314b4f0>, gamma=None, gammaErrorPolicy='raise', infoMsg=UNKNOWN, lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x7f7fe361af10>, multiSample=False, name='window1', numSamples=2, pos=[360.0, 225.0], screen=0, size=array([2880, 1800]), stencilBits=0, stereo=False, title='PsychoPy', units='pix', useFBO=True, useRetina=True, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+11.5856 	EXP 	window1: backgroundImage = ''
+11.5857 	EXP 	window1: backgroundFit = 'none'
+11.5873 	EXP 	window1: mouseVisible = False
+11.5897 	EXP 	window1: Attempting to measure frame rate of screen (0) ...
+11.5897 	EXP 	window1: recordFrameIntervals = False
+11.6722 	EXP 	window1: recordFrameIntervals = True
+11.7168 	WARNING 	t of last frame was 10.97ms (=1/91)
+11.7830 	WARNING 	t of last frame was 13.67ms (=1/73)
+11.8509 	WARNING 	t of last frame was 10.13ms (=1/98)
+11.8682 	EXP 	Screen (0) actual frame rate measured at 117.64Hz
+11.8683 	EXP 	window1: recordFrameIntervals = False
+16.5874 	EXP 	window1: mouseVisible = False
+16.6548 	EXP 	Created text_welcome = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, draggable=False, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=1.0, italic=False, languageStyle='LTR', name='text_welcome', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='When you are ready, press "space".', units='cm', win=Window(...), wrapWidth=15.0)
+16.6550 	EXP 	window1: mouseVisible = False
+16.6608 	EXP 	Created line_diagonal_1 = Line(__class__=<class 'psychopy.visual.line.Line'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=False, color=array([1., 0., 0.]), colorSpace='rgb', contrast=None, depth=0.0, draggable=False, fillColor=array([0, 0, 0]), fillColorSpace='rgb', fillRGB=array([0, 0, 0]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([250,   0,   0]), lineWidth=1.5, name='line_diagonal_1', opacity=0.5, ori=0.0, pos=array([0., 0.]), size=array([1., 1.]), units='norm', vertices=ndarray(...), win=Window(...), windingRule=None)
+16.6610 	EXP 	window1: mouseVisible = False
+16.6636 	EXP 	Created line_diagonal_2 = Line(__class__=<class 'psychopy.visual.line.Line'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=False, color=array([1., 0., 0.]), colorSpace='rgb', contrast=None, depth=0.0, draggable=False, fillColor=array([0, 0, 0]), fillColorSpace='rgb', fillRGB=array([0, 0, 0]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([250,   0,   0]), lineWidth=1.5, name='line_diagonal_2', opacity=0.5, ori=0.0, pos=array([0., 0.]), size=array([1., 1.]), units='norm', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.1454 	EXP 	Sound beep set volume 1.000
+17.1526 	EXP 	Sound audio set volume 1.000
+17.3265 	EXP 	Sound audio set volume 1.000
+17.3395 	EXP 	Sound audio set volume 1.000
+17.3555 	EXP 	Sound audio set volume 1.000
+17.3696 	EXP 	Sound audio set volume 1.000
+17.3895 	EXP 	window1: mouseVisible = False
+17.8503 	EXP 	window1: mouseVisible = False
+17.8780 	EXP 	window1: mouseVisible = False
+17.9091 	EXP 	window1: mouseVisible = False
+17.9409 	EXP 	window1: mouseVisible = False
+17.9753 	EXP 	window1: mouseVisible = False
+18.0018 	EXP 	window1: mouseVisible = False
+18.0302 	EXP 	window1: mouseVisible = False
+18.0673 	EXP 	window1: mouseVisible = False
+18.0987 	EXP 	window1: mouseVisible = False
+18.1292 	EXP 	window1: mouseVisible = False
+18.1610 	EXP 	window1: mouseVisible = False
+18.1927 	EXP 	window1: mouseVisible = False
+18.2331 	EXP 	window1: mouseVisible = False
+18.2702 	EXP 	Created unnamed ImageStim = ImageStim(__class__=<class 'psychopy.visual.image.ImageStim'>, anchor=('center', 'center'), autoLog=True, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0, draggable=False, flipHoriz=False, flipVert=False, image=str(...), interpolate=False, mask=None, maskParams=None, name='unnamed ImageStim', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([385., 400.]), texRes=128, units='pix', win=Window(...))
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	unnamed MovieStim: autoLog = True
+18.3383 	EXP 	text_welcome: autoDraw = True
+22.6433 	DATA 	Keypress: space
+22.6565 	EXP 	Created sequence: random, trialTypes=12, nReps=35, seed=None
+22.6572 	EXP 	New trial (rep=0, index=0): {'condition': '4_con_duration', 'single_duration': 0.08, 'numerosity': 4}
+22.6666 	EXP 	Sound beep started
+22.6649 	EXP 	text_welcome: autoDraw = False
+22.7407 	EXP 	Sound beep stopped
+22.8493 	EXP 	Sound beep started
+22.9238 	EXP 	Sound beep stopped
+23.0324 	EXP 	Sound beep started
+23.1061 	EXP 	Sound beep stopped
+23.2074 	EXP 	Sound beep started
+23.2902 	EXP 	Sound beep stopped
+24.0908 	EXP 	New trial (rep=0, index=1): {'condition': '2_con_rate', 'single_duration': 0.02, 'numerosity': 2}
+24.0938 	EXP 	Sound beep started
+24.1226 	EXP 	Sound beep stopped
+24.2235 	EXP 	Sound beep started
+24.2415 	EXP 	Sound beep stopped
+25.0421 	WARNING 	Keypress was given unknown key code (233)
+25.0429 	WARNING 	Keypress was given unknown key code (233)
+25.0436 	EXP 	New trial (rep=0, index=2): {'condition': '1_con_rate', 'single_duration': 0.02, 'numerosity': 1}
+25.0532 	EXP 	Sound beep started
+25.0642 	EXP 	Sound beep stopped
+25.8648 	EXP 	New trial (rep=0, index=3): {'condition': '1_con_duration', 'single_duration': 0.62, 'numerosity': 1}
+25.8674 	EXP 	Sound beep started
+26.4362 	WARNING 	Keypress was given unknown key code (234)
+26.4906 	EXP 	Sound beep stopped
+27.2914 	WARNING 	Keypress was given unknown key code (234)
+27.2921 	EXP 	New trial (rep=0, index=4): {'condition': '6_con_rate', 'single_duration': 0.02, 'numerosity': 6}
+27.2940 	EXP 	Sound beep started
+27.3115 	EXP 	Sound beep stopped
+27.4205 	EXP 	Sound beep started
+27.4296 	EXP 	Sound beep stopped
+27.5307 	EXP 	Sound beep started
+27.5525 	EXP 	Sound beep stopped
+27.6613 	EXP 	Sound beep started
+27.6763 	EXP 	Sound beep stopped
+27.7850 	EXP 	Sound beep started
+27.8061 	EXP 	Sound beep stopped
+27.9070 	EXP 	Sound beep started
+27.9249 	EXP 	Sound beep stopped
+28.7254 	EXP 	New trial (rep=0, index=5): {'condition': '5_con_rate', 'single_duration': 0.02, 'numerosity': 5}
+28.7288 	EXP 	Sound beep started
+28.7560 	EXP 	Sound beep stopped
+28.8650 	EXP 	Sound beep started
+28.8756 	EXP 	Sound beep stopped
+28.9843 	EXP 	Sound beep started
+28.9934 	EXP 	Sound beep stopped
+29.0944 	EXP 	Sound beep started
+29.1231 	EXP 	Sound beep stopped
+29.2241 	EXP 	Sound beep started
+29.2465 	EXP 	Sound beep stopped
+30.0471 	EXP 	New trial (rep=0, index=6): {'condition': '2_con_duration', 'single_duration': 0.26, 'numerosity': 2}
+30.0498 	EXP 	Sound beep started
+30.3128 	EXP 	Sound beep stopped
+30.4217 	EXP 	Sound beep started
+30.6741 	EXP 	Sound beep stopped
+31.4746 	EXP 	New trial (rep=0, index=7): {'condition': '6_con_duration', 'single_duration': 0.02, 'numerosity': 6}
+31.4777 	EXP 	Sound beep started
+31.5059 	EXP 	Sound beep stopped
+31.6061 	WARNING 	Keypress was given unknown key code (234)
+31.6151 	EXP 	Sound beep started
+31.6405 	EXP 	Sound beep stopped
+31.7491 	EXP 	Sound beep started
+31.7732 	EXP 	Sound beep stopped
+31.8821 	EXP 	Sound beep started
+31.8919 	EXP 	Sound beep stopped
+32.0010 	EXP 	Sound beep started
+32.0240 	EXP 	Sound beep stopped
+32.1326 	EXP 	Sound beep started
+32.1472 	EXP 	Sound beep stopped
+32.9478 	EXP 	New trial (rep=0, index=8): {'condition': '3_con_duration', 'single_duration': 0.14, 'numerosity': 3}
+32.9509 	EXP 	Sound beep started
+33.0904 	EXP 	Sound beep stopped
+33.1994 	EXP 	Sound beep started
+33.3291 	EXP 	Sound beep stopped
+33.4379 	EXP 	Sound beep started
+33.5736 	EXP 	Sound beep stopped
+34.3742 	EXP 	New trial (rep=0, index=9): {'condition': '4_con_rate', 'single_duration': 0.02, 'numerosity': 4}
+34.3770 	EXP 	Sound beep started
+34.4069 	EXP 	Sound beep stopped
+34.5076 	EXP 	Sound beep started
+34.5260 	EXP 	Sound beep stopped
+34.6346 	EXP 	Sound beep started
+34.6563 	EXP 	Sound beep stopped
+34.7572 	EXP 	Sound beep started
+34.7797 	EXP 	Sound beep stopped
+35.5804 	EXP 	New trial (rep=0, index=10): {'condition': '3_con_rate', 'single_duration': 0.02, 'numerosity': 3}
+35.5836 	EXP 	Sound beep started
+35.6044 	EXP 	Sound beep stopped
+35.7132 	EXP 	Sound beep started
+35.7235 	EXP 	Sound beep stopped
+35.8321 	EXP 	Sound beep started
+35.8428 	EXP 	Sound beep stopped
+36.6433 	EXP 	New trial (rep=0, index=11): {'condition': '5_con_duration', 'single_duration': 0.044, 'numerosity': 5}
+36.6463 	EXP 	Sound beep started
+36.6901 	EXP 	Sound beep stopped
+36.7990 	EXP 	Sound beep started
+36.8401 	EXP 	Sound beep stopped
+36.9410 	EXP 	Sound beep started
+36.9905 	EXP 	Sound beep stopped
+37.0996 	EXP 	Sound beep started
+37.1398 	EXP 	Sound beep stopped
+37.2488 	EXP 	Sound beep started
+37.2901 	EXP 	Sound beep stopped
+38.4082 	EXP 	Sound audio started
+39.0978 	EXP 	Sound audio stopped
+39.9182 	EXP 	New trial (rep=1, index=0): {'condition': '5_con_duration', 'single_duration': 0.044, 'numerosity': 5}
+39.9198 	EXP 	Sound beep started
+39.9620 	EXP 	Sound beep stopped
+40.0707 	EXP 	Sound beep started
+40.1067 	EXP 	Sound beep stopped
+40.2156 	EXP 	Sound beep started
+40.2575 	EXP 	Sound beep stopped
+40.3664 	EXP 	Sound beep started
+40.4074 	EXP 	Sound beep stopped
+40.5162 	EXP 	Sound beep started
+40.5575 	EXP 	Sound beep stopped
+41.3583 	EXP 	New trial (rep=1, index=1): {'condition': '6_con_duration', 'single_duration': 0.02, 'numerosity': 6}
+41.3608 	EXP 	Sound beep started
+41.3896 	EXP 	Sound beep stopped
+41.4905 	EXP 	Sound beep started
+41.5133 	EXP 	Sound beep stopped
+41.6224 	EXP 	Sound beep started
+41.6368 	EXP 	Sound beep stopped
+41.7377 	EXP 	Sound beep started
+41.7611 	EXP 	Sound beep stopped
+41.8698 	EXP 	Sound beep started
+41.8798 	EXP 	Sound beep stopped
+41.9886 	EXP 	Sound beep started
+42.0024 	EXP 	Sound beep stopped
+42.8029 	EXP 	New trial (rep=1, index=2): {'condition': '4_con_duration', 'single_duration': 0.08, 'numerosity': 4}
+42.8064 	EXP 	Sound beep started
+42.8906 	EXP 	Sound beep stopped
+42.9996 	EXP 	Sound beep started
+43.0742 	EXP 	Sound beep stopped
+43.1829 	EXP 	Sound beep started
+43.2576 	EXP 	Sound beep stopped
+43.3662 	EXP 	Sound beep started
+43.4402 	EXP 	Sound beep stopped
+44.2408 	EXP 	New trial (rep=1, index=3): {'condition': '2_con_rate', 'single_duration': 0.02, 'numerosity': 2}
+44.2442 	EXP 	Sound beep started
+44.2727 	EXP 	Sound beep stopped
+44.3738 	EXP 	Sound beep started
+44.3967 	EXP 	Sound beep stopped
+45.1972 	EXP 	New trial (rep=1, index=4): {'condition': '3_con_duration', 'single_duration': 0.14, 'numerosity': 3}
+45.2003 	EXP 	Sound beep started
+45.3411 	EXP 	Sound beep stopped
+45.4498 	EXP 	Sound beep started
+45.5804 	EXP 	Sound beep stopped
+45.6890 	EXP 	Sound beep started
+45.8237 	EXP 	Sound beep stopped
+46.6243 	EXP 	New trial (rep=1, index=5): {'condition': '1_con_duration', 'single_duration': 0.62, 'numerosity': 1}
+46.6277 	EXP 	Sound beep started
+47.2489 	EXP 	Sound beep stopped
+48.0497 	EXP 	New trial (rep=1, index=6): {'condition': '2_con_duration', 'single_duration': 0.26, 'numerosity': 2}
+48.0525 	EXP 	Sound beep started
+48.3129 	EXP 	Sound beep stopped
+48.4219 	EXP 	Sound beep started
+48.6738 	EXP 	Sound beep stopped
+49.4743 	EXP 	New trial (rep=1, index=7): {'condition': '6_con_rate', 'single_duration': 0.02, 'numerosity': 6}
+49.4779 	EXP 	Sound beep started
+49.5070 	EXP 	Sound beep stopped
+49.6157 	EXP 	Sound beep started
+49.6260 	EXP 	Sound beep stopped
+49.7347 	EXP 	Sound beep started
+49.7444 	EXP 	Sound beep stopped
+49.8531 	EXP 	Sound beep started
+49.8736 	EXP 	Sound beep stopped
+49.9749 	EXP 	Sound beep started
+49.9926 	EXP 	Sound beep stopped
+50.1015 	EXP 	Sound beep started
+50.1244 	EXP 	Sound beep stopped
+50.9250 	EXP 	New trial (rep=1, index=8): {'condition': '3_con_rate', 'single_duration': 0.02, 'numerosity': 3}
+50.9276 	EXP 	Sound beep started
+50.9571 	EXP 	Sound beep stopped
+51.0657 	EXP 	Sound beep started
+51.0763 	EXP 	Sound beep stopped
+51.1773 	EXP 	Sound beep started
+51.2070 	EXP 	Sound beep stopped
+52.0076 	EXP 	New trial (rep=1, index=9): {'condition': '5_con_rate', 'single_duration': 0.02, 'numerosity': 5}
+52.0111 	EXP 	Sound beep started
+52.0403 	EXP 	Sound beep stopped
+52.1489 	EXP 	Sound beep started
+52.1590 	EXP 	Sound beep stopped
+52.2679 	EXP 	Sound beep started
+52.2773 	EXP 	Sound beep stopped
+52.3783 	EXP 	Sound beep started
+52.3964 	EXP 	Sound beep stopped
+52.4973 	EXP 	Sound beep started
+52.5194 	EXP 	Sound beep stopped
+53.3199 	EXP 	New trial (rep=1, index=10): {'condition': '4_con_rate', 'single_duration': 0.02, 'numerosity': 4}
+53.3227 	EXP 	Sound beep started
+53.3449 	EXP 	Sound beep stopped
+53.4534 	EXP 	Sound beep started
+53.4737 	EXP 	Sound beep stopped
+53.5825 	EXP 	Sound beep started
+53.5920 	EXP 	Sound beep stopped
+53.6931 	EXP 	Sound beep started
+53.7245 	EXP 	Sound beep stopped
+54.5249 	EXP 	New trial (rep=1, index=11): {'condition': '1_con_rate', 'single_duration': 0.02, 'numerosity': 1}
+54.5278 	EXP 	Sound beep started
+54.5572 	EXP 	Sound beep stopped
+55.6417 	EXP 	Sound audio started
+56.3646 	EXP 	Sound audio stopped
+57.1823 	EXP 	New trial (rep=2, index=0): {'condition': '2_con_duration', 'single_duration': 0.26, 'numerosity': 2}
+57.1839 	EXP 	Sound beep started
+57.4472 	EXP 	Sound beep stopped
+57.5556 	EXP 	Sound beep started
+57.8132 	EXP 	Sound beep stopped
+58.6137 	EXP 	New trial (rep=2, index=1): {'condition': '6_con_duration', 'single_duration': 0.02, 'numerosity': 6}
+58.6169 	EXP 	Sound beep started
+58.6376 	EXP 	Sound beep stopped
+58.7464 	EXP 	Sound beep started
+58.7614 	EXP 	Sound beep stopped
+58.8702 	EXP 	Sound beep started
+58.8796 	EXP 	Sound beep stopped
+58.9807 	EXP 	Sound beep started
+59.0019 	EXP 	Sound beep stopped
+59.1107 	EXP 	Sound beep started
+59.1262 	EXP 	Sound beep stopped
+59.2348 	EXP 	Sound beep started
+59.2450 	EXP 	Sound beep stopped
+60.0456 	EXP 	New trial (rep=2, index=2): {'condition': '5_con_duration', 'single_duration': 0.044, 'numerosity': 5}
+60.0482 	EXP 	Sound beep started
+60.0903 	EXP 	Sound beep stopped
+60.1993 	EXP 	Sound beep started
+60.2400 	EXP 	Sound beep stopped
+60.3411 	EXP 	Sound beep started
+60.3910 	EXP 	Sound beep stopped
+60.4999 	EXP 	Sound beep started
+60.5406 	EXP 	Sound beep stopped
+60.6416 	EXP 	Sound beep started
+60.6903 	EXP 	Sound beep stopped
+61.4908 	EXP 	New trial (rep=2, index=3): {'condition': '5_con_rate', 'single_duration': 0.02, 'numerosity': 5}
+61.4941 	EXP 	Sound beep started
+61.5151 	EXP 	Sound beep stopped
+61.6240 	EXP 	Sound beep started
+61.6380 	EXP 	Sound beep stopped
+61.7469 	EXP 	Sound beep started
+61.7618 	EXP 	Sound beep stopped
+61.8704 	EXP 	Sound beep started
+61.8910 	EXP 	Sound beep stopped
+61.9999 	EXP 	Sound beep started
+62.0097 	EXP 	Sound beep stopped
+62.8103 	EXP 	New trial (rep=2, index=4): {'condition': '2_con_rate', 'single_duration': 0.02, 'numerosity': 2}
+62.8138 	EXP 	Sound beep started
+62.8404 	EXP 	Sound beep stopped
+62.9493 	EXP 	Sound beep started
+62.9593 	EXP 	Sound beep stopped
+63.7599 	EXP 	New trial (rep=2, index=5): {'condition': '1_con_duration', 'single_duration': 0.62, 'numerosity': 1}
+63.7627 	EXP 	Sound beep started
+64.3823 	EXP 	Sound beep stopped
+65.1830 	EXP 	New trial (rep=2, index=6): {'condition': '4_con_rate', 'single_duration': 0.02, 'numerosity': 4}
+65.1856 	EXP 	Sound beep started
+65.2063 	EXP 	Sound beep stopped
+65.3151 	EXP 	Sound beep started
+65.3245 	EXP 	Sound beep stopped
+65.4337 	EXP 	Sound beep started
+65.4515 	EXP 	Sound beep stopped
+65.5591 	EXP 	Sound beep started
+65.5819 	EXP 	Sound beep stopped
+66.3832 	EXP 	New trial (rep=2, index=7): {'condition': '3_con_duration', 'single_duration': 0.14, 'numerosity': 3}
+66.3853 	EXP 	Sound beep started
+66.5245 	EXP 	Sound beep stopped
+66.6255 	EXP 	Sound beep started
+66.7636 	EXP 	Sound beep stopped
+66.8724 	EXP 	Sound beep started
+67.0079 	EXP 	Sound beep stopped
+67.8086 	EXP 	New trial (rep=2, index=8): {'condition': '4_con_duration', 'single_duration': 0.08, 'numerosity': 4}
+67.8117 	EXP 	Sound beep started
+67.8905 	EXP 	Sound beep stopped
+67.9996 	EXP 	Sound beep started
+68.0742 	EXP 	Sound beep stopped
+68.1753 	EXP 	Sound beep started
+68.2578 	EXP 	Sound beep stopped
+68.3585 	EXP 	Sound beep started
+68.4413 	EXP 	Sound beep stopped
+69.2419 	EXP 	New trial (rep=2, index=9): {'condition': '6_con_rate', 'single_duration': 0.02, 'numerosity': 6}
+69.2447 	EXP 	Sound beep started
+69.2744 	EXP 	Sound beep stopped
+69.3832 	EXP 	Sound beep started
+69.3937 	EXP 	Sound beep stopped
+69.5025 	EXP 	Sound beep started
+69.5242 	EXP 	Sound beep stopped
+69.6253 	EXP 	Sound beep started
+69.6480 	EXP 	Sound beep stopped
+69.7488 	EXP 	Sound beep started
+69.7668 	EXP 	Sound beep stopped
+69.8755 	EXP 	Sound beep started
+69.8896 	EXP 	Sound beep stopped
+70.6901 	EXP 	New trial (rep=2, index=10): {'condition': '1_con_rate', 'single_duration': 0.02, 'numerosity': 1}
+70.6935 	EXP 	Sound beep started
+70.7160 	EXP 	Sound beep stopped
+71.5164 	EXP 	New trial (rep=2, index=11): {'condition': '3_con_rate', 'single_duration': 0.02, 'numerosity': 3}
+71.5193 	EXP 	Sound beep started
+71.5401 	EXP 	Sound beep stopped
+71.6490 	EXP 	Sound beep started
+71.6587 	EXP 	Sound beep stopped
+71.7596 	EXP 	Sound beep started
+71.7771 	EXP 	Sound beep stopped
+72.8954 	EXP 	Sound audio started
+73.5909 	EXP 	Sound audio stopped
+74.3979 	EXP 	New trial (rep=3, index=0): {'condition': '3_con_duration', 'single_duration': 0.14, 'numerosity': 3}
+74.3996 	EXP 	Sound beep started
+74.5418 	EXP 	Sound beep stopped
+74.6505 	EXP 	Sound beep started
+74.7913 	EXP 	Sound beep stopped
+74.8922 	EXP 	Sound beep started
+75.0297 	EXP 	Sound beep stopped
+75.8303 	EXP 	New trial (rep=3, index=1): {'condition': '1_con_duration', 'single_duration': 0.62, 'numerosity': 1}
+75.8336 	EXP 	Sound beep started
+76.4600 	EXP 	Sound beep stopped
+77.2606 	EXP 	New trial (rep=3, index=2): {'condition': '1_con_rate', 'single_duration': 0.02, 'numerosity': 1}
+77.2623 	EXP 	Sound beep started
+77.2907 	EXP 	Sound beep stopped
+78.0912 	EXP 	New trial (rep=3, index=3): {'condition': '4_con_rate', 'single_duration': 0.02, 'numerosity': 4}
+78.0944 	EXP 	Sound beep started
+78.1241 	EXP 	Sound beep stopped
+78.2250 	EXP 	Sound beep started
+78.2431 	EXP 	Sound beep stopped
+78.3518 	EXP 	Sound beep started
+78.3742 	EXP 	Sound beep stopped
+78.4750 	EXP 	Sound beep started
+78.4926 	EXP 	Sound beep stopped
+79.2934 	EXP 	New trial (rep=3, index=4): {'condition': '6_con_duration', 'single_duration': 0.02, 'numerosity': 6}
+79.2965 	EXP 	Sound beep started
+79.3258 	EXP 	Sound beep stopped
+79.4341 	EXP 	Sound beep started
+79.4577 	EXP 	Sound beep stopped
+79.5666 	EXP 	Sound beep started
+79.5816 	EXP 	Sound beep stopped
+79.6903 	EXP 	Sound beep started
+79.7048 	EXP 	Sound beep stopped
+79.8135 	EXP 	Sound beep started
+79.8232 	EXP 	Sound beep stopped
+79.9320 	EXP 	Sound beep started
+79.9422 	EXP 	Sound beep stopped
+80.7428 	EXP 	New trial (rep=3, index=5): {'condition': '2_con_rate', 'single_duration': 0.02, 'numerosity': 2}
+80.7456 	EXP 	Sound beep started
+80.7743 	EXP 	Sound beep stopped
+80.8832 	EXP 	Sound beep started
+80.8929 	EXP 	Sound beep stopped
+81.6936 	EXP 	New trial (rep=3, index=6): {'condition': '5_con_duration', 'single_duration': 0.044, 'numerosity': 5}
+81.6967 	EXP 	Sound beep started
+81.7416 	EXP 	Sound beep stopped
+81.8505 	EXP 	Sound beep started
+81.8981 	EXP 	Sound beep stopped
+82.0066 	EXP 	Sound beep started
+82.0581 	EXP 	Sound beep stopped
+82.1671 	EXP 	Sound beep started
+82.2079 	EXP 	Sound beep stopped
+82.3089 	EXP 	Sound beep started
+82.3581 	EXP 	Sound beep stopped
+83.1587 	EXP 	New trial (rep=3, index=7): {'condition': '6_con_rate', 'single_duration': 0.02, 'numerosity': 6}
+83.1616 	EXP 	Sound beep started
+83.1905 	EXP 	Sound beep stopped
+83.2915 	EXP 	Sound beep started
+83.3093 	EXP 	Sound beep stopped
+83.4182 	EXP 	Sound beep started
+83.4283 	EXP 	Sound beep stopped
+83.5372 	EXP 	Sound beep started
+83.5579 	EXP 	Sound beep stopped
+83.6667 	EXP 	Sound beep started
+83.6766 	EXP 	Sound beep stopped
+83.7773 	EXP 	Sound beep started
+83.8080 	EXP 	Sound beep stopped
+84.6085 	EXP 	New trial (rep=3, index=8): {'condition': '2_con_duration', 'single_duration': 0.26, 'numerosity': 2}
+84.6115 	EXP 	Sound beep started
+84.8754 	EXP 	Sound beep stopped
+84.9842 	EXP 	Sound beep started
+85.2419 	EXP 	Sound beep stopped
+86.0426 	EXP 	New trial (rep=3, index=9): {'condition': '5_con_rate', 'single_duration': 0.02, 'numerosity': 5}
+86.0456 	EXP 	Sound beep started
+86.0744 	EXP 	Sound beep stopped
+86.1755 	EXP 	Sound beep started
+86.1982 	EXP 	Sound beep stopped
+86.3072 	EXP 	Sound beep started
+86.3211 	EXP 	Sound beep stopped
+86.4300 	EXP 	Sound beep started
+86.4449 	EXP 	Sound beep stopped
+86.5535 	EXP 	Sound beep started
+86.5646 	EXP 	Sound beep stopped
+87.3653 	EXP 	New trial (rep=3, index=10): {'condition': '3_con_rate', 'single_duration': 0.02, 'numerosity': 3}
+87.3678 	EXP 	Sound beep started
+87.3900 	EXP 	Sound beep stopped
+87.4989 	EXP 	Sound beep started
+87.5090 	EXP 	Sound beep stopped
+87.6179 	EXP 	Sound beep started
+87.6281 	EXP 	Sound beep stopped
+88.6319 	DATA 	Keypress: escape
+89.0139 	EXP 	window1: mouseVisible = True
+89.0539 	WARNING 	Stopping key buffers but this could be dangerous ifother keyboards rely on the same.

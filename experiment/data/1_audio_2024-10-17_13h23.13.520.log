@@ -1,0 +1,60 @@
+9.8153 	WARNING 	psychopy.parallel has been imported on a Mac (which doesn't have a parallel port?)
+20.3289 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, autoLog=True, backendConf=UNKNOWN, backgroundFit=<method-wrapper '__getattribute__' of attributeSetter object at 0x7fbb53352580>, backgroundImage=<method-wrapper '__getattribute__' of attributeSetter object at 0x7fbb53352520>, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([0, 0, 0]), colorSpace='rgb', depthBits=8, fullscr=<method-wrapper '__getattribute__' of attributeSetter object at 0x7fbb53352310>, gamma=None, gammaErrorPolicy='raise', infoMsg=UNKNOWN, lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x7fbb40c33d30>, multiSample=False, name='window1', numSamples=2, pos=[360.0, 225.0], screen=0, size=array([2880, 1800]), stencilBits=0, stereo=False, title='PsychoPy', units='pix', useFBO=True, useRetina=True, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+20.3290 	EXP 	window1: backgroundImage = ''
+20.3290 	EXP 	window1: backgroundFit = 'none'
+20.3299 	EXP 	window1: mouseVisible = False
+20.3323 	EXP 	window1: Attempting to measure frame rate of screen (0) ...
+20.3323 	EXP 	window1: recordFrameIntervals = False
+20.4188 	EXP 	window1: recordFrameIntervals = True
+20.4609 	WARNING 	t of last frame was 10.58ms (=1/94)
+20.4939 	WARNING 	t of last frame was 25.39ms (=1/39)
+20.5111 	WARNING 	t of last frame was 17.21ms (=1/58)
+20.5443 	WARNING 	t of last frame was 10.31ms (=1/96)
+20.6270 	EXP 	Screen (0) actual frame rate measured at 121.15Hz
+20.6271 	EXP 	window1: recordFrameIntervals = False
+25.9084 	EXP 	window1: mouseVisible = False
+26.0088 	EXP 	Created text_welcome = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoDraw=False, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, draggable=False, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=1.0, italic=False, languageStyle='LTR', name='text_welcome', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='When you are ready, press "space".', units='cm', win=Window(...), wrapWidth=15.0)
+26.0093 	EXP 	window1: mouseVisible = False
+26.0224 	EXP 	Created line_diagonal_1 = Line(__class__=<class 'psychopy.visual.line.Line'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=False, color=array([1., 0., 0.]), colorSpace='rgb', contrast=None, depth=0.0, draggable=False, fillColor=array([0, 0, 0]), fillColorSpace='rgb', fillRGB=array([0, 0, 0]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([250,   0,   0]), lineWidth=1.5, name='line_diagonal_1', opacity=0.5, ori=0.0, pos=array([0., 0.]), size=array([1., 1.]), units='norm', vertices=ndarray(...), win=Window(...), windingRule=None)
+26.0226 	EXP 	window1: mouseVisible = False
+26.0254 	EXP 	Created line_diagonal_2 = Line(__class__=<class 'psychopy.visual.line.Line'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=False, color=array([1., 0., 0.]), colorSpace='rgb', contrast=None, depth=0.0, draggable=False, fillColor=array([0, 0, 0]), fillColorSpace='rgb', fillRGB=array([0, 0, 0]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([250,   0,   0]), lineWidth=1.5, name='line_diagonal_2', opacity=0.5, ori=0.0, pos=array([0., 0.]), size=array([1., 1.]), units='norm', vertices=ndarray(...), win=Window(...), windingRule=None)
+28.3618 	EXP 	Sound beep set volume 1.000
+28.3673 	EXP 	Sound audio set volume 1.000
+28.5281 	EXP 	Sound audio set volume 1.000
+29.6837 	EXP 	Sound audio set volume 1.000
+29.6917 	EXP 	Sound audio set volume 1.000
+29.7011 	EXP 	Sound audio set volume 1.000
+29.7178 	EXP 	window1: mouseVisible = False
+40.1822 	EXP 	window1: mouseVisible = False
+40.2187 	EXP 	window1: mouseVisible = False
+40.2584 	EXP 	window1: mouseVisible = False
+40.2851 	EXP 	window1: mouseVisible = False
+40.3167 	EXP 	window1: mouseVisible = False
+41.4571 	EXP 	window1: mouseVisible = False
+41.4887 	EXP 	window1: mouseVisible = False
+42.7002 	EXP 	window1: mouseVisible = False
+42.7314 	EXP 	window1: mouseVisible = False
+42.7630 	EXP 	window1: mouseVisible = False
+42.7881 	EXP 	window1: mouseVisible = False
+42.8136 	EXP 	window1: mouseVisible = False
+42.8425 	EXP 	window1: mouseVisible = False
+42.8860 	EXP 	Created unnamed ImageStim = ImageStim(__class__=<class 'psychopy.visual.image.ImageStim'>, anchor=('center', 'center'), autoLog=True, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0, draggable=False, flipHoriz=False, flipVert=False, image=str(...), interpolate=False, mask=None, maskParams=None, name='unnamed ImageStim', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([385., 400.]), texRes=128, units='pix', win=Window(...))
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	unnamed MovieStim: autoLog = True
+42.9916 	EXP 	text_welcome: autoDraw = True
+45.5121 	DATA 	Keypress: space
+45.5470 	EXP 	Created sequence: random, trialTypes=12, nReps=35, seed=None
+45.5480 	EXP 	New trial (rep=0, index=0): {'condition': '6_con_duration', 'single_duration': 0.02, 'numerosity': 6}
+45.9107 	EXP 	window1: mouseVisible = True
+45.9786 	WARNING 	Stopping key buffers but this could be dangerous ifother keyboards rely on the same.

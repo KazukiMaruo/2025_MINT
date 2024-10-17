@@ -44,7 +44,7 @@ This section outlines the pipeline, with step-by-step explanations of how to set
 
 ### 2. Generate the visual stimuli based on your experiment setting
 
-If you just want to take a look at the experiment, you can skip this process. All of the stimuli are already on the folder 
+If you just want to take a look at the experiment, you can skip this process. All of the stimuli are already on the following folder 
 ```bash
 cd MINT/experiment/stimuli/visual
 ```
@@ -68,10 +68,16 @@ This experiment works well with
 psychopyVersion = '2024.1.5'
 ```
 1. Open Psychopy.
-2. Open two scripts: 'main__adudio_mac.py' 'main__visual_mac.py'
-3. Run either one.
-
-'main__adudio.py' and 'main__visual.py' include trigger for EEG recording.
+2. Open 'experiment.py' 
+3. Chnage the folloing parameters.
+```python 
+# chose 'audio' or 'visual'
+modality = 'visual'
+# specify the monitor size (px), width (cm), and distance (cm) from the screen. 
+monitor_data = [1440, 900, 30, 50]   # Ex. EEG lab: [1920, 1080, 30, 50], Mac laptop: [1440, 900, 30, 50] 
+# specify whether you need trigger or not.
+EEG_Trigger = False
+```
 
 ## Directory Structure
 The experiment folder should be configured like this:
@@ -109,10 +115,8 @@ experiment/
     │   ├── .csv   
     │   ├── .log  
     │   └── .psydat 
-    ├── main__adudio_mac.py   # Psychopy: auditory experiment on Mac
-    ├── main__visual_mac.py   # Psychopy: visual experiment on Mac
-    ├── main__adudio.py   # Psychopy: auditory experiment on window in EEG lab
-    ├── main__visual.py   # Psychopy: visual experiment on window in EEG lab
+    ├── experiment.py   # Psychopy: auditory experiment on Mac
+    ├── functions.py   # Psychopy: visual experiment on Mac
     ├── visualstimuli_generator.py   # Generate the visual stimuli
     └── README.md  # Overview of the experiment directory
 ```

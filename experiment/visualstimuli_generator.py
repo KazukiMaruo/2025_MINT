@@ -242,13 +242,12 @@ def control_circumference(width, height, circle_radius_pixels):
         os.makedirs(numerosity_dir, exist_ok=True)
 
         # Calculate the total area for the dots and adjust dot radius
-        total_area = math.pi * (circle_radius_pixels) ** 2  # Total area occupied by the dots
-        single_dot_area = (total_area / 1.5) / numerosity  # Area for each dot
-        dot_radius_pixels = math.sqrt(single_dot_area / math.pi)  # Adjusted radius based on the area
-        circumference = 2 * math.pi * dot_radius_pixels
-
         if numerosity == 1:
-            dot_radius_pixels = dot_radius_pixels
+            total_area = math.pi * (circle_radius_pixels) ** 2  # Total area of circle based on the visual angle
+            single_dot_area = (total_area / 2) / numerosity  # Area for each dot
+            dot_radius_pixels = math.sqrt(single_dot_area / math.pi)  # Adjusted radius based on the area
+            circumference = 2 * math.pi * dot_radius_pixels
+        
         else:
             circumference_per_dot = circumference / numerosity
             dot_radius_pixels = circumference_per_dot / (2 * math.pi)
