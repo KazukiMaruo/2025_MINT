@@ -368,9 +368,9 @@ file_name = 'param.json'
 file_path = os.path.join(target_dir, file_name)
 
 data = {
-    'singledotsize_cont_radius': {str(i+1): singledotsize for i in range(6)},
-    'totaldotsize_cont_radius': {str(i+1): totaldotsize[i] for i in range(6)},
-    'circumference_cont_radius': {str(i+1): circumference[i] for i in range(6)}
+    'singledotsize_cont_radius (px))': {str(i+1): singledotsize for i in range(6)},
+    'totaldotsize_cont_radius (px)': {str(i+1): totaldotsize[i] for i in range(6)},
+    'circumference_cont_radius (px)': {str(i+1): circumference[i] for i in range(6)}
 }
 
 # Create and write the JSON file

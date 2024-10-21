@@ -1,5 +1,5 @@
 {
-    "singledotsize_cont_radius": {
+    "singledotsize_cont_radius (px)": {
         "1": 8,
         "2": 8,
         "3": 8,
@@ -7,7 +7,7 @@
         "5": 8,
         "6": 8
     },
-    "totaldotsize_cont_radius": {
+    "totaldotsize_cont_radius (px)": {
         "1": 19.349157955255333,
         "2": 13.681920800410678,
         "3": 11.171241554059256,
@@ -15,7 +15,7 @@
         "5": 8.653206499066352,
         "6": 7.899260657148244
     },
-    "circumference_cont_radius": {
+    "circumference_cont_radius (px)": {
         "1": 23.697781971444734,
         "2": 11.848890985722367,
         "3": 7.899260657148245,
