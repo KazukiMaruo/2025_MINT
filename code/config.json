@@ -46,7 +46,7 @@
                  "6_con_circum": 18
                 },
     
-    "POSTSTIM_WINDOW": 0.75,
+    "POSTSTIM_WINDOW": 0.8,
 
     "PREPROC_PARAMS": 
             {"hpf": 0.1, 

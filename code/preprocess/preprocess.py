@@ -12,7 +12,10 @@ import json
 
 
 
-# ~~~~~~~~~~~~~~ Environment set up
+################################################################################
+#################### Environment #############################################
+################################################################################
+
 # open parent folder of this script
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -52,16 +55,20 @@ update_eeg_headers(f"{BASE_DIR}/data/raw/{session}/{session}.vhdr") # BrainVisio
 
 
 
+################################################################################
+#################### Loading data #############################################
+################################################################################
 
-# ~~~~~~~~~~~~~~ Pre-processing
-# load raw data
-raw = mne.io.read_raw_brainvision(f"{BASE_DIR}/data/raw/{session}/{session}.vhdr", 
-                                  misc='auto', scale=1.0, preload=True, verbose=False)
-
+raw = mne.io.read_raw_brainvision(f"{BASE_DIR}/data/raw/{session}/{session}.vhdr",  # Brain vision file format contains three files .vhdr for the header, .eeg for the data, and .vmrk for events
+                                  misc='auto', # misc = Specifies that channels labeled as miscellaneous (e.g., auxiliary or non-EEG channels) should be automatically detected.
+                                  scale=1.0, # 1.0 means no change for scale
+                                  preload=True, # the data is loaded directly into memory. This allows for faster processing 
+                                  verbose=False) # Suppresses output during the loading process (helpful when you don’t want too much logging information
+ 
 # create custom montage
-raw.rename_channels({'VP': 'Fp2',  # this is a detour
+raw.rename_channels({'VP': 'Fp2',  # In this case, the channel labeled VP is renamed to Fp2, and VM is renamed to Fp1.
                      'VM': 'Fp1'})
-raw.set_montage(make_31_montage(raw))
+raw.set_montage(make_31_montage(raw)) # A montage is a spatial configuration that specifies the positions of the EEG electrodes on the scalp. # Without this montage, the EEG data would lack spatial information, which is necessary for topographical analyses or visualizations.
 
 # annotations / events
 raw.annotations.description = np.array(
@@ -70,22 +77,23 @@ raw.annotations.description = np.array(
         for i in raw.annotations.description
     ]
 )
+# annotations / duration of each event
 raw.annotations.duration = np.array([POSTSTIM_WINDOW for _ in raw.annotations.description])
 
-# delete remaining stimulus events
+# delete remaining stimulus events / This part of the code removes specific types of events from the annotations in the EEG data
 indices_to_remove = [i for i, j in enumerate(raw.annotations.description) if "Stimulus" in j or "Segment" in j or "actiCAP" in j]
 raw.annotations.delete(indices_to_remove)
 
 # error correction in first 3 pilots
 if session in ["sub-301_ses-001", "sub-303_ses-001", "sub-304_ses-001"]:
-    raw.annotations.description = np.roll(raw.annotations.description, 1)
+    raw.annotations.description = np.roll(raw.annotations.description, 1) # This shifts the annotation descriptions forward by 1 position, which corrects an error where the annotations may have been misaligned. Example: If the original descriptions are [A, B, C], after rolling by 1, they become [C, A, B].
     
 # get events and event_id
 events, event_id = mne.events_from_annotations(raw, event_id=EVENT_ID)
 
 # resample
-raw, events = raw.resample(SFREQ, events = events)
-raw.events = events
+raw, events = raw.resample(SFREQ, events = events) # raw.resample(SFREQ, events=events): Resamples the raw EEG data to a new sampling frequency (SFREQ) while adjusting the timing of the events accordingly.
+raw.events = events #  This assigns the resampled events back to the raw object, so the events remain associated with the data after resampling.
 
 # print the number of events per condition
 event_counts = {}
@@ -93,38 +101,50 @@ for key in EVENT_ID.keys():
     event_counts[key] = len(events[events[:, 2] == EVENT_ID[key]])
     print(key, len(events[events[:, 2] == EVENT_ID[key]]))
 
+# This saves the event counts to a JSON file.
 with open(f"{BASE_DIR}/data/interim/{session}/event_counts_before_drop.json", "w") as f:
     json.dump(event_counts, f)
 
-np.save(f"{BASE_DIR}/data/interim/{session}/events.npy", events)
+# This saves the events and the event ID mapping as .npy (NumPy binary) files for future use.
+np.save(f"{BASE_DIR}/data/interim/{session}/events.npy", events) # This function saves the array or object
 np.save(f"{BASE_DIR}/data/interim/{session}/event_id.npy", EVENT_ID)
 
+# This plots the events and saves the visualization as a .png image.
 fig = mne.viz.plot_events(events, event_id=EVENT_ID, sfreq=raw.info['sfreq'], first_samp=raw.first_samp, show=False)
 fig.savefig(f"{BASE_DIR}/data/interim/{session}/events.png")
 
 
-# okular data
-raw = calculate_artificial_channels(raw.copy(), pairs=[['Fp1', 'Fp2'],['F9', 'F10']], labels=['eyeV', 'eyeH'])
+# creates new artificial channels representing eye movements, using specific EEG channel pairs.
+raw = calculate_artificial_channels(raw.copy(), pairs=[['Fp1', 'Fp2'],['F9', 'F10']], labels=['eyeV', 'eyeH']) # ['Fp1', 'Fp2']: These are the frontal electrodes typically used to capture vertical eye movements (denoted as eyeV in this case). ['F9', 'F10']: These electrodes are often placed near the eyes and can be used to capture horizontal eye movements (denoted as eyeH).
 raw.drop_channels(['Fp1']) # former eye channel (dummy name)
 
 # save
-raw.save(f"{BASE_DIR}/data/interim/{session}/raw.fif", overwrite=True)
+raw.save(f"{BASE_DIR}/data/interim/{session}/raw.fif", overwrite=True) # .fif file, which is a standard file format used in MNE for storing EEG/MEG data.
+# ~~~~~~~~~~~~~~ Loading data ~~~~~~~~~~~~~~
+
+
 
 ################################################################################
 #################### Preprocessing #############################################
 ################################################################################
 
-# filter
-raw.filter(l_freq=PREPROC_PARAMS["hpf"], 
-           h_freq=PREPROC_PARAMS["lpf"], 
-           method='fir', fir_design='firwin', skip_by_annotation='EDGE boundary', n_jobs=-1)
+# band-pass filter
+raw.filter(l_freq=PREPROC_PARAMS["hpf"], # high-pass
+           h_freq=PREPROC_PARAMS["lpf"], # low-pass
+           method='fir', #  Finite Impulse Response (FIR) filter 
+           fir_design='firwin', # a popular window method for designing FIR filters
+           skip_by_annotation='EDGE boundary', # This skips data points marked by annotations such as "EDGE" or "boundary"
+           n_jobs=-1) # This allows the filtering to be done in parallel, using all available CPU cores
 
 # eye movement correction
-
 if PREPROC_PARAMS["emc"] == "True":
     filt_raw = raw.copy().filter(l_freq=1.0, h_freq=None, n_jobs=-1)
     
-    ica = ICA(n_components=20, max_iter="auto", method='picard', random_state=97)
+    # ICA model to the filtered EEG data
+    ica = ICA(n_components=20, # set the number of ICA to estimate
+              max_iter="auto", # Automatically determines the maximum number of iterations for ICA convergence.
+              method='picard', # This specifies the ICA algorithm to use. Picard is an efficient ICA algorithm suitable for EEG data.
+              random_state=97) # Sets a random seed for reproducibility.
     ica.fit(filt_raw) # bads seem to be ignored by default
 
     # automatic detection of EOG/EMG components
@@ -132,7 +152,7 @@ if PREPROC_PARAMS["emc"] == "True":
     # find which ICs match the EOG pattern
     indices, scores = ica.find_bads_eog(raw)
     print(f'Found {len(indices)} independent components correlating with EOG signal.')
-    ica.exclude.extend(indices) 
+    ica.exclude.extend(indices) # Adds the EOG-correlated ICs to the exclude list. These components will later be removed from the data.
 
     # barplot of ICA component "EOG/EMG match" scores
     f = ica.plot_scores(scores,
@@ -149,19 +169,21 @@ if PREPROC_PARAMS["emc"] == "True":
             gi.savefig(f"{BASE_DIR}/data/interim/{session}/ica_diagnostics_ic{p}.png", dpi=100)
     plt.close('all')
 
+    # This applies the ICA solution to the raw EEG data,
     ica.apply(raw)
 
-# reference
-raw.set_eeg_reference(PREPROC_PARAMS["ref"], projection=False)
+
+# reference determines the baseline
+raw.set_eeg_reference(PREPROC_PARAMS["ref"], projection=False) #  average of all electrodes is used as the reference. This indicates that the reference should be applied directly
 
 # epoching
-epochs = mne.Epochs(raw, 
-                    events, 
+epochs = mne.Epochs(raw, # The continuous EEG data
+                    events, # This is an array of events detected in the EEG data
                     event_id=EVENT_ID, #event_id,
-                    tmin=PREPROC_PARAMS["base"][0], 
-                    tmax=PREPROC_PARAMS["tmax"], # new: longer interval
-                    baseline=tuple(PREPROC_PARAMS["base"]),
-                    detrend=PREPROC_PARAMS["det"],
+                    tmin=PREPROC_PARAMS["base"][0], # the start time = -100ms
+                    tmax=PREPROC_PARAMS["tmax"], # The end time of each epoch = 1s
+                    baseline=tuple(PREPROC_PARAMS["base"]), # (-100 - 0), Baseline correction subtracts the mean signal in this window from the rest of the epoch to remove slow drifts or offset in the data.
+                    detrend=PREPROC_PARAMS["det"], # it removes any linear trends (slow drifts) in the data.
                     proj=False,
                     reject_by_annotation=False, 
                     preload=True)
@@ -170,8 +192,8 @@ epochs = mne.Epochs(raw,
 if PREPROC_PARAMS["ar"] != "False":
     
     if PREPROC_PARAMS["ar"] == "interpolate":        
-        n_interpolate=[len(epochs.info['ch_names'])] # or False for default hyperparameter finding
-        consensus=[len(epochs.info['ch_names'])]  # or False for default hyperparameter finding
+        n_interpolate=[len(epochs.info['ch_names'])] # This means the maximum number of channels (equal to the number of channels in the data) will be interpolated, which effectively interpolates all bad channels.
+        consensus=[len(epochs.info['ch_names'])]  # Similarly, the consensus parameter is set to match the number of channels
     elif PREPROC_PARAMS["ar"] == "interpolate_reject":    
         n_interpolate = [4, 8, 12, 16]
         consensus = np.linspace(0, 1.0, 11)
@@ -180,25 +202,26 @@ if PREPROC_PARAMS["ar"] != "False":
         sys.exit(1)
     
     # automated estimation of rejection threshold based on channel and trial per participant
-    ar = AutoReject(n_interpolate=n_interpolate, 
-                    consensus=consensus,
-                    random_state=11,
+    ar = AutoReject(n_interpolate=n_interpolate, # The number of channels to interpolate if they are detected as noisy.
+                    consensus=consensus, # The proportion of channels that must agree to mark a trial as noisy.
+                    random_state=11, # Ensures the results are reproducible by setting the random seed
                     n_jobs=-1, 
-                    verbose=False)
-    ar.fit(epochs)  # fit only a few epochs if you want to save time
-    epochs, reject_log = ar.transform(epochs.copy(), return_log=True)
+                    verbose=False) # Suppresses the printing of verbose output.
+    ar.fit(epochs)  # The autoreject algorithm is fitted to the epochs, analyzing the data to determine which trials or channels are noisy.
+    epochs, reject_log = ar.transform(epochs.copy(), return_log=True) # epochs = The cleaned EEG epochs after autoreject has been applied. reject_log = A log of which trials were rejected or which channels were interpolated.
 
     # plot the rejection log and save plot
     rej_plot = reject_log.plot('horizontal', show=True)
     rej_plot.savefig(f"{BASE_DIR}/data/interim/{session}/autoreject.png", dpi=100)
-    reject_log.save(f"{BASE_DIR}/data/interim/{session}/autoreject.npz", overwrite=True) # must end with .npz
+    reject_log.save(f"{BASE_DIR}/data/interim/{session}/autoreject.npz", overwrite=True) # must end with .npz, compressed numpy file format
     
     
     
 # delete surplus trials --> at the end when formed epochs, because if some epoch forming failed (because eeg ended before tmax), then the rebalancing needs to be performed again
-min_trials = np.min(list(event_counts.values()))
+min_trials = np.min(list(event_counts.values())) # Determine the smallest number of trials across all event types
 dropping_seed = 23
 np.random.seed(dropping_seed)
+
 epochs_equalized = []
 for key in EVENT_ID.keys():
     if len(epochs[key]) > min_trials:
