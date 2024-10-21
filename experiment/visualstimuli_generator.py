@@ -11,6 +11,7 @@ from PIL import Image, ImageDraw
 import math
 import random
 import os
+import json
 # ~~~~~~~~~~~~~ Libraries ~~~~~~~~~~~~~
 
 
@@ -353,8 +354,30 @@ circle_radius_pixels = compute_radius(width, screen_width_cm, distance_cm, visua
 
 # ~~~~~~~~~~~~~ Generator
 background_image(width, height)
-control_singledotsize(width, height, circle_radius_pixels)
-control_totaldotsize(width, height, circle_radius_pixels)
-control_circumference(width, height, circle_radius_pixels)
+singledotsize = control_singledotsize(width, height, circle_radius_pixels)
+totaldotsize = control_totaldotsize(width, height, circle_radius_pixels)
+circumference = control_circumference(width, height, circle_radius_pixels) # this function generates the images and retunrs the radius of each dot
 # ~~~~~~~~~~~~~ Generator ~~~~~~~~~~~~~
 
+
+
+# ~~~~~~~~~~~~~ Output the stimuli data into json
+base_dir = os.getcwd()
+target_dir = os.path.join(base_dir, 'stimuli', 'visual')
+file_name = 'param.json'
+file_path = os.path.join(target_dir, file_name)
+
+data = {
+    'singledotsize_cont_radius': {str(i+1): singledotsize for i in range(6)},
+    'totaldotsize_cont_radius': {str(i+1): totaldotsize[i] for i in range(6)},
+    'circumference_cont_radius': {str(i+1): circumference[i] for i in range(6)}
+}
+
+# Create and write the JSON file
+with open(file_path, 'w') as json_file:
+    json.dump(data, json_file, indent=4)
+
+print(f"JSON file created successfully at: {file_path}")
+
+
+# ~~~~~~~~~~~~~ Output the data into json ~~~~~~~~~~~~~
