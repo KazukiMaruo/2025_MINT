@@ -1,0 +1,73 @@
+{
+    "BASE_DIR": "/u/kazma/MINT/",
+    "COMPUTE_DIR": "/ptmp/kazma/MINT/",
+
+    "DATASHARE_USER": "kazma",
+    "DATASHARE_RAW_FOLDER": "MINT/raw/",
+
+    "CONDITION_MAP":
+               {"Stimulus/S  1": "1_con_singledot",
+                "Stimulus/S  2": "2_con_singledot",
+                "Stimulus/S  3": "3_con_singledot",
+                "Stimulus/S  4": "4_con_singledot",
+                "Stimulus/S  5": "5_con_singledot",
+                "Stimulus/S  6": "6_con_singledot",
+                "Stimulus/S  7": "1_con_totaldot",
+                "Stimulus/S  8": "2_con_totaldot",
+                "Stimulus/S  9": "3_con_totaldot",
+                "Stimulus/S 10": "4_con_totaldot",
+                "Stimulus/S 11": "5_con_totaldot",
+                "Stimulus/S 12": "6_con_totaldot",
+                "Stimulus/S 13": "1_con_circum",
+                "Stimulus/S 14": "2_con_circum",
+                "Stimulus/S 15": "3_con_circum",
+                "Stimulus/S 16": "4_con_circum",
+                "Stimulus/S 17": "5_con_circum",
+                "Stimulus/S 18": "6_con_circum"
+            },
+    "EVENT_ID":
+                {"1_con_singledot": 1,
+                 "2_con_singledot": 2,
+                 "3_con_singledot": 3,
+                 "4_con_singledot": 4,
+                 "5_con_singledot": 5,
+                 "6_con_singledot": 6,
+                 "1_con_totaldot": 7,
+                 "2_con_totaldot": 8,
+                 "3_con_totaldot": 9,
+                 "4_con_totaldot": 10,
+                 "5_con_totaldot": 11,
+                 "6_con_totaldot": 12,
+                 "1_con_circum": 13,
+                 "2_con_circum": 14,
+                 "3_con_circum": 15,
+                 "4_con_circum": 16,
+                 "5_con_circum": 17,
+                 "6_con_circum": 18
+                },
+    
+    "POSTSTIM_WINDOW": 0.8,
+
+    "PREPROC_PARAMS": 
+            {"hpf": 0.1, 
+            "lpf": 15,
+            "emc": "True",
+            "ref": "average",
+            "base": [-0.1, 0.0], 
+            "tmax": 1,
+            "det": 1,
+            "ar": "interpolate"
+            },
+    
+    "SFREQ": 250,
+    
+    "N_CLASSES": 18,
+
+    "EEGNET_CV": 10,
+    "EEGNET_MAX_EPOCHS": 200,
+    "EEGNET_BATCH_SIZE": 16,
+    "N_SURROGATES_EEGNET": 1000,
+
+    "TR_CV": 10,
+    "N_SURROGATES_TR": 1000
+}

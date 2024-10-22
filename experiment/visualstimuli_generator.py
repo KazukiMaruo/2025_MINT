@@ -11,6 +11,7 @@ from PIL import Image, ImageDraw
 import math
 import random
 import os
+import json
 # ~~~~~~~~~~~~~ Libraries ~~~~~~~~~~~~~
 
 
@@ -40,7 +41,7 @@ def euclidean_distance(x1, y1, x2, y2): # Function to calculate Euclidean distan
 
 
 
-def control_singledotsize(width, height, circle_radius_pixels):
+def control_singledotsize(width, height, circle_radius_pixels, n_trials):
     """
     Generates single dot sise controled stimuli with varying numbers of dots (from 1 ~ 6), ensuring no overlap and positioning
     them inside a circle.
@@ -64,7 +65,7 @@ def control_singledotsize(width, height, circle_radius_pixels):
         os.makedirs(numerosity_dir, exist_ok=True)
 
         # Generate 70 images for each numerosity
-        for img_num in range(1, 71):
+        for img_num in range(n_trials):
             # Create a blank image with gray background
             image = Image.new("RGB", (width, height), (128, 128, 128))
             draw = ImageDraw.Draw(image)
@@ -120,14 +121,14 @@ def control_singledotsize(width, height, circle_radius_pixels):
                         break  # Exit the while loop once a valid dot is placed
 
             # Save the image with a unique name
-            image_path = os.path.join(numerosity_dir, f"image_{img_num}.png")
+            image_path = os.path.join(numerosity_dir, f"image_{img_num+1}.png")
             image.save(image_path)
     print(f"When the singledotsize is controlled, single dot radius (px) from 1 to 6 is: {dot_radius_pixels}")
     return dot_radius_pixels
 
 
 
-def control_totaldotsize(width, height, circle_radius_pixels):
+def control_totaldotsize(width, height, circle_radius_pixels, n_trials):
     """
     Generates total dot sise controled stimuli with varying numbers of dots (from 1 ~ 6), ensuring no overlap and positioning
     them inside a circle.
@@ -155,7 +156,7 @@ def control_totaldotsize(width, height, circle_radius_pixels):
         dot_radius_pixels_list.append(dot_radius_pixels)
 
         # Generate 70 images for each numerosity
-        for img_num in range(1, 71):
+        for img_num in range(n_trials):
             # Create a blank image with gray background
             image = Image.new("RGB", (width, height), (128, 128, 128))
             draw = ImageDraw.Draw(image)
@@ -212,14 +213,14 @@ def control_totaldotsize(width, height, circle_radius_pixels):
                         break  # Exit while loop after placing the dot
 
             # Save the image with a unique name
-            image_path = os.path.join(numerosity_dir, f"image_{img_num}.png")
+            image_path = os.path.join(numerosity_dir, f"image_{img_num+1}.png")
             image.save(image_path)
     print(f"When the totaldotsize is controlled, single dot radius (px) from 1 to 6 is: {dot_radius_pixels_list}")
     return dot_radius_pixels_list
 
 
 
-def control_circumference(width, height, circle_radius_pixels):
+def control_circumference(width, height, circle_radius_pixels, n_trials):
     """
     Generates totatl circumference controled stimuli with varying numbers of dots (from 1 ~ 6), ensuring no overlap and positioning
     them inside a circle.
@@ -256,7 +257,7 @@ def control_circumference(width, height, circle_radius_pixels):
         dot_radius_pixels_list.append(dot_radius_pixels)
 
         # Generate 70 images for each numerosity
-        for img_num in range(1, 71):
+        for img_num in range(n_trials):
             # Create a blank image with gray background
             image = Image.new("RGB", (width, height), (128, 128, 128))
             draw = ImageDraw.Draw(image)
@@ -313,7 +314,7 @@ def control_circumference(width, height, circle_radius_pixels):
                         break  # Exit while loop after placing the dot
 
             # Save the image with a unique name
-            image_path = os.path.join(numerosity_dir, f"image_{img_num}.png")
+            image_path = os.path.join(numerosity_dir, f"image_{img_num+1}.png")
             image.save(image_path)
     print(f"When the circumference is controlled, single dot radius (px) from 1 to 6 is: {dot_radius_pixels_list}")
     return dot_radius_pixels_list
@@ -324,6 +325,7 @@ def background_image(width, height):
     # Base directory for storing images
     base_dir = os.getcwd()
     target_dir = os.path.join(base_dir, 'stimuli', 'visual')
+    os.makedirs(target_dir, exist_ok=True)
     image = Image.new("RGB", (width, height), (128, 128, 128))
     draw = ImageDraw.Draw(image)
 
@@ -350,11 +352,38 @@ circle_radius_pixels = compute_radius(width, screen_width_cm, distance_cm, visua
 # ~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~
 
 
+# ~~~~~~~~~~~~~ Constant
+n_trials = 70 # e.g., 70 trials for numerosity 3 in singledot controlled condition
+n_condition = 3
+total_n_trials = n_trials * n_condition
+numerosity = [1, 2, 3, 4, 5, 6]
+# ~~~~~~~~~~~~~ Constant ~~~~~~~~~~~~~
+
 
 # ~~~~~~~~~~~~~ Generator
 background_image(width, height)
-control_singledotsize(width, height, circle_radius_pixels)
-control_totaldotsize(width, height, circle_radius_pixels)
-control_circumference(width, height, circle_radius_pixels)
+singledotsize = control_singledotsize(width, height, circle_radius_pixels, n_trials)
+totaldotsize = control_totaldotsize(width, height, circle_radius_pixels, n_trials)
+circumference = control_circumference(width, height, circle_radius_pixels, n_trials) # this function generates the images and retunrs the radius of each dot
 # ~~~~~~~~~~~~~ Generator ~~~~~~~~~~~~~
 
+
+# ~~~~~~~~~~~~~ Output the stimuli data into json
+base_dir = os.getcwd()
+target_dir = os.path.join(base_dir, 'stimuli', 'visual')
+file_name = 'param.json'
+file_path = os.path.join(target_dir, file_name)
+data = {
+    'singledotsize_cont_radius_px': {str(i+1): singledotsize for i in range(6)},
+    'totaldotsize_cont_radius_px': {str(i+1): totaldotsize[i] for i in range(6)},
+    'circumference_cont_radius_px': {str(i+1): circumference[i] for i in range(6)},
+    'n_trials': n_trials,
+    'n_condition': n_condition,
+    'total_n_trials': total_n_trials,
+    'numerosity': numerosity
+}
+# Create and write the JSON file
+with open(file_path, 'w') as json_file:
+    json.dump(data, json_file, indent=4)
+print(f"JSON file created successfully at: {file_path}")
+# ~~~~~~~~~~~~~ Output the stimuli data into json ~~~~~~~~~~~~~
