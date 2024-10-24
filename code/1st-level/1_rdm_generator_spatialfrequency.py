@@ -114,7 +114,7 @@ RDM[upper_tri_mask] = np.nan   # Apply the mask and set the upper triangle to Na
 
 # ~~~~~~~~~~~~~~~~ Save cleand RDM
 rsa_image_dict = os.path.join(cwd, 'RDM')
-rdm_path = os.path.join(rsa_image_dict, 'rdm_spatial_frequency_new.npy')
+rdm_path = os.path.join(rsa_image_dict, 'rdm_spatial_frequency.npy')
 np.save(rdm_path, RDM)  # Save as .npy
 # ~~~~~~~~~~~~~~~~ Save RDM  ~~~~~~~~~~~~~~~~
 
@@ -128,7 +128,7 @@ ticks_labels = list(range(1,7)) # Labels for the ranges
 blackline_positions = np.arange(0, n, 210).tolist()
 
 # output name
-image_name = f'rdm_spatial_frequency_new.png'
+image_name = f'rdm_spatial_frequency.png'
 image_path = os.path.join(rsa_image_dict, image_name)
 
 # plot and save the figure
