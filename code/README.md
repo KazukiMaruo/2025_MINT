@@ -57,7 +57,7 @@ python 1_rdm_generator.py
 python 1_rdm_generator_spatialfrequency.py
  ```
 - **NOTE:** more than 10 hours will be needed until completed
-5. output 1 dissimilarity matrix by .png and .npy in [RDM folder](/RDM)
+5. output 1 dissimilarity matrix by .png and .npy in [RDM folder](./1st-level/RDM)
 -  'rdm_spatial_frequency_raw' represents matrix without cleaning up
 -  'rdm_spatial_frequency' represents dissimilarity matrix based on the spatial frequency in an image.
 
