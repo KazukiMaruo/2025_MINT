@@ -47,53 +47,49 @@ python preprocess.py
  ```bash
 python 1_rdm_generator.py
  ```
-
 - **NOTE:** 'param.json' in [stimuli folder](../experiment/stimuli/visual) is necessary.
+3. output 4 different dissimilarity matrixes by .png and .npy, and the color bar in [RDM folder](/RDM), larger value indicates more dissimilar
+- 1. 'rdm_area_of_a_single_dot' represents dissimilarity based on the area of a single dot in an image.
+- 2. 'rdm_area_of_total_dots' represents dissimilarity based on the area of total dots in an image.
+- 3. 'rdm_circumference_of_total_dots' represents dissimilarity based on the circumference of total dots in an image.
+- 4. 'rdm_numerosity' represents dissimilarity based on the number of dot in an image.
+
+4. run '1_rdm_generator_spatialfrequency.py' 
+ ```bash
+python 1_rdm_generator_spatialfrequency.py
+ ```
+- **NOTE:** more than 10 hours will be needed until completed
+5. output 1 dissimilarity matrix by .png and .npy in [RDM folder](/RDM)
+- 1. 'rdm_spatial_frequency_raw' represents matrix without cleaning up
+- 2. 'rdm_spatial_frequency' represents dissimilarity matrix based on the spatial frequency in an image.
 
 
 ## Group level analysis
 
 ## Directory Structure
-The experiment folder should be configured like this:
+The code folder should be configured like this:
 ```bash
 experiment/
-    ├── stimuli/   # contains all the stimuli you need
-    │   ├── audio/   # auditory numerosity
-    │   │   ├── beep.wav
-    │   ├── catch/   # catchy video and audio
-    │   │   ├── audio/
-    │   │   │   ├── 1.wav
-    │   │   │   │   ...
-    │   │   │   └── 5.wav
-    │   │   ├── video/
-    │   │   │   ├── 1.mp4
-    │   │   │   │   ...
-    │   │   │   └── 16.mp4        
-    │   │   └── pause.png   # an image for pause
-    │   └── visual/   # visual numerosity
-    │       ├── circumference_cont/   # total circumference is controlled across numerosity
-    │       │   ├── numerosity_1/
-    │       │   │   ...
-    │       │   ├── umerosity_6/
-    │       ├── singledotsize_cont/   # single dot size is controlled across numerosity
-    │       │   ├── numerosity_1/
-    │       │   │   ...
-    │       │   ├── umerosity_6/               
-    │       ├── totaldotsize_cont/   # total dot size is controlled across numerosity
-    │       │   ├── numerosity_1/
-    │       │   │   ...
-    │       │   ├── umerosity_6/
-    │       ├── background.png   # background image
-    │       └── param.json   # parameters of visual stimuli
+    ├── 1st-level/   # single level analysis
+    │   ├── RDM/   # representational dissimilarity matrix
+    │   │   ├── rdm_.png
+    │   │   ├── rdm_.npy
+    │   │   └── colorbar_only.png
+    │   ├── 1_rdm_generator.py        
+    │   └── 1_rdm_generator_spatialfrequency.py   
     │
-    ├── data/   # output directory from psychopy 
-    │   ├── .csv   
-    │   ├── .log  
-    │   └── .psydat 
-    ├── experiment.py   # Psychopy: visual and auditory experiments on Mac
-    ├── functions.py   # function lists
-    ├── visualstimuli_generator.py   # Generate the visual stimuli
-    └── README.md  # Overview of the experiment directory
+    ├── 2nd-level/   # group level analysis 
+    │   ├──    
+    │   ├──   
+    │   └── 
+    │
+    ├── Preprocess   # EEG preprocessing
+    │   ├── preprocess.py       
+    │   ├──   
+    │   └── 
+    ├── config.json   # general info for analysis
+    ├── README.md   # overview of the directory
+    └── utils.py  # function lists
 ```
 
 
