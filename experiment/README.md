@@ -61,6 +61,8 @@ visual_angle = 2 # visual angle
 circle_radius_pixels = compute_radius(width, screen_width_cm, distance_cm, visual_angle) # compute the raidus of circle within the specified visual angle
 # ~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~
 ```
+3. 'param.json' describes pixel size of single dot for each numerosity and condition.
+
 
 ### 3. Run the experiment on Psychopy
 This experiment works well with
@@ -108,15 +110,16 @@ experiment/
     │       ├── totaldotsize_cont/   # total dot size is controlled across numerosity
     │       │   ├── numerosity_1/
     │       │   │   ...
-    │       │   ├── umerosity_6/ 
-    │       └── background.png   # background image
+    │       │   ├── umerosity_6/
+    │       ├── background.png   # background image
+    │       └── param.json   # parameters of visual stimuli
     │
     ├── data/   # output directory from psychopy 
     │   ├── .csv   
     │   ├── .log  
     │   └── .psydat 
-    ├── experiment.py   # Psychopy: auditory experiment on Mac
-    ├── functions.py   # Psychopy: visual experiment on Mac
+    ├── experiment.py   # Psychopy: visual and auditory experiments on Mac
+    ├── functions.py   # function lists
     ├── visualstimuli_generator.py   # Generate the visual stimuli
     └── README.md  # Overview of the experiment directory
 ```
