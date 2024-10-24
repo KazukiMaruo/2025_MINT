@@ -23,8 +23,6 @@ The objective is to test whether the EEG data is distinct by numerosity using:
 
 ## EEG preprocessing
 
-This section outlines the preprocessing pipeline, with step-by-step explanations.
-
 ### 1. Download the code folder. 
 1. Open https://download-directory.github.io/
 2. Paste the URL of 'code' folder
@@ -48,7 +46,7 @@ python preprocess.py
 python 1_rdm_generator.py
  ```
 - **NOTE:** 'param.json' in [stimuli folder](../experiment/stimuli/visual) is necessary.
-3. output 4 different dissimilarity matrixes by .png and .npy, and the color bar in [RDM folder](/RDM), larger value indicates more dissimilar
+3. output 4 different dissimilarity matrixes by .png and .npy, and the color bar in [RDM folder](./1st-level/RDM), larger value indicates more dissimilar
 - 1. 'rdm_area_of_a_single_dot' represents dissimilarity based on the area of a single dot in an image.
 - 2. 'rdm_area_of_total_dots' represents dissimilarity based on the area of total dots in an image.
 - 3. 'rdm_circumference_of_total_dots' represents dissimilarity based on the circumference of total dots in an image.
