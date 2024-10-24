@@ -48,7 +48,7 @@ python preprocess.py
 python 1_rdm_generator.py
  ```
 
-- **NOTE:** 'param.json' in [config folder](./visual/param.json) is necessary 
+- **NOTE:** 'param.json' in [stimuli folder](experiment/stimuli/visual/param.json) is necessary 
 
 
 ## Group level analysis
