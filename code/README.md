@@ -47,10 +47,10 @@ python 1_rdm_generator.py
  ```
 - **NOTE:** 'param.json' in [stimuli folder](../experiment/stimuli/visual) is necessary.
 3. output 4 different dissimilarity matrixes by .png and .npy, and the color bar in [RDM folder](./1st-level/RDM), larger value indicates more dissimilar
-- 1. 'rdm_area_of_a_single_dot' represents dissimilarity based on the area of a single dot in an image.
-- 2. 'rdm_area_of_total_dots' represents dissimilarity based on the area of total dots in an image.
-- 3. 'rdm_circumference_of_total_dots' represents dissimilarity based on the circumference of total dots in an image.
-- 4. 'rdm_numerosity' represents dissimilarity based on the number of dot in an image.
+-  'rdm_area_of_a_single_dot' represents dissimilarity based on the area of a single dot in an image.
+-  'rdm_area_of_total_dots' represents dissimilarity based on the area of total dots in an image.
+-  'rdm_circumference_of_total_dots' represents dissimilarity based on the circumference of total dots in an image.
+-  'rdm_numerosity' represents dissimilarity based on the number of dot in an image.
 
 4. run '1_rdm_generator_spatialfrequency.py' 
  ```bash
@@ -58,8 +58,8 @@ python 1_rdm_generator_spatialfrequency.py
  ```
 - **NOTE:** more than 10 hours will be needed until completed
 5. output 1 dissimilarity matrix by .png and .npy in [RDM folder](/RDM)
-- 1. 'rdm_spatial_frequency_raw' represents matrix without cleaning up
-- 2. 'rdm_spatial_frequency' represents dissimilarity matrix based on the spatial frequency in an image.
+-  'rdm_spatial_frequency_raw' represents matrix without cleaning up
+-  'rdm_spatial_frequency' represents dissimilarity matrix based on the spatial frequency in an image.
 
 
 ## Group level analysis
