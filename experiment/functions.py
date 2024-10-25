@@ -1009,8 +1009,7 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
         # ~~~~~~~~~~~~~~ make the trigger index and chose 1 stimuli from the specific condition 
         # ~~~~~~~ single dot size is controlled
         if 'singledot' in condition: 
-            # idx_trigger = 0 + numerosity # singledot is controlled
-            condition_number = 1
+            idx_trigger = 0 + numerosity # singledot is controlled
 
             if numerosity == 1:
                 image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_1]['image']
@@ -1040,8 +1039,7 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
 
         # ~~~~~~~ totaldot size is controlled
         elif 'totaldot' in condition:
-            # idx_trigger = 100 + numerosity # totaldot is controlled
-            condition_number = 2
+            idx_trigger = 100 + numerosity # totaldot is controlled
 
             if numerosity == 1:
                 image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_1]['image']
@@ -1071,8 +1069,7 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
 
         # ~~~~~~~ circumference is controlled
         else: 
-            # idx_trigger = 200 + numerosity # circumference is controlled
-            condition_number = 3
+            idx_trigger = 200 + numerosity # circumference is controlled
 
             if numerosity == 1:
                 image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_1]['image']
@@ -1099,13 +1096,12 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
                 image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_6]['name']
                 cicumference_counter_6 += 1
 
-        # trigger value 
-        image_number = re.findall(r'\d+', image_to_show_name)[0] # Use a regular expression to extract the number (e.g., image_to_show_name = image_5)
-        trigger_value = ((condition_number - 1) * (6 * 70)) + ((numerosity - 1) * 70) + image_number # from 1 to 1260 # 1-based indexing for condition, numerosity, and image
-
 
         image_name = f"{condition}_{image_to_show_name}"
         thisExp.addData('image_name', image_name)  # Store the movie name in the CSV
+  
+        image_number = int(re.findall(r'\d+', image_to_show_name)[0]) # Use a regular expression to extract the number (e.g., image_to_show_name = image_5)
+        thisExp.addData(f'image_number',  image_number)
 
         # ~~~~~~~~~~~~~~~ Prepare to start Routine "trial"
         continueRoutine = True   
@@ -1138,7 +1134,7 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
                 image_to_show.tStart = t # record the local trial time when beep starts
                 image_to_show.tStartRefresh = tThisFlipGlobal # get the global time when the beep is presented
                 if EEG_trigger == True:
-                    win.callOnFlip(p_port.setData, trigger_value) # send trigger
+                    win.callOnFlip(p_port.setData, idx_trigger) # send trigger
                 image_to_show.setAutoDraw(True)
                 thisExp.addData(f'image.started', tThisFlipGlobal)  # write in the datafile
                 image_to_show.status = STARTED
