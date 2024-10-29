@@ -345,7 +345,7 @@ def background_image(width, height):
 
 # ~~~~~~~~~~~~~ Parameters
 width, height = 1920, 1080  # screen pixel dimensions
-distance_cm = 50  # Distance from the viewer in cm
+distance_cm = 90  # Distance from the viewer in cm
 screen_width_cm = 50  # Screen width in cm
 visual_angle = 2 # visual angle
 circle_radius_pixels = compute_radius(width, screen_width_cm, distance_cm, visual_angle) # compute the raidus of circle within the specified visual angle
