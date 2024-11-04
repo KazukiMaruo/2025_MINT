@@ -120,7 +120,7 @@ fig.savefig(f"{interim_target_dir_path}/events.png")
 
 # creates new artificial channels representing eye movements, using specific EEG channel pairs.
 raw = calculate_artificial_channels(raw.copy(), pairs=[['Fp1', 'Fp2'],['F9', 'F10']], labels=['eyeV', 'eyeH']) # ['Fp1', 'Fp2']: These are the frontal electrodes typically used to capture vertical eye movements (denoted as eyeV in this case). ['F9', 'F10']: These electrodes are often placed near the eyes and can be used to capture horizontal eye movements (denoted as eyeH).
-raw.drop_channels(['Fp1']) # former eye channel (dummy name)
+# raw.drop_channels(['Fp1']) # former eye channel (dummy name)
 
 # save
 raw.save(f"{interim_target_dir_path}/raw.fif", overwrite=True) # .fif file, which is a standard file format used in MNE for storing EEG/MEG data.
@@ -179,6 +179,14 @@ if PREPROC_PARAMS["emc"] == "True":
     # This applies the ICA solution to the raw EEG data,
     ica.apply(raw)
 # ~~~~~~~~~~~~~~ eye movement correction ~~~~~~~~~~~~~~
+
+
+
+# ~~~~~~~~~~~~~~ remove eye-movement related channels
+channels_to_remove = ['Fp1', 'Fp2', 'F9', 'F10']  
+raw.drop_channels(channels_to_remove) # former eye channel (dummy name)
+# ~~~~~~~~~~~~~~ remove eye-movement related channels ~~~~~~~~~~~~~~
+
 
 
 # ~~~~~~~~~~~~~~ reference 
