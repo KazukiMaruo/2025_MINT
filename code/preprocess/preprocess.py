@@ -32,7 +32,7 @@ from utils import create_if_not_exist, download_datashare_dir, update_eeg_header
 # ~~~~~~~~~~~~~~ Pre-processing Parameters
 modality = 'visual'
 session = 1
-sub_name = 'sub-03_ses-01'
+sub_name = 'sub-01_ses-01'
 print(f"\n\n Processing {modality} EEG session {session} of {sub_name}\n\n")
 # ~~~~~~~~~~~~~~ Pre-processing Parameters ~~~~~~~~~~~~~~
 
@@ -183,7 +183,7 @@ if PREPROC_PARAMS["emc"] == "True":
 
 
 # ~~~~~~~~~~~~~~ remove eye-movement related channels
-channels_to_remove = ['Fp1', 'Fp2', 'F9', 'F10']  
+channels_to_remove = ['Fp1', 'Fp2']  
 raw.drop_channels(channels_to_remove) # former eye channel (dummy name)
 # ~~~~~~~~~~~~~~ remove eye-movement related channels ~~~~~~~~~~~~~~
 
