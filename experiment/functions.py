@@ -17,7 +17,7 @@ Info:
 
 
 
-def run_audio(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
+def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
 
     # ~~~~~~~~~~~~~~~ Import packages
     from psychopy import locale_setup
@@ -573,7 +573,7 @@ def run_audio(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
 
 
 
-def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
+def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
 
     # ~~~~~~~~~~~~~~~ Import packages
     from psychopy import locale_setup
@@ -742,13 +742,13 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
         # numerosity loop (1 ~ 6)
         for numerosity in all_numerosity_folders:
             each_numerosity_folder = os.path.join(stimuli_folder, numerosity)
-            each_image_name = [f for f in os.listdir(each_numerosity_folder) if os.path.isfile(os.path.join(each_numerosity_folder, f))]
+            each_image_name = [f for f in os.listdir(each_numerosity_folder) if os.path.isfile(os.path.join(each_numerosity_folder, f)) and not f.startswith("._") ]
 
             # image loop (1 ~ 70)
             for image_name in each_image_name:
-                image = visual.ImageStim(win, image= os.path.join(each_numerosity_folder, image_name))
+                # image = visual.ImageStim(win, image= os.path.join(each_numerosity_folder, image_name))
                 images[condition_name].append({
-                                                'image': image, 
+                                                'image': os.path.join(each_numerosity_folder, image_name), 
                                                 'numerosity': numerosity, 
                                                 'name': image_name
                                                 })
@@ -785,7 +785,7 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
                                 flipVert=False, # flips the video vertically
                                 flipHoriz=False, # flips the viode horizontally
                                 loop=False, # plays the video once and stops
-                                noAudio=True,
+                                noAudio=True
                                 )
         movie_duration = movie.duration # get the duration
         movies[f'movie_{videoNum}'] = {'movie': movie, 'duration': movie_duration} # create the dictionary for the list of videos
@@ -1012,27 +1012,27 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
             idx_trigger = 0 + numerosity # singledot is controlled
 
             if numerosity == 1:
-                image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_1]['image']
+                image_to_show = visual.ImageStim(win, image=singledot_images_by_numerosity[str(numerosity)][singledot_counter_1]['image'])
                 image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_1]['name']
                 singledot_counter_1 += 1 # add 1 to the counter
             elif numerosity == 2:
-                image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_2]['image']
+                image_to_show = visual.ImageStim(win, image=singledot_images_by_numerosity[str(numerosity)][singledot_counter_2]['image'])
                 image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_2]['name']
                 singledot_counter_2 += 1
             elif numerosity == 3:
-                image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_3]['image']
+                image_to_show = visual.ImageStim(win, image=singledot_images_by_numerosity[str(numerosity)][singledot_counter_3]['image'])
                 image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_3]['name']
                 singledot_counter_3 += 1
             elif numerosity == 4:
-                image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_4]['image']
+                image_to_show = visual.ImageStim(win, image=singledot_images_by_numerosity[str(numerosity)][singledot_counter_4]['image'])
                 image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_4]['name']
                 singledot_counter_4 += 1
             elif numerosity == 5:
-                image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_5]['image']
+                image_to_show = visual.ImageStim(win, image=singledot_images_by_numerosity[str(numerosity)][singledot_counter_5]['image'])
                 image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_5]['name']
                 singledot_counter_5 += 1
             else:
-                image_to_show = singledot_images_by_numerosity[str(numerosity)][singledot_counter_6]['image']
+                image_to_show = visual.ImageStim(win, image=singledot_images_by_numerosity[str(numerosity)][singledot_counter_6]['image'])
                 image_to_show_name = singledot_images_by_numerosity[str(numerosity)][singledot_counter_6]['name']
                 singledot_counter_6 += 1
 
@@ -1042,27 +1042,27 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
             idx_trigger = 100 + numerosity # totaldot is controlled
 
             if numerosity == 1:
-                image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_1]['image']
+                image_to_show = visual.ImageStim(win, image=totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_1]['image'])
                 image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_1]['name']
                 totatldot_counter_1 += 1 # add 1 to the counter
             elif numerosity == 2:
-                image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_2]['image']
+                image_to_show = visual.ImageStim(win, image=totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_2]['image'])
                 image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_2]['name']
                 totatldot_counter_2 += 1
             elif numerosity == 3:
-                image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_3]['image']
+                image_to_show = visual.ImageStim(win, image=totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_3]['image'])
                 image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_3]['name']
                 totatldot_counter_3 += 1
             elif numerosity == 4:
-                image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_4]['image']
+                image_to_show = visual.ImageStim(win, image=totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_4]['image'])
                 image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_4]['name']
                 totatldot_counter_4 += 1
             elif numerosity == 5:
-                image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_5]['image']
+                image_to_show = visual.ImageStim(win, image=totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_5]['image'])
                 image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_5]['name']
                 totatldot_counter_5 += 1
             else:
-                image_to_show = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_6]['image']
+                image_to_show = visual.ImageStim(win, image=totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_6]['image'])
                 image_to_show_name = totaldot_images_by_numerosity[str(numerosity)][totatldot_counter_6]['name']
                 totatldot_counter_6 += 1
 
@@ -1072,27 +1072,27 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
             idx_trigger = 200 + numerosity # circumference is controlled
 
             if numerosity == 1:
-                image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_1]['image']
+                image_to_show = visual.ImageStim(win, image=circumference_images_by_numerosity[str(numerosity)][cicumference_counter_1]['image'])
                 image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_1]['name']
                 cicumference_counter_1 += 1 # add 1 to the counter
             elif numerosity == 2:
-                image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_2]['image']
+                image_to_show = visual.ImageStim(win, image=circumference_images_by_numerosity[str(numerosity)][cicumference_counter_2]['image'])
                 image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_2]['name']
                 cicumference_counter_2 += 1
             elif numerosity == 3:
-                image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_3]['image']
+                image_to_show = visual.ImageStim(win, image=circumference_images_by_numerosity[str(numerosity)][cicumference_counter_3]['image'])
                 image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_3]['name']
                 cicumference_counter_3 += 1
             elif numerosity == 4:
-                image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_4]['image']
+                image_to_show = visual.ImageStim(win, image=circumference_images_by_numerosity[str(numerosity)][cicumference_counter_4]['image'])
                 image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_4]['name']
                 cicumference_counter_4 += 1
             elif numerosity == 5:
-                image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_5]['image']
+                image_to_show = visual.ImageStim(win, image=circumference_images_by_numerosity[str(numerosity)][cicumference_counter_5]['image'])
                 image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_5]['name']
                 cicumference_counter_5 += 1
             else:
-                image_to_show = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_6]['image']
+                image_to_show = visual.ImageStim(win, image=circumference_images_by_numerosity[str(numerosity)][cicumference_counter_6]['image'])
                 image_to_show_name = circumference_images_by_numerosity[str(numerosity)][cicumference_counter_6]['name']
                 cicumference_counter_6 += 1
 
@@ -1151,6 +1151,7 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
                     # update status
                     image_to_show.setAutoDraw(False)
                     image_to_show.status = FINISHED
+                    image_to_show.image = None
                     if EEG_trigger == True:
                         p_port.setData(0) # refresh the trigger
 
@@ -1235,7 +1236,6 @@ def run_visual(monitor_data = [1920, 1080, 30, 50], EEG_trigger = True):
                 
             audio_to_show.stop()
             movie_to_show.pause()
-            
             if EEG_trigger == True:
                 p_port.setData(0) # refresh the trigger
             i += 1 # updates the index
