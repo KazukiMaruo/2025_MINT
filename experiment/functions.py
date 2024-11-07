@@ -257,6 +257,11 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
     image_path = _thisDir + os.sep + f'stimuli/catch/pause.png'  # Replace with the path to your image
     image_pause = visual.ImageStim(win, image=image_path)
 
+    # Trial number text on the lower left
+    # Create a text stimulus for the trial number
+    trial_text = visual.TextStim(win=win, text='', pos=(-0.9, -0.9), height=0.05, color='white', alignText='left')
+
+
     # ~~~~~~~~~~~~~~~ Create some handy timers
     globalClock = core.Clock()  # to track the time since experiment started, Start Timing: Automatically starts from the moment it is created.
     routineTimer = core.Clock()  # to track time remaining of each (possibly non-slip) routine
@@ -391,9 +396,13 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         else:
             idx_trigger = 100 + numerosity # rate is controlled 
         
+
         # ~~~~~~~~~~~~~~~ Prepare to start Routine "trial"
         continueRoutine = True
 
+
+        # ~~~~~~~~~~~~~~~ Update trial number text
+        trial_text.text = f'T{trial_index}'
 
         # ~~~~~~~~~~~~~~~　modify the single item duration depending on the condition
         beep.setSound(value=beep, secs=single_duration)
@@ -429,6 +438,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                 line_diagonal_1.draw()
                 line_diagonal_2.draw()
 
+
                 # if beep is starting this fram...
                 if beep.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance: # If both conditions are met, it means the beep should start this frame.
                     beep.framNstart = frameN # record the frame number when beep starts
@@ -440,6 +450,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                     # update status
                     beep.status = STARTED
                     beep.play(when=win)  # sync with win flip
+                    trial_text.draw(when=win)
 
                 # if beep is stopping this frame...
                 if beep.status == STARTED:
@@ -795,6 +806,10 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
     image_path = _thisDir + os.sep + f'stimuli/catch/pause.png'  # Replace with the path to your image
     image_pause = visual.ImageStim(win, image=image_path)
 
+    # Create a text stimulus for the trial number
+    trial_text = visual.TextStim(win=win, text='', pos=(-0.9, -0.9), height=0.05, color='white', alignText='left')
+
+
     # Image for no dot time. 
     background_path = _thisDir + os.sep + f'stimuli/visual/background.png'  # Replace with the path to your image
     background_image = visual.ImageStim(win, image=background_path)
@@ -1103,6 +1118,9 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         image_number = int(re.findall(r'\d+', image_to_show_name)[0]) # Use a regular expression to extract the number (e.g., image_to_show_name = image_5)
         thisExp.addData(f'image_number',  image_number)
 
+        # ~~~~~~~~~~~~~~~ Update trial number text
+        trial_text.text = f'T{trial_index}'
+
         # ~~~~~~~~~~~~~~~ Prepare to start Routine "trial"
         continueRoutine = True   
 
@@ -1138,8 +1156,9 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                 image_to_show.setAutoDraw(True)
                 thisExp.addData(f'image.started', tThisFlipGlobal)  # write in the datafile
                 image_to_show.status = STARTED
+                trial_text.draw(when=win)
 
-            # if beep is stopping this frame...
+            # if image is stopping this frame...
             if image_to_show.status == STARTED:
 
                 # is it time to stop? (based on global clock, using actual start)
