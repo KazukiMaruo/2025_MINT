@@ -450,7 +450,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                     # update status
                     beep.status = STARTED
                     beep.play(when=win)  # sync with win flip
-                    trial_text.draw(when=win)
+                    trial_text.draw()
 
                 # if beep is stopping this frame...
                 if beep.status == STARTED:
@@ -1156,7 +1156,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                 image_to_show.setAutoDraw(True)
                 thisExp.addData(f'image.started', tThisFlipGlobal)  # write in the datafile
                 image_to_show.status = STARTED
-                trial_text.draw(when=win)
+                trial_text.draw()
 
             # if image is stopping this frame...
             if image_to_show.status == STARTED:
