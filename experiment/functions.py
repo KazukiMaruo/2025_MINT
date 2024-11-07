@@ -105,7 +105,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
     _backgroundFit='none' # Specifies how the background image should fit to the window if provided
     _blendMode='avg' # Controls how overlapping stimuli are blended together on the screen. 'avg' means averaging the pixel values of overlapping stimuli.
     _useFBO=True # Setting useFBO=True allows PsychoPy to render stimuli off-screen (in a buffer) before displaying them. This can improve rendering flexibility and performance, especially when dealing with complex stimuli or advanced visual effects.
-    _units='pix' # Defines the units used for positioning and sizing stimuli in the window. units='height' sets the unit of measurement relative to the height of the window. For example, setting a stimulus' size to 0.5 means it will occupy half of the window’s height. Other possible units include norm, pix (pixels), and cm (centimeters).
+    _units='norm' # Defines the units used for positioning and sizing stimuli in the window. units='height' sets the unit of measurement relative to the height of the window. For example, setting a stimulus' size to 0.5 means it will occupy half of the window’s height. Other possible units include norm, pix (pixels), and cm (centimeters).
 
     win = visual.Window(
         size=_size, 
@@ -206,7 +206,9 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         lineWidth=1.5,        # Width of the line
         units='norm'
         )
-
+    
+    # Create a text stimulus for the trial number
+    trial_text = visual.TextStim(win=win, text='', pos=(-0.97, -0.97), height=0.04, color='black', alignText='center')
 
     # Audio beep
     wav_file_path = _thisDir + os.sep + 'stimuli/audio/beep.wav' 
@@ -256,11 +258,6 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
     # Image for pause
     image_path = _thisDir + os.sep + f'stimuli/catch/pause.png'  # Replace with the path to your image
     image_pause = visual.ImageStim(win, image=image_path)
-
-    # Trial number text on the lower left
-    # Create a text stimulus for the trial number
-    trial_text = visual.TextStim(win=win, text='', pos=(-0.9, -0.9), height=0.05, color='white', alignText='left')
-
 
     # ~~~~~~~~~~~~~~~ Create some handy timers
     globalClock = core.Clock()  # to track the time since experiment started, Start Timing: Automatically starts from the moment it is created.
@@ -397,12 +394,11 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             idx_trigger = 100 + numerosity # rate is controlled 
         
 
-        # ~~~~~~~~~~~~~~~ Prepare to start Routine "trial"
-        continueRoutine = True
-
-
         # ~~~~~~~~~~~~~~~ Update trial number text
         trial_text.text = f'T{trial_index}'
+
+        # ~~~~~~~~~~~~~~~ Prepare to start Routine "trial"
+        continueRoutine = True
 
         # ~~~~~~~~~~~~~~~　modify the single item duration depending on the condition
         beep.setSound(value=beep, secs=single_duration)
@@ -450,7 +446,10 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                     # update status
                     beep.status = STARTED
                     beep.play(when=win)  # sync with win flip
-                    trial_text.draw()
+                    
+
+                    trial_text.setAutoDraw(True)
+
 
                 # if beep is stopping this frame...
                 if beep.status == STARTED:
@@ -463,6 +462,8 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                         # update status
                         beep.status = FINISHED
                         beep.stop()
+                        trial_text.setAutoDraw(False)
+
                         if EEG_trigger == True:
                             p_port.setData(0) # refresh the trigger
 
@@ -472,6 +473,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                             core.wait(silent_duration)  # wait for 800ms before continuing
                         else:
                             core.wait(isi)
+
                 # Pause logic - check if 'p' key is pressed
                 keys = defaultKeyboard.getKeys(keyList=['p', 'r']) # they key press is detected immediately. 
                 if 'p' in [key.name for key in keys]: # list the keys pressed
@@ -673,7 +675,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
     _backgroundFit='none' # Specifies how the background image should fit to the window if provided
     _blendMode='avg' # Controls how overlapping stimuli are blended together on the screen. 'avg' means averaging the pixel values of overlapping stimuli.
     _useFBO=True # Setting useFBO=True allows PsychoPy to render stimuli off-screen (in a buffer) before displaying them. This can improve rendering flexibility and performance, especially when dealing with complex stimuli or advanced visual effects.
-    _units='pix' # Defines the units used for positioning and sizing stimuli in the window. units='height' sets the unit of measurement relative to the height of the window. For example, setting a stimulus' size to 0.5 means it will occupy half of the window’s height. Other possible units include norm, pix (pixels), and cm (centimeters).
+    _units='norm' # Defines the units used for positioning and sizing stimuli in the window. units='height' sets the unit of measurement relative to the height of the window. For example, setting a stimulus' size to 0.5 means it will occupy half of the window’s height. Other possible units include norm, pix (pixels), and cm (centimeters).
 
     win = visual.Window(
         size=_size, 
@@ -807,7 +809,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
     image_pause = visual.ImageStim(win, image=image_path)
 
     # Create a text stimulus for the trial number
-    trial_text = visual.TextStim(win=win, text='', pos=(-0.9, -0.9), height=0.05, color='white', alignText='left')
+    trial_text = visual.TextStim(win=win, text='', pos=(-0.97, -0.97), height=0.04, color='black', alignText='center')
 
 
     # Image for no dot time. 
@@ -1156,7 +1158,9 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                 image_to_show.setAutoDraw(True)
                 thisExp.addData(f'image.started', tThisFlipGlobal)  # write in the datafile
                 image_to_show.status = STARTED
-                trial_text.draw()
+                
+                trial_text.setAutoDraw(True)
+
 
             # if image is stopping this frame...
             if image_to_show.status == STARTED:
@@ -1180,7 +1184,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                     core.wait(isi) # 100ms wait for the next trial
 
                     background_image.setAutoDraw(False)
-
+                    trial_text.setAutoDraw(False)
             
 
             # Pause logic - check if 'p' key is pressed
