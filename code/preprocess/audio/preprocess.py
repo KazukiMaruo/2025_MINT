@@ -7,37 +7,35 @@ import matplotlib.pyplot as plt
 from mne.preprocessing import ICA # ICA (Independent Component Analysis) algorithm, which is for artifact removal
 from autoreject import AutoReject # Python package for automatically rejecting bad epochs in EEG/MEG data
 import json
+import owncloud
 # ~~~~~~~~~~~~~~ Libraries ~~~~~~~~~~~~~~
 
-
-
-#############################################################################
-#################### ENVIROMENT #############################################
-#############################################################################
-
+# ~~~~~~~~~~~~~~ Environment
 # ~~~~~~~~~~~~~~ open json paramete files and import functions
-code_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+code_directory = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(code_directory) 
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-with open("config.json") as f: # import variables from config.json
+os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+with open("config.json") as f: # The file object is referenced as f during the block.
     config = json.load(f) 
 globals().update(config)
 sys.path.append(BASE_DIR) # import custom python packages
-print(os.getcwd())
+
+# import cusom functions
 from utils import create_if_not_exist, download_datashare_dir, update_eeg_headers, make_31_montage, calculate_artificial_channels
-# ~~~~~~~~~~~~~~ open json paramete files and import functions ~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~ Environment ~~~~~~~~~~~~~~
 
 
 
-# ~~~~~~~~~~~~~~ Pre-processing Parameters
-modality = 'visual'
+# ~~~~~~~~~~~~~~ Parameters
+modality = 'audio'
 session = 1
 sub_name = 'sub-03_ses-01'
-print(f"\n\n Processing {modality} EEG session {session} of {sub_name}\n\n")
-# ~~~~~~~~~~~~~~ Pre-processing Parameters ~~~~~~~~~~~~~~
+print(f"\n\n Processing {modality} EEG {sub_name} session {session} \n\n")
+# ~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~
 
 
-# ~~~~~~~~~~~~~~ Path settings and make folders
+
+# ~~~~~~~~~~~~~~ New Folder 
 datashare_dir_path = os.path.join(DATASHARE_RAW_FOLDER, modality, sub_name) #  "DATASHARE_RAW_FOLDER": "MINT/raw/",
 # create directories
 raw_target_dir_path = os.path.join(BASE_DIR, 'data', 'raw', modality, sub_name)
@@ -48,7 +46,8 @@ create_if_not_exist(interim_target_dir_path)
 create_if_not_exist(processed_target_dir_path) 
 # the interested file name
 target_file_name = f"{raw_target_dir_path}/{sub_name}.vhdr"
-# ~~~~~~~~~~~~~~ Path settings and make folders ~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~ New Folder ~~~~~~~~~~~~~~
+
 
 
 # ~~~~~~~~~~~~~~ load data from datashare
@@ -57,12 +56,8 @@ download_datashare_dir(datashare_dir = datashare_dir_path,
                        datashare_user = DATASHARE_USER) # "DATASHARE_USER": "kazma",
 # get eeg headers from datashare
 update_eeg_headers(target_file_name) 
-# ~~~~~~~~~~~~~~ load data from datashare ~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~ load data from datashare
 
-
-###############################################################################
-#################### LOADING DATA #############################################
-###############################################################################
 
 
 # ~~~~~~~~~~~~~~ Load data and the data ajustments
@@ -75,10 +70,10 @@ raw.rename_channels({'VP': 'Fp2',  # In this case, the channel labeled VP is ren
                      'VM': 'Fp1'})
 raw.set_montage(make_31_montage(raw))
 
-# Trigger value is converted to condition label name (e.g., from 106 to 6_con_totaldot)
+# Trigger value is converted to condition label name (e.g., from 106 to numerosity 6)
 raw.annotations.description = np.array(
     [
-        CONDITION_MAP[i] if i in CONDITION_MAP else i
+        CONDITION_MAP_AUDIO[i] if i in CONDITION_MAP_AUDIO else i
         for i in raw.annotations.description
     ]
 )
@@ -94,7 +89,21 @@ events, event_id = mne.events_from_annotations(raw, event_id=EVENT_ID)
 
 # resample
 raw, events = raw.resample(SFREQ, events = events) # raw.resample(SFREQ, events=events): Resamples the raw EEG data to a new sampling frequency (SFREQ) while adjusting the timing of the events accordingly.
-raw.events = events #  This assigns the resampled events back to the raw object, so the events remain associated with the data after resampling.
+
+# Extract only the last tone epoch
+events_lasttone = []
+
+for num_target in range(1,7):
+    # Filter out only the events with condition '4'
+    condition_x_events = events[events[:, 2] == num_target]
+    idx_vector = np.arange(num_target-1, len(condition_x_events), num_target)
+    x = condition_x_events[idx_vector,:]
+    events_lasttone.append(x)
+events_lasttone = np.vstack(events_lasttone)
+# Sort `events_lasttone` based on the values in the first column
+events = events_lasttone[np.argsort(events_lasttone[:, 0])]
+
+raw.events = events_lasttone #  This assigns the resampled events back to the raw object, so the events remain associated with the data after resampling.
 # ~~~~~~~~~~~~~~ Load data and the data ajustments ~~~~~~~~~~~~~~
 
 
@@ -125,6 +134,7 @@ raw = calculate_artificial_channels(raw.copy(), pairs=[['Fp1', 'Fp2'],['F9', 'F1
 # save
 raw.save(f"{interim_target_dir_path}/raw.fif", overwrite=True) # .fif file, which is a standard file format used in MNE for storing EEG/MEG data.
 # ~~~~~~~~~~~~~~ print and save ~~~~~~~~~~~~~~
+
 
 
 
