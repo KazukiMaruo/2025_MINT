@@ -13,21 +13,21 @@ import matplotlib.cm as cm
 
 
 
-# ~~~~~~~~~~~~~~ Set the working directory
-path = "/u/kazma/MINT/data/processed/visual"
-sub_folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
-sub_folders_sorted = sorted(sub_folders, key=lambda x: int(re.search(r'\d+', x).group())) # Sort the folders based on the numeric part after "sub-"
-# ~~~~~~~~~~~~~~ Set the working directory ~~~~~~~~~~~~~~
-
-
-
 # ~~~~~~~~~~~~~~ Parameters
+modality = 'audio' # 'visual' or 'audio'
 output_filename = "time_resolved_decoding_accuracy.png"
 time_vector = np.arange(-100, 1002, 10)
 plt.figure(figsize=(10, 5)) # Create a figure to plot all subjects on the same plot
-colors = plt.cm.tab10(np.linspace(0, 1, len(sub_folders_sorted))) # color lists
 # ~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~
 
+
+
+# ~~~~~~~~~~~~~~ Set the working directory
+path = f"/u/kazma/MINT/data/processed/{modality}"
+sub_folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
+sub_folders_sorted = sorted(sub_folders, key=lambda x: int(re.search(r'\d+', x).group())) # Sort the folders based on the numeric part after "sub-"
+colors = plt.cm.tab10(np.linspace(0, 1, len(sub_folders_sorted))) # color lists
+# ~~~~~~~~~~~~~~ Set the working directory ~~~~~~~~~~~~~~
 
 
 
