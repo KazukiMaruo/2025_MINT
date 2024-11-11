@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from mne.preprocessing import ICA # ICA (Independent Component Analysis) algorithm, which is for artifact removal
 from autoreject import AutoReject # Python package for automatically rejecting bad epochs in EEG/MEG data
 import json
+import re
+import pandas as pd
 # ~~~~~~~~~~~~~~ Libraries ~~~~~~~~~~~~~~
 
 
@@ -36,8 +38,6 @@ sub_name = 'sub-01_ses-01'
 print(f"\n\n Processing {modality} EEG session {session} of {sub_name}\n\n")
 # ~~~~~~~~~~~~~~ Pre-processing Parameters ~~~~~~~~~~~~~~
 
-
-
 # ~~~~~~~~~~~~~~ Path settings and make folders
 datashare_dir_path = os.path.join(DATASHARE_RAW_FOLDER, modality, sub_name) #  "DATASHARE_RAW_FOLDER": "MINT/raw/",
 # create directories
@@ -61,10 +61,6 @@ update_eeg_headers(target_file_name)
 # ~~~~~~~~~~~~~~ load data from datashare ~~~~~~~~~~~~~~
 
 
-###############################################################################
-#################### LOADING DATA #############################################
-###############################################################################
-
 
 # ~~~~~~~~~~~~~~ Load data and the data ajustments
 raw = mne.io.read_raw_brainvision(target_file_name,  # Brain vision file format contains three files .vhdr for the header, .eeg for the data, and .vmrk for events
@@ -76,19 +72,57 @@ raw.rename_channels({'VP': 'Fp2',  # In this case, the channel labeled VP is ren
                      'VM': 'Fp1'})
 raw.set_montage(make_31_montage(raw))
 
-# Trigger value is converted to condition label name (e.g., from 106 to 6_con_totaldot)
-raw.annotations.description = np.array(
-    [
-        CONDITION_MAP[i] if i in CONDITION_MAP else i
-        for i in raw.annotations.description
-    ]
-)
-# interested duration of each trial (e.g., 800ms after the onset of image)
-raw.annotations.duration = np.array([POSTSTIM_WINDOW for _ in raw.annotations.description])
+
+# Load csv file
+csv_file = [f for f in os.listdir(raw_target_dir_path) if f.endswith('.csv')] # List all files in the folder and filter for .csv files
+csv_df = pd.read_csv(os.path.join(raw_target_dir_path, csv_file[0])) # Load the CSV file into a DataFrame """
+
+# Define conditions
+conditions = [
+    csv_df['image_name'].str.contains('totaldot'),       # Condition 1: contains 'singledot'
+    csv_df['image_name'].str.contains('circum')    # Condition 2: contains 'circumference'
+]
+
+# Define corresponding values to increase the 'index' by
+values = [
+    csv_df['image_number'] + 70,   # Increase by 70 if 'singledot' is found
+    csv_df['image_number'] + 140   # Increase by 140 if 'circumference' is found
+]
+
+# Apply np.select() to update the 'index' based on conditions
+csv_df['image_number'] = np.select(conditions, values, default=csv_df['image_number'])
+
+# Define conditions
+conditions = [
+    csv_df['image_name'].str.startswith('2'),       # Condition 1: contains 'singledot'
+    csv_df['image_name'].str.startswith('3'), 
+    csv_df['image_name'].str.startswith('4'),
+    csv_df['image_name'].str.startswith('5'),
+    csv_df['image_name'].str.startswith('6')       # Condition 2: contains 'circumference'
+]
+
+# Define corresponding values to increase the 'index' by
+values = [
+    csv_df['image_number'] + 210,   # Increase by 70 if 'singledot' is found
+    csv_df['image_number'] + 210*2,
+    csv_df['image_number'] + 210*3,
+    csv_df['image_number'] + 210*4,
+    csv_df['image_number'] + 210*5   # Increase by 140 if 'circumference' is found
+]
+
+csv_df['image_number'] = np.select(conditions, values, default=csv_df['image_number'])
+print(csv_df[csv_df['image_number']==1260]['image_name'])
+
+
+EVENT = np.array(csv_df['image_name'])
+EVENT_ID = dict(zip(csv_df['image_name'], csv_df['image_number']))
 
 # delete remaining stimulus events / This part of the code removes specific types of events from the annotations in the EEG data
-indices_to_remove = [i for i, j in enumerate(raw.annotations.description) if "Stimulus" in j or "Segment" in j or "actiCAP" in j]
+indices_to_remove = [i for i, j in enumerate(raw.annotations.description) if  "Segment" in j or "actiCAP" in j or re.match(r'Stimulus/S (5[1-9]|6[0-7])', j)]
 raw.annotations.delete(indices_to_remove)
+raw.annotations.description = EVENT
+# interested duration of each trial (e.g., 800ms after the onset of image)
+raw.annotations.duration = np.array([POSTSTIM_WINDOW for _ in raw.annotations.description])
 
 # get events (number of events, 3), each row represents [event time, previous_event, event_id]
 events, event_id = mne.events_from_annotations(raw, event_id=EVENT_ID)
@@ -100,38 +134,13 @@ raw.events = events #  This assigns the resampled events back to the raw object,
 
 
 
-# ~~~~~~~~~~~~~~ print and save
-# print the number of trials for each condition
-event_counts = {}
-for key in EVENT_ID.keys():
-    event_counts[key] = len(events[events[:, 2] == EVENT_ID[key]])
-    print(key, len(events[events[:, 2] == EVENT_ID[key]]))
-
-# Save event counts in jsonfile
-with open(f"{interim_target_dir_path}/event_counts_before_drop.json", "w") as f:
-    json.dump(event_counts, f)
-
-# This saves the events and the event ID mapping as .npy (NumPy binary) files for future use.
-np.save(f"{interim_target_dir_path}/events.npy", events) # This function saves the array or object
-np.save(f"{interim_target_dir_path}/event_id.npy", EVENT_ID)
-
-# This plots the events and saves the visualization as a .png image.
-fig = mne.viz.plot_events(events, event_id=EVENT_ID, sfreq=raw.info['sfreq'], first_samp=raw.first_samp, show=False)
-fig.savefig(f"{interim_target_dir_path}/events.png")
-
 # creates new artificial channels representing eye movements, using specific EEG channel pairs.
 raw = calculate_artificial_channels(raw.copy(), pairs=[['Fp1', 'Fp2'],['F9', 'F10']], labels=['eyeV', 'eyeH']) # ['Fp1', 'Fp2']: These are the frontal electrodes typically used to capture vertical eye movements (denoted as eyeV in this case). ['F9', 'F10']: These electrodes are often placed near the eyes and can be used to capture horizontal eye movements (denoted as eyeH).
 # raw.drop_channels(['Fp1']) # former eye channel (dummy name)
 
 # save
-raw.save(f"{interim_target_dir_path}/raw.fif", overwrite=True) # .fif file, which is a standard file format used in MNE for storing EEG/MEG data.
-# ~~~~~~~~~~~~~~ print and save ~~~~~~~~~~~~~~
+raw.save(f"{interim_target_dir_path}/RDM_raw.fif", overwrite=True) # .fif file, which is a standard file format used in MNE for storing EEG/MEG data.
 
-
-
-################################################################################
-#################### Preprocessing #############################################
-################################################################################
 
 # ~~~~~~~~~~~~~~ band-pass filter
 raw.filter(l_freq=PREPROC_PARAMS["hpf"], # high-pass
@@ -141,7 +150,6 @@ raw.filter(l_freq=PREPROC_PARAMS["hpf"], # high-pass
            skip_by_annotation='EDGE boundary', # This skips data points marked by annotations such as "EDGE" or "boundary"
            n_jobs=-1) # This allows the filtering to be done in parallel, using all available CPU cores
 # ~~~~~~~~~~~~~~ band-pass filter  ~~~~~~~~~~~~~~
-
 
 
 # ~~~~~~~~~~~~~~ eye movement correction
@@ -166,7 +174,7 @@ if PREPROC_PARAMS["emc"] == "True":
     f = ica.plot_scores(scores,
                     title=f'IC correlation with EOG',
                     show=True)
-    f.savefig(f"{interim_target_dir_path}/ica_scores.png", dpi=100)
+    f.savefig(f"{interim_target_dir_path}/ica_scores_RDM.png", dpi=100)
 
     # plot diagnostics
     if indices: # only if some components were found to correlate with EOG/EMG
@@ -174,20 +182,17 @@ if PREPROC_PARAMS["emc"] == "True":
                                 picks=indices, 
                                 show=False)
         for gi, p in zip(g, indices):
-            gi.savefig(f"{interim_target_dir_path}/ica_diagnostics_ic{p}.png", dpi=100)
+            gi.savefig(f"{interim_target_dir_path}/ica_diagnostics_ic{p}_RDM.png", dpi=100)
     plt.close('all')
 
     # This applies the ICA solution to the raw EEG data,
     ica.apply(raw)
 # ~~~~~~~~~~~~~~ eye movement correction ~~~~~~~~~~~~~~
 
-
-
 # ~~~~~~~~~~~~~~ remove eye-movement related channels
 channels_to_remove = ['Fp1', 'Fp2']  
 raw.drop_channels(channels_to_remove) # former eye channel (dummy name)
 # ~~~~~~~~~~~~~~ remove eye-movement related channels ~~~~~~~~~~~~~~
-
 
 
 # ~~~~~~~~~~~~~~ reference 
@@ -207,7 +212,6 @@ epochs = mne.Epochs(raw, # The continuous EEG data
                     reject_by_annotation=False, 
                     preload=True)
 # ~~~~~~~~~~~~~~ epoching ~~~~~~~~~~~~~~
-
 
 
 # ~~~~~~~~~~~~~~  autoreject
@@ -234,8 +238,8 @@ if PREPROC_PARAMS["ar"] != "False":
 
     # plot the rejection log and save plot
     rej_plot = reject_log.plot('horizontal', show=True)
-    rej_plot.savefig(f"{interim_target_dir_path}/autoreject.png", dpi=100)
-    reject_log.save(f"{interim_target_dir_path}/autoreject.npz", overwrite=True) # must end with .npz, compressed numpy file format
+    rej_plot.savefig(f"{interim_target_dir_path}/autoreject_RDM.png", dpi=100)
+    reject_log.save(f"{interim_target_dir_path}/autoreject_RDM.npz", overwrite=True) # must end with .npz, compressed numpy file format
 # ~~~~~~~~~~~~~~  autoreject  ~~~~~~~~~~~~~~ 
 
 
@@ -243,6 +247,6 @@ if PREPROC_PARAMS["ar"] != "False":
 
 
 # ~~~~~~~~~~~~~~ save epochs
-epochs.save(f"{interim_target_dir_path}/epochs-epo.fif", overwrite=True)
+epochs.save(f"{interim_target_dir_path}/RDM_epochs-epo.fif", overwrite=True)
 print("epochs are saved")
 # ~~~~~~~~~~~~~~save epochs ~~~~~~~~~~~~~~
