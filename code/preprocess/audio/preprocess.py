@@ -193,7 +193,7 @@ if PREPROC_PARAMS["emc"] == "True":
 
 
 # ~~~~~~~~~~~~~~ remove eye-movement related channels
-channels_to_remove = ['Fp1', 'Fp2']  
+channels_to_remove = ['Fp1', 'Fp2', 'eyeV', 'eyeH']   
 raw.drop_channels(channels_to_remove) # former eye channel (dummy name)
 # ~~~~~~~~~~~~~~ remove eye-movement related channels ~~~~~~~~~~~~~~
 
