@@ -221,7 +221,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
 
     # specify the trial just before the catch trial
     catch_points = list(range(11, 421, 12))
-    i = 0 # catch_points_idx
+    ii = 0 # catch_points_idx
 
     # Audio for catch trials
     all_audios = ["1","2","3","4"]
@@ -236,7 +236,13 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         audio.setVolume(1.0)
         audio_duration = audio.duration
         audios[f'audio_{audioNum}'] = {'audio': audio, 'duration': audio_duration}
-    sampled_audios = random.choices(all_audios, k=len(catch_points))
+    # sampled_audios = random.choices(all_audios, k=len(catch_points))
+    while len(all_audios) < len(catch_points):
+        all_audios += all_audios  # Duplicate the list until it's long enough
+    # Trim the extended list to exactly 35 items
+    extended_audios = all_audios[:len(catch_points)]
+    random.shuffle(extended_audios)
+    sampled_audios = extended_audios
 
     # Videos for catch trials
     all_videos = ["1","2","3","4","5","6","7","11","12","13","14","15","16"]
@@ -253,7 +259,16 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                                 )
         movie_duration = movie.duration # get the duration
         movies[f'movie_{videoNum}'] = {'movie': movie, 'duration': movie_duration} # create the dictionary for the list of videos
-    sampled_videos = random.choices(all_videos, k=len(catch_points)) # based on the number of catch trial, chose the videos randoemely
+        # Extend the list manually if needed
+    while len(all_videos) < len(catch_points):
+        all_videos += all_videos  # Duplicate the list until it's long enough
+
+    # Trim the extended list to exactly 35 items
+    extended_videos = all_videos[:len(catch_points)]
+    random.shuffle(extended_videos)
+    sampled_videos = extended_videos
+    # sampled_videos = random.choices(all_videos, k=len(catch_points)) # based on the number of catch trial, chose the videos randoemely
+
 
     # Image for pause
     image_path = _thisDir + os.sep + f'stimuli/catch/pause.png'  # Replace with the path to your image
@@ -510,23 +525,23 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         if trial_index in catch_points:  
             start_time = core.getTime()
             # prepare an audio
-            audio_to_show = audios[f'audio_{sampled_audios[i]}']['audio']
-            audio_name = f'{sampled_audios[i]}.wav'
+            audio_to_show = audios[f'audio_{sampled_audios[ii]}']['audio']
+            audio_name = f'{sampled_audios[ii]}.wav'
             thisExp.addData('audio_name', audio_name)  # Store the movie name in the CSV
             thisExp.addData('audio_started', start_time) # store the time started
             audio_to_show.seek(1)
             
             
             # prepare a movie
-            movie_duration = movies[f'movie_{sampled_videos[i]}']['duration']
-            movie_to_show = movies[f'movie_{sampled_videos[i]}']['movie']
-            movie_name = f'{sampled_videos[i]}.mp4'
+            movie_duration = movies[f'movie_{sampled_videos[ii]}']['duration']
+            movie_to_show = movies[f'movie_{sampled_videos[ii]}']['movie']
+            movie_name = f'{sampled_videos[ii]}.mp4'
             movie_to_show.stop()
             # if trial_index < n_trials/2:
                 # movie_to_show.seek((movie_duration/2) - 1)
             # else:
                 # movie_to_show.seek((movie_duration/2) + 1)
-            movie_to_show.seek((movie_duration/2))
+            movie_to_show.seek(movie_duration/2)
 
             movie_to_show.play()
             audio_to_show.play(when=win)
@@ -540,7 +555,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                 line_diagonal_2.draw()
                 movie_to_show.draw()  # Draw the current frame of the video
                 if EEG_trigger == True:
-                    win.callOnFlip(p_port.setData, 50 + int(sampled_videos[i])) # set the trigger based on the video
+                    win.callOnFlip(p_port.setData, 50 + int(sampled_videos[ii])) # set the trigger based on the video
                 win.flip()
                 
             audio_to_show.stop()
@@ -548,7 +563,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             
             if EEG_trigger == True:
                 p_port.setData(0) # refresh the trigger
-            i += 1 # updates the index
+            ii += 1 # updates the index
             # Show the whole background with lines after movie pauses
             line_diagonal_1.draw()
             line_diagonal_2.draw()
@@ -774,7 +789,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
     i = 0 # catch_points_idx
 
     # Audio for catch trials
-    all_audios = ["1","2","3","4","5"]
+    all_audios = ["1","2","3","4"]
     audios = {}
     for audioNum in all_audios:
         audio_file_path = _thisDir + os.sep + f'stimuli/catch/audio/{audioNum}.wav'
@@ -786,7 +801,13 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         audio.setVolume(1.0)
         audio_duration = audio.duration
         audios[f'audio_{audioNum}'] = {'audio': audio, 'duration': audio_duration}
-    sampled_audios = random.choices(all_audios, k=len(catch_points))
+    # sampled_audios = random.choices(all_audios, k=len(catch_points))
+    while len(all_audios) < len(catch_points):
+        all_audios += all_audios  # Duplicate the list until it's long enough
+    # Trim the extended list to exactly 35 items
+    extended_audios = all_audios[:len(catch_points)]
+    random.shuffle(extended_audios)
+    sampled_audios = extended_audios
 
     # Videos for catch trials
     all_videos = ["1","2","3","4","5","6","7","11","12","13","14","15","16"]
@@ -803,7 +824,12 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                                 )
         movie_duration = movie.duration # get the duration
         movies[f'movie_{videoNum}'] = {'movie': movie, 'duration': movie_duration} # create the dictionary for the list of videos
-    sampled_videos = random.choices(all_videos, k=len(catch_points)) # based on the number of catch trial, chose the videos randoemely
+    while len(all_videos) < len(catch_points):
+        all_videos += all_videos  # Duplicate the list until it's long enough
+    # Trim the extended list to exactly 35 items
+    extended_videos = all_videos[:len(catch_points)]
+    random.shuffle(extended_videos)
+    sampled_videos = extended_videos
 
     # Image for pause
     image_path = _thisDir + os.sep + f'stimuli/catch/pause.png'  # Replace with the path to your image
@@ -1230,7 +1256,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             audio_name = f'{sampled_audios[i]}.wav'
             thisExp.addData('audio_name', audio_name)  # Store the movie name in the CSV
             thisExp.addData('audio_started', start_time) # store the time started
-            audio_to_show.seek(3)
+            audio_to_show.seek(1)
             
             
             # prepare a movie
@@ -1238,10 +1264,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             movie_to_show = movies[f'movie_{sampled_videos[i]}']['movie']
             movie_name = f'{sampled_videos[i]}.mp4'
             movie_to_show.stop()
-            if trial_index < n_trials/2:
-                movie_to_show.seek((movie_duration/2) - 1)
-            else:
-                movie_to_show.seek((movie_duration/2) + 1)
+            movie_to_show.seek(movie_duration/2)
 
             movie_to_show.play()
             audio_to_show.play(when=win)
@@ -1250,7 +1273,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             thisExp.addData('movie_started', start_time) # store the time started
 
             # Play the video for only 1 second
-            while core.getTime() - start_time < 1.0:  # 1 second duration
+            while core.getTime() - start_time < 4.0:  # 1 second duration
                 background_image.draw() # show the diagonal lines on the screen
                 background_image.draw()
                 movie_to_show.draw()  # Draw the current frame of the video
