@@ -224,7 +224,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
     i = 0 # catch_points_idx
 
     # Audio for catch trials
-    all_audios = ["1","2","3","4","5"]
+    all_audios = ["1","2","3","4"]
     audios = {}
     for audioNum in all_audios:
         audio_file_path = _thisDir + os.sep + f'stimuli/catch/audio/{audioNum}.wav'
@@ -514,7 +514,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             audio_name = f'{sampled_audios[i]}.wav'
             thisExp.addData('audio_name', audio_name)  # Store the movie name in the CSV
             thisExp.addData('audio_started', start_time) # store the time started
-            audio_to_show.seek(3)
+            audio_to_show.seek(1)
             
             
             # prepare a movie
@@ -522,10 +522,11 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             movie_to_show = movies[f'movie_{sampled_videos[i]}']['movie']
             movie_name = f'{sampled_videos[i]}.mp4'
             movie_to_show.stop()
-            if trial_index < n_trials/2:
-                movie_to_show.seek((movie_duration/2) - 1)
-            else:
-                movie_to_show.seek((movie_duration/2) + 1)
+            # if trial_index < n_trials/2:
+                # movie_to_show.seek((movie_duration/2) - 1)
+            # else:
+                # movie_to_show.seek((movie_duration/2) + 1)
+            movie_to_show.seek((movie_duration/2))
 
             movie_to_show.play()
             audio_to_show.play(when=win)
@@ -534,7 +535,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             thisExp.addData('movie_started', start_time) # store the time started
 
             # Play the video for only 1 second
-            while core.getTime() - start_time < 1.0:  # 1 second duration
+            while core.getTime() - start_time < 4.0:  # 1 second duration
                 line_diagonal_1.draw() # show the diagonal lines on the screen
                 line_diagonal_2.draw()
                 movie_to_show.draw()  # Draw the current frame of the video
