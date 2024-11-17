@@ -21,7 +21,7 @@ import pickle
 
 
 # ~~~~~~~~~~~~~~ Parameters
-modality = 'audio' # 'visual' or 'audio'
+modality = 'visual' # 'visual' or 'audio'
 
 # ML parameters
 window_size = 5 # 1 sample = 2ms, 5 samples = 10 ms
