@@ -26,6 +26,21 @@
                 "Stimulus/S206": "numerosity 6"
                 },
 
+    "CONDITION_MAP_AUDIO":
+                {"Stimulus/S  1": "numerosity 1",
+                 "Stimulus/S  2": "numerosity 2",
+                 "Stimulus/S  3": "numerosity 3",
+                 "Stimulus/S  4": "numerosity 4",
+                 "Stimulus/S  5": "numerosity 5",
+                 "Stimulus/S  6": "numerosity 6",
+                 "Stimulus/S101": "numerosity 1",
+                 "Stimulus/S102": "numerosity 2",
+                 "Stimulus/S103": "numerosity 3",
+                 "Stimulus/S104": "numerosity 4",
+                 "Stimulus/S105": "numerosity 5",
+                 "Stimulus/S106": "numerosity 6"
+                 },
+
     "EVENT_ID":
                 {"numerosity 1": 1,
                  "numerosity 2": 2,

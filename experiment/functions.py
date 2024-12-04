@@ -105,7 +105,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
     _backgroundFit='none' # Specifies how the background image should fit to the window if provided
     _blendMode='avg' # Controls how overlapping stimuli are blended together on the screen. 'avg' means averaging the pixel values of overlapping stimuli.
     _useFBO=True # Setting useFBO=True allows PsychoPy to render stimuli off-screen (in a buffer) before displaying them. This can improve rendering flexibility and performance, especially when dealing with complex stimuli or advanced visual effects.
-    _units='pix' # Defines the units used for positioning and sizing stimuli in the window. units='height' sets the unit of measurement relative to the height of the window. For example, setting a stimulus' size to 0.5 means it will occupy half of the window’s height. Other possible units include norm, pix (pixels), and cm (centimeters).
+    _units='norm' # Defines the units used for positioning and sizing stimuli in the window. units='height' sets the unit of measurement relative to the height of the window. For example, setting a stimulus' size to 0.5 means it will occupy half of the window’s height. Other possible units include norm, pix (pixels), and cm (centimeters).
 
     win = visual.Window(
         size=_size, 
@@ -206,7 +206,9 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         lineWidth=1.5,        # Width of the line
         units='norm'
         )
-
+    
+    # Create a text stimulus for the trial number
+    trial_text = visual.TextStim(win=win, text='', pos=(-0.97, -0.97), height=0.04, color='black', alignText='center')
 
     # Audio beep
     wav_file_path = _thisDir + os.sep + 'stimuli/audio/beep.wav' 
@@ -219,10 +221,10 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
 
     # specify the trial just before the catch trial
     catch_points = list(range(11, 421, 12))
-    i = 0 # catch_points_idx
+    ii = 0 # catch_points_idx
 
     # Audio for catch trials
-    all_audios = ["1","2","3","4","5"]
+    all_audios = ["1","2","3","4"]
     audios = {}
     for audioNum in all_audios:
         audio_file_path = _thisDir + os.sep + f'stimuli/catch/audio/{audioNum}.wav'
@@ -234,7 +236,13 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         audio.setVolume(1.0)
         audio_duration = audio.duration
         audios[f'audio_{audioNum}'] = {'audio': audio, 'duration': audio_duration}
-    sampled_audios = random.choices(all_audios, k=len(catch_points))
+    # sampled_audios = random.choices(all_audios, k=len(catch_points))
+    while len(all_audios) < len(catch_points):
+        all_audios += all_audios  # Duplicate the list until it's long enough
+    # Trim the extended list to exactly 35 items
+    extended_audios = all_audios[:len(catch_points)]
+    random.shuffle(extended_audios)
+    sampled_audios = extended_audios
 
     # Videos for catch trials
     all_videos = ["1","2","3","4","5","6","7","11","12","13","14","15","16"]
@@ -251,7 +259,16 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                                 )
         movie_duration = movie.duration # get the duration
         movies[f'movie_{videoNum}'] = {'movie': movie, 'duration': movie_duration} # create the dictionary for the list of videos
-    sampled_videos = random.choices(all_videos, k=len(catch_points)) # based on the number of catch trial, chose the videos randoemely
+        # Extend the list manually if needed
+    while len(all_videos) < len(catch_points):
+        all_videos += all_videos  # Duplicate the list until it's long enough
+
+    # Trim the extended list to exactly 35 items
+    extended_videos = all_videos[:len(catch_points)]
+    random.shuffle(extended_videos)
+    sampled_videos = extended_videos
+    # sampled_videos = random.choices(all_videos, k=len(catch_points)) # based on the number of catch trial, chose the videos randoemely
+
 
     # Image for pause
     image_path = _thisDir + os.sep + f'stimuli/catch/pause.png'  # Replace with the path to your image
@@ -391,9 +408,12 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         else:
             idx_trigger = 100 + numerosity # rate is controlled 
         
+
+        # ~~~~~~~~~~~~~~~ Update trial number text
+        trial_text.text = f'T{trial_index}'
+
         # ~~~~~~~~~~~~~~~ Prepare to start Routine "trial"
         continueRoutine = True
-
 
         # ~~~~~~~~~~~~~~~　modify the single item duration depending on the condition
         beep.setSound(value=beep, secs=single_duration)
@@ -429,6 +449,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                 line_diagonal_1.draw()
                 line_diagonal_2.draw()
 
+
                 # if beep is starting this fram...
                 if beep.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance: # If both conditions are met, it means the beep should start this frame.
                     beep.framNstart = frameN # record the frame number when beep starts
@@ -440,6 +461,10 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                     # update status
                     beep.status = STARTED
                     beep.play(when=win)  # sync with win flip
+                    
+
+                    trial_text.setAutoDraw(True)
+
 
                 # if beep is stopping this frame...
                 if beep.status == STARTED:
@@ -452,6 +477,8 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                         # update status
                         beep.status = FINISHED
                         beep.stop()
+                        trial_text.setAutoDraw(False)
+
                         if EEG_trigger == True:
                             p_port.setData(0) # refresh the trigger
 
@@ -461,6 +488,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                             core.wait(silent_duration)  # wait for 800ms before continuing
                         else:
                             core.wait(isi)
+
                 # Pause logic - check if 'p' key is pressed
                 keys = defaultKeyboard.getKeys(keyList=['p', 'r']) # they key press is detected immediately. 
                 if 'p' in [key.name for key in keys]: # list the keys pressed
@@ -497,22 +525,23 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         if trial_index in catch_points:  
             start_time = core.getTime()
             # prepare an audio
-            audio_to_show = audios[f'audio_{sampled_audios[i]}']['audio']
-            audio_name = f'{sampled_audios[i]}.wav'
+            audio_to_show = audios[f'audio_{sampled_audios[ii]}']['audio']
+            audio_name = f'{sampled_audios[ii]}.wav'
             thisExp.addData('audio_name', audio_name)  # Store the movie name in the CSV
             thisExp.addData('audio_started', start_time) # store the time started
-            audio_to_show.seek(3)
+            audio_to_show.seek(1)
             
             
             # prepare a movie
-            movie_duration = movies[f'movie_{sampled_videos[i]}']['duration']
-            movie_to_show = movies[f'movie_{sampled_videos[i]}']['movie']
-            movie_name = f'{sampled_videos[i]}.mp4'
+            movie_duration = movies[f'movie_{sampled_videos[ii]}']['duration']
+            movie_to_show = movies[f'movie_{sampled_videos[ii]}']['movie']
+            movie_name = f'{sampled_videos[ii]}.mp4'
             movie_to_show.stop()
-            if trial_index < n_trials/2:
-                movie_to_show.seek((movie_duration/2) - 1)
-            else:
-                movie_to_show.seek((movie_duration/2) + 1)
+            # if trial_index < n_trials/2:
+                # movie_to_show.seek((movie_duration/2) - 1)
+            # else:
+                # movie_to_show.seek((movie_duration/2) + 1)
+            movie_to_show.seek(movie_duration/2)
 
             movie_to_show.play()
             audio_to_show.play(when=win)
@@ -521,12 +550,12 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             thisExp.addData('movie_started', start_time) # store the time started
 
             # Play the video for only 1 second
-            while core.getTime() - start_time < 1.0:  # 1 second duration
+            while core.getTime() - start_time < 4.0:  # 1 second duration
                 line_diagonal_1.draw() # show the diagonal lines on the screen
                 line_diagonal_2.draw()
                 movie_to_show.draw()  # Draw the current frame of the video
                 if EEG_trigger == True:
-                    win.callOnFlip(p_port.setData, 50 + int(sampled_videos[i])) # set the trigger based on the video
+                    win.callOnFlip(p_port.setData, 50 + int(sampled_videos[ii])) # set the trigger based on the video
                 win.flip()
                 
             audio_to_show.stop()
@@ -534,7 +563,7 @@ def run_audio(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             
             if EEG_trigger == True:
                 p_port.setData(0) # refresh the trigger
-            i += 1 # updates the index
+            ii += 1 # updates the index
             # Show the whole background with lines after movie pauses
             line_diagonal_1.draw()
             line_diagonal_2.draw()
@@ -662,7 +691,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
     _backgroundFit='none' # Specifies how the background image should fit to the window if provided
     _blendMode='avg' # Controls how overlapping stimuli are blended together on the screen. 'avg' means averaging the pixel values of overlapping stimuli.
     _useFBO=True # Setting useFBO=True allows PsychoPy to render stimuli off-screen (in a buffer) before displaying them. This can improve rendering flexibility and performance, especially when dealing with complex stimuli or advanced visual effects.
-    _units='pix' # Defines the units used for positioning and sizing stimuli in the window. units='height' sets the unit of measurement relative to the height of the window. For example, setting a stimulus' size to 0.5 means it will occupy half of the window’s height. Other possible units include norm, pix (pixels), and cm (centimeters).
+    _units='norm' # Defines the units used for positioning and sizing stimuli in the window. units='height' sets the unit of measurement relative to the height of the window. For example, setting a stimulus' size to 0.5 means it will occupy half of the window’s height. Other possible units include norm, pix (pixels), and cm (centimeters).
 
     win = visual.Window(
         size=_size, 
@@ -760,7 +789,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
     i = 0 # catch_points_idx
 
     # Audio for catch trials
-    all_audios = ["1","2","3","4","5"]
+    all_audios = ["1","2","3","4"]
     audios = {}
     for audioNum in all_audios:
         audio_file_path = _thisDir + os.sep + f'stimuli/catch/audio/{audioNum}.wav'
@@ -772,7 +801,13 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         audio.setVolume(1.0)
         audio_duration = audio.duration
         audios[f'audio_{audioNum}'] = {'audio': audio, 'duration': audio_duration}
-    sampled_audios = random.choices(all_audios, k=len(catch_points))
+    # sampled_audios = random.choices(all_audios, k=len(catch_points))
+    while len(all_audios) < len(catch_points):
+        all_audios += all_audios  # Duplicate the list until it's long enough
+    # Trim the extended list to exactly 35 items
+    extended_audios = all_audios[:len(catch_points)]
+    random.shuffle(extended_audios)
+    sampled_audios = extended_audios
 
     # Videos for catch trials
     all_videos = ["1","2","3","4","5","6","7","11","12","13","14","15","16"]
@@ -789,11 +824,20 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                                 )
         movie_duration = movie.duration # get the duration
         movies[f'movie_{videoNum}'] = {'movie': movie, 'duration': movie_duration} # create the dictionary for the list of videos
-    sampled_videos = random.choices(all_videos, k=len(catch_points)) # based on the number of catch trial, chose the videos randoemely
+    while len(all_videos) < len(catch_points):
+        all_videos += all_videos  # Duplicate the list until it's long enough
+    # Trim the extended list to exactly 35 items
+    extended_videos = all_videos[:len(catch_points)]
+    random.shuffle(extended_videos)
+    sampled_videos = extended_videos
 
     # Image for pause
     image_path = _thisDir + os.sep + f'stimuli/catch/pause.png'  # Replace with the path to your image
     image_pause = visual.ImageStim(win, image=image_path)
+
+    # Create a text stimulus for the trial number
+    trial_text = visual.TextStim(win=win, text='', pos=(-0.97, -0.97), height=0.04, color='black', alignText='center')
+
 
     # Image for no dot time. 
     background_path = _thisDir + os.sep + f'stimuli/visual/background.png'  # Replace with the path to your image
@@ -1103,6 +1147,9 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
         image_number = int(re.findall(r'\d+', image_to_show_name)[0]) # Use a regular expression to extract the number (e.g., image_to_show_name = image_5)
         thisExp.addData(f'image_number',  image_number)
 
+        # ~~~~~~~~~~~~~~~ Update trial number text
+        trial_text.text = f'T{trial_index}'
+
         # ~~~~~~~~~~~~~~~ Prepare to start Routine "trial"
         continueRoutine = True   
 
@@ -1138,8 +1185,11 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                 image_to_show.setAutoDraw(True)
                 thisExp.addData(f'image.started', tThisFlipGlobal)  # write in the datafile
                 image_to_show.status = STARTED
+                
+                trial_text.setAutoDraw(True)
 
-            # if beep is stopping this frame...
+
+            # if image is stopping this frame...
             if image_to_show.status == STARTED:
 
                 # is it time to stop? (based on global clock, using actual start)
@@ -1161,7 +1211,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
                     core.wait(isi) # 100ms wait for the next trial
 
                     background_image.setAutoDraw(False)
-
+                    trial_text.setAutoDraw(False)
             
 
             # Pause logic - check if 'p' key is pressed
@@ -1206,7 +1256,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             audio_name = f'{sampled_audios[i]}.wav'
             thisExp.addData('audio_name', audio_name)  # Store the movie name in the CSV
             thisExp.addData('audio_started', start_time) # store the time started
-            audio_to_show.seek(3)
+            audio_to_show.seek(1)
             
             
             # prepare a movie
@@ -1214,10 +1264,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             movie_to_show = movies[f'movie_{sampled_videos[i]}']['movie']
             movie_name = f'{sampled_videos[i]}.mp4'
             movie_to_show.stop()
-            if trial_index < n_trials/2:
-                movie_to_show.seek((movie_duration/2) - 1)
-            else:
-                movie_to_show.seek((movie_duration/2) + 1)
+            movie_to_show.seek(movie_duration/2)
 
             movie_to_show.play()
             audio_to_show.play(when=win)
@@ -1226,7 +1273,7 @@ def run_visual(monitor_data = [1920, 1080, 50, 90], EEG_trigger = True):
             thisExp.addData('movie_started', start_time) # store the time started
 
             # Play the video for only 1 second
-            while core.getTime() - start_time < 1.0:  # 1 second duration
+            while core.getTime() - start_time < 4.0:  # 1 second duration
                 background_image.draw() # show the diagonal lines on the screen
                 background_image.draw()
                 movie_to_show.draw()  # Draw the current frame of the video

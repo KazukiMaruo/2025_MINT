@@ -20,25 +20,29 @@ import pickle
 
 
 
-# ~~~~~~~~~~~~~~ Set the working directory
-path = "/u/kazma/MINT/data/interim/visual"
-sub_folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
-sub_folders_sorted = sorted(sub_folders, key=lambda x: int(re.search(r'\d+', x).group())) # Sort the folders based on the numeric part after "sub-"
-# ~~~~~~~~~~~~~~ Set the working directory ~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~ Parameters
+modality = 'visual' # 'visual' or 'audio'
 
-
-
-# ~~~~~~~~~~~~~~ ML Parameters
+# ML parameters
 window_size = 5 # 1 sample = 2ms, 5 samples = 10 ms
 n_splits = 10 # number of folds
 clf = SVC(kernel='linear') # support vector machine (SVM) classifier with a linear kernel.
 
 # Print out each parameter
+print(f"{modality} data is processed")
 print("Machine learning parameters:")
 print(f"  Window size: {window_size} samples ({window_size * 2} ms)")
 print(f"  Number of CV splits (folds): {n_splits}")
 print(f"  Classifier: {clf.__class__.__name__} with kernel = '{clf.kernel}'")
-# ~~~~~~~~~~~~~~ ML Parameters ~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~
+
+
+
+# ~~~~~~~~~~~~~~ Set the working directory
+path = f"/u/kazma/MINT/data/interim/{modality}"
+sub_folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
+sub_folders_sorted = sorted(sub_folders, key=lambda x: int(re.search(r'\d+', x).group())) # Sort the folders based on the numeric part after "sub-"
+# ~~~~~~~~~~~~~~ Set the working directory ~~~~~~~~~~~~~~
 
 
 
@@ -156,7 +160,7 @@ for subject in sub_folders_sorted:
 
 
     # ~~~~~~~~~~~~~~~~ Save the list of accuracy matrices
-    save_folder = f"/u/kazma/MINT/data/processed/visual/{subject}"
+    save_folder = f"/u/kazma/MINT/data/processed/{modality}/{subject}"
     save_path = os.path.join(save_folder, "accuracy_matrices.pkl") #  a pickle file
     with open(save_path, "wb") as f:
         pickle.dump(all_accuracy_matrices, f)
