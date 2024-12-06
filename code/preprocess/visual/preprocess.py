@@ -30,25 +30,27 @@ from utils import create_if_not_exist, download_datashare_dir, update_eeg_header
 
 
 # ~~~~~~~~~~~~~~ Pre-processing Parameters
+group = 'adult'
+sub_name = 'sub-02'
 modality = 'visual'
 session = 1
-sub_name = 'sub-01_ses-01'
-print(f"\n\n Processing {modality} EEG session {session} of {sub_name}\n\n")
+print(f"\n\n Processing {modality} EEG session {session} of {group}: {sub_name}\n\n")
 # ~~~~~~~~~~~~~~ Pre-processing Parameters ~~~~~~~~~~~~~~
 
 
 
 # ~~~~~~~~~~~~~~ Path settings and make folders
-datashare_dir_path = os.path.join(DATASHARE_RAW_FOLDER, modality, sub_name) #  "DATASHARE_RAW_FOLDER": "MINT/raw/",
+group_name = f"raw-{group}"
+datashare_dir_path = os.path.join('MINT', group_name, sub_name, modality) #  "DATASHARE_RAW_FOLDER": "MINT/raw/",
 # create directories
-raw_target_dir_path = os.path.join(BASE_DIR, 'data', 'raw', modality, sub_name)
-interim_target_dir_path = os.path.join(BASE_DIR, 'data', 'interim', modality, sub_name)
-processed_target_dir_path = os.path.join(BASE_DIR, 'data', 'processed', modality, sub_name)
+raw_target_dir_path = os.path.join(BASE_DIR, 'data', group,'raw', modality, sub_name) # BASE_DIR: "/u/kazma/MINT/"
+interim_target_dir_path = os.path.join(BASE_DIR, 'data', group, 'interim', modality, sub_name)
+processed_target_dir_path = os.path.join(BASE_DIR, 'data', group, 'processed', modality, sub_name)
 create_if_not_exist(raw_target_dir_path) 
 create_if_not_exist(interim_target_dir_path)
 create_if_not_exist(processed_target_dir_path) 
 # the interested file name
-target_file_name = f"{raw_target_dir_path}/{sub_name}.vhdr"
+target_file_name = f"{raw_target_dir_path}/{sub_name}_ses-0{session}_{modality}.vhdr"
 # ~~~~~~~~~~~~~~ Path settings and make folders ~~~~~~~~~~~~~~
 
 
@@ -73,7 +75,7 @@ raw = mne.io.read_raw_brainvision(target_file_name,  # Brain vision file format 
                                   preload=True, # the data is loaded directly into memory. This allows for faster processing 
                                   verbose=False) # Suppresses output during the loading process (helpful when you don’t want too much logging information
 raw.rename_channels({'VP': 'Fp2',  # In this case, the channel labeled VP is renamed to Fp2, and VM is renamed to Fp1.
-                     'VM': 'Fp1'})
+                     'VM': 'Fp1'}) # VM is under the eye channel
 raw.set_montage(make_31_montage(raw))
 
 # Trigger value is converted to condition label name (e.g., from 106 to 6_con_totaldot)
@@ -184,7 +186,7 @@ if PREPROC_PARAMS["emc"] == "True":
 
 
 # ~~~~~~~~~~~~~~ remove eye-movement related channels
-channels_to_remove = ['Fp1', 'Fp2', 'eyeV', 'eyeH']  
+channels_to_remove = ['Fp1', 'eyeV', 'eyeH']  
 raw.drop_channels(channels_to_remove) # former eye channel (dummy name)
 # ~~~~~~~~~~~~~~ remove eye-movement related channels ~~~~~~~~~~~~~~
 
