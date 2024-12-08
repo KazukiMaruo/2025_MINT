@@ -87,7 +87,7 @@ for i in range(n): # Compute the Euclidean distance between each pair of numeros
         matrix_x1 = sorted_images[f'{keys_list[i]}'].flatten()
         matrix_x2 = sorted_images[f'{keys_list[j]}'].flatten()
         correlation_matrix = np.corrcoef(matrix_x1, matrix_x2)
-        X [i, j] = np.abs(correlation_matrix[0, 1])
+        X [i, j] = 1 - correlation_matrix[0, 1]
 
     print(f'{keys_list[i]} is done')
 # ~~~~~~~~~~~~~ Start pairwise correlation ~~~~~~~~~~~~~
@@ -103,11 +103,11 @@ np.save(rdm_path, X)  # Save as .npy
 
 
 # ~~~~~~~~~~~~~ RDM data clean-up 
-RDM = 1 - X
-RDM = RDM / np.max(RDM) # Normalize the RDM
+RDM = X
 np.fill_diagonal(RDM, np.nan)  # Remove diagonal elements
 upper_tri_mask = np.triu(np.ones(RDM.shape), k=0).astype(bool) # Create an upper triangular mask (including the diagonal)
 RDM[upper_tri_mask] = np.nan   # Apply the mask and set the upper triangle to NaN
+RDM = (RDM - np.nanmin(RDM)) / (np.nanmax(RDM) - np.nanmin(RDM)) # Normalize the RDM
 # ~~~~~~~~~~~~~ RDM data clean-up ~~~~~~~~~~~~~
 
 

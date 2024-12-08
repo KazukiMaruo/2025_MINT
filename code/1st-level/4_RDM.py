@@ -19,152 +19,156 @@ import pandas as pd
 import seaborn as sns
 import pickle
 
+import scipy.spatial.distance as dist
+import statsmodels.api as sm
+from statsmodels.genmod.families import Gaussian
+from statsmodels.genmod.families.links import Identity  # Updated import
 
 
 # ~~~~~~~~~~~~~~ Parameters
+group = 'adult'
 modality = 'visual' # 'visual' or 'audio'
 
-# RDM parameters
-window_size = 5 # 1 sample = 2ms, 5 samples = 10 ms
+# RDM parameter
+whichRDM = 'dynamic' #'dynamic' 
 
 # Print out each parameter
 print(f"{modality} data is processed")
 print("RDM parameters:")
-print(f"  Window size: {window_size} samples ({window_size * 2} ms)")
+print(f"  Type: {whichRDM}")
 # ~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~
 
 
 # ~~~~~~~~~~~~~~ Set the working directory
-path = f"/u/kazma/MINT/data/interim/{modality}"
+path = f"/u/kazma/MINT/data/{group}/interim/{modality}"
 sub_folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
 sub_folders_sorted = sorted(sub_folders, key=lambda x: int(re.search(r'\d+', x).group())) # Sort the folders based on the numeric part after "sub-"
 # ~~~~~~~~~~~~~~ Set the working directory ~~~~~~~~~~~~~~
 
+# ~~~~~~~~~~~~~~ Load model RDM
+rdm_path = f"/u/kazma/MINT/code/1st-level/RDM"
+# Load the .npy file
+# Load the .npy file
+RDM_numerosity = np.load(f"{rdm_path}/rdm_numerosity.npy")
+RDM_spatialfrequency = np.load(f"{rdm_path}/rdm_spatial_frequency.npy")
+RDM_signledot = np.load(f"{rdm_path}/rdm_area_of_a_single_dot.npy")
+RDM_totaldot = np.load(f"{rdm_path}/rdm_area_of_total_dots.npy")
+RDM_circumference = np.load(f"{rdm_path}/rdm_circumference_of_total_dots.npy")
+# ~~~~~~~~~~~~~~ Load model RDM ~~~~~~~~~~~~~~
 
 
 # SUB_LOOP
-for subject in sub_folders_sorted:
+# for subject in sub_folders_sorted
 
-    # subject folder 
-    sub_filename = os.path.join(path, subject, 'RDM_epochs-epo.fif')
+subject = sub_folders_sorted[1]
 
-    # Load epochs
-    epochs = mne.read_epochs(sub_filename, preload=True)
+# subject folder 
+sub_filename = os.path.join(path, subject, 'RDM_epochs-epo.fif') 
 
-    # Get the information about the data
-    conditions = list(epochs.event_id.keys())
-    n_conditions = len(conditions)
-    # n_trials = len(epochs)
-    n_channels = epochs.get_data().shape[1]
+# Load epochs
+epochs = mne.read_epochs(sub_filename, preload=True)
 
-
-    n_samples = epochs.get_data().shape[2]
-    min_time = epochs.times[0]*1000   # First time point in milli seconds
-    max_time = epochs.times[-1]*1000    # Last time point in milli seconds
-
-    # store rdm for each time point
-    all_rdm = []
-
-    # WINDOW_LOOP
-    for start in range(0, n_samples, window_size): # Loop over the epoch in steps of `window_size` to extract each 5-sample window
-        # Check if there are enough samples left for a full window
-        if start + window_size <= n_samples:
-
-            df_dict = {}
-            for condition in conditions:
-                x = epochs[condition]
-                x = x.get_data()
-                x = x[:, :, start:start + window_size]
-                x = x.reshape(x.shape[0], -1)
-                df_dict[condition] = x
+# Get the information about the data
+conditions = list(epochs.event_id.keys())
+n_conditions = len(conditions)
+# n_trials = len(epochs)
+n_channels = epochs.get_data().shape[1]
 
 
-            # Define the order for conditions
-            condition_order = {'singledot': 0, 'totaldot': 1, 'circum': 2}
-            # Sort dictionary by first number and then by condition order
-            sorted_condition_dict = dict(
-                sorted(
-                    df_dict.items(),
-                    key=lambda item: (
-                        int(item[0].split('_')[0]),
-                        condition_order.get(item[0].split('_')[2], 99),
-                        int(item[0].split('_')[-1].split('.')[0])  # Sort by condition order, 99 as default for unmatched
-                    )
-                )
-            )
-
-            pairwise_dissimilar_dict = {}
-
-            # CONDITION_LOOP
-            for i in range(n_conditions):
-                for j in range(i + 1, n_conditions):
-                    
-                    cond1 = list(sorted_condition_dict.keys())[i]
-                    cond2 = list(sorted_condition_dict.keys())[j]
-                    data_cond1 = sorted_condition_dict[cond1]
-                    data_cond2 = sorted_condition_dict[cond2]
-                    # Correlation
-                    corr_matrix = np.corrcoef(data_cond1, data_cond2)
-                    pairwise_dissimilar_dict[(cond1, cond2)] = 1 - corr_matrix[0, 1] # 0 = most similar and 2 = most dissimilar
-                    # print(f"Correlation for {cond1} vs {cond2} in time points {start + window_size}: {np.abs(corr_matrix[0, 1]):.2f}")
-        
-        # Average accuracy for this time point across CV folds
-        all_rdm.append(pairwise_dissimilar_dict)
-        print(f"Time point {start + window_size} is done")
+n_samples = epochs.get_data().shape[2]
+min_time = epochs.times[0]*1000   # First time point in milli seconds
+max_time = epochs.times[-1]*1000    # Last time point in milli seconds
 
 
+rdm_order = ['intercept','numerosity_RDM', 'spatialfrequency_RDM', 'signledot_RDM', 'totaldot_RDM', 'circumference_RDM']
+
+betas = np.zeros((len(rdm_order), n_samples)) # 6 = intercept plus betas for each moldel
+p_values = np.zeros((len(rdm_order), n_samples)) # 6 = intercept plus betas for each moldel
 
 
-    # ~~~~~~~~~~~~~~~~ Generate dissimilarity matrix
+### Time point LOOP
+for timepoint in range(n_samples):
 
-    all_dissimilarity_matrices = [] # List to store the resulting dissimilarity matrices
+    df_dict = {}
 
-    # ~~~~~~~~~~~~~~~~  CONDITION_LOOP
-    for idx, x in enumerate(all_rdm):
-        # Extract all unique conditions
-        conditions = sorted(set(key[0] for key in x.keys()).union(set(key[1] for key in x.keys())))
-        # Define the order for conditions
-        condition_order = {'singledot': 0, 'totaldot': 1, 'circum': 2}
-        # Sort dictionary by first number and then by condition order
-        sorted_conditions = sorted(
-                conditions,
-                key=lambda item: (
-                    int(item.split('_')[0]),
-                    condition_order.get(item.split('_')[2], 99),
-                    int(item.split('_')[-1].split('.')[0])  # Sort by condition order, 99 as default for unmatched
-                )
-            )
-        
-        n_conditions = len(sorted_conditions)
+    df = np.zeros((n_conditions, n_channels))
 
-        # Create a dictionary to map conditions to matrix indices
-        condition_idx = {condition: idx for idx, condition in enumerate(sorted_conditions)}
+    for i, condition in enumerate(conditions):
+        x = epochs[condition]
+        x = x.get_data()
+        x = x[:,:,timepoint] # because 0 means -100ms, so 50 means the onset
+        s = x.reshape(x.shape[0], -1)
+        df[i,:] = s
+        df_dict[condition] = s
 
-        # Initialize a square matrix with NaN values (for easier filling)
-        dissimilarity_matrix = np.full((n_conditions, n_conditions), np.nan)
 
-        # Fill the matrix with accuracies
-        for (cond1, cond2), dissimilarity in x.items(): # e.g., 'cond1' = 'numerosity 1' and 'cond2' = 'numerosity 2'
-            i, j = condition_idx[cond1], condition_idx[cond2]
-            dissimilarity_matrix[i, j] = dissimilarity
-            dissimilarity_matrix[j, i] = dissimilarity  # Ensuring symmetry
+    df_pd = pd.DataFrame(df)
+    df_pd.index = list(df_dict.keys())
 
-        # Convert to DataFrame for readability
-        dissimilarity_df = pd.DataFrame(dissimilarity_matrix, index=sorted_conditions, columns=sorted_conditions)
-        
-        # Store the DataFrame in the list
-        all_dissimilarity_matrices.append(dissimilarity_df)
 
-        # Optionally print each matrix to verify (can remove if not needed)
-        print(f"Decoding dissimilarity Matrix for entry {idx + 1}:")
-        print(dissimilarity_df)
-        print("\n")
-    # ~~~~~~~~~~~~~~~~  CONDITION_LOOP ~~~~~~~~~~~~~~~~
+    # Define the order for conditions
+    condition_order = {'singledot': 0, 'totaldot': 1, 'circum': 2}
 
-    # ~~~~~~~~~~~~~~~~ Save the list of accuracy matrices
-    save_folder = f"/u/kazma/MINT/data/processed/{modality}/{subject}"
-    save_path = os.path.join(save_folder, "rdm_matrices.pkl") #  a pickle file
-    with open(save_path, "wb") as f:
-        pickle.dump(all_dissimilarity_matrices, f)
-    print(f"{subject}: matrices saved in 'rdm_matrices.pkl'")
-    # ~~~~~~~~~~~~~~~~ Save the list of accuracy matrices ~~~~~~~~~~~~~~~~
+    df_sort = df_pd.loc[sorted(df_pd.index, key=lambda x: int(x.split('_')[-1].split('.')[0]))]
+    df_sort = df_sort.loc[sorted(df_sort.index, key=lambda x: condition_order[x.split('_')[2]])]
+    df_sort = df_sort.loc[sorted(df_sort.index, key=lambda x: int(x.split('_')[0]))]
+
+
+    rdm = dist.pdist(df_sort, metric='correlation')
+    rdm_square = dist.squareform(rdm)  
+    upper_tri_mask = np.triu(np.ones(rdm_square.shape), k=0).astype(bool) # Create an upper triangular mask (including the diagonal)
+    rdm_square[upper_tri_mask] = np.nan   # Apply the mask and set the upper triangle to NaN
+
+    # Min-Max normalization: Normalize the entire matrix
+    rdm_minmax_normalized = (rdm_square - np.nanmin(rdm_square)) / (np.nanmax(rdm_square) - np.nanmin(rdm_square))
+
+
+    # Multiple regressions
+    # Multiple regressions
+    # vectorize the RDMs
+    neural_RDM = rdm_minmax_normalized[np.tril_indices(rdm_minmax_normalized.shape[0], k=-1)]
+
+    numerosity_RDM = RDM_numerosity[np.tril_indices(RDM_numerosity.shape[0], k=-1)]
+    spatialfrequency_RDM = RDM_spatialfrequency[np.tril_indices(RDM_spatialfrequency.shape[0], k=-1)]
+    signledot_RDM = RDM_signledot[np.tril_indices(RDM_signledot.shape[0], k=-1)]
+    totaldot_RDM = RDM_totaldot[np.tril_indices(RDM_totaldot.shape[0], k=-1)]
+    circumference_RDM = RDM_circumference[np.tril_indices(RDM_circumference.shape[0], k=-1)]
+
+
+    Y = neural_RDM
+    X = np.column_stack([numerosity_RDM, spatialfrequency_RDM, signledot_RDM, totaldot_RDM, circumference_RDM])
+    X = sm.add_constant(X)
+    model = sm.GLM(Y, X, family=Gaussian(link=Identity()))
+    results = model.fit()
+
+    # print(results.summary())
+    coefficient = results.params  # Regression coefficients
+    p_value = results.pvalues     # P-values for the coefficients
+
+    betas[:,timepoint] = coefficient # 6 = intercept plus betas for each moldel
+    p_values[:,timepoint] = p_value
+
+    print(f"  {subject}: Timepoint {timepoint} proccessed")
+
+### END: Time point LOOP
+
+# convert it into pd.dataframe
+betas_pd = pd.DataFrame(betas)
+betas_pd.index =  rdm_order
+
+p_values_pd = pd.DataFrame(p_values)
+p_values_pd.index =  rdm_order
+
+
+# ~~~~~~~~~~~~~~~~ Save the decoding accuracy
+save_folder = f"/u/kazma/MINT/data/adult/processed/{modality}/{subject}"
+save_path = os.path.join(save_folder, "rdm_beta.pkl") #  a pickle file
+with open(save_path, "wb") as f:
+    pickle.dump(betas_pd, f)
+print(f"{subject}: saved in 'rdm_beta.pkl'")
+
+save_path = os.path.join(save_folder, "rdm_beta_pvals.pkl") #  a pickle file
+with open(save_path, "wb") as f:
+    pickle.dump(p_values_pd, f)
+print(f"{subject}: saved in 'rdm_beta_pvals.pkl'")
+# ~~~~~~~~~~~~~~~~ Save the decoding accuracy ~~~~~~~~~~~~~~~~
