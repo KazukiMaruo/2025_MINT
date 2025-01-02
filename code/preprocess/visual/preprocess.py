@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from mne.preprocessing import ICA # ICA (Independent Component Analysis) algorithm, which is for artifact removal
 from autoreject import AutoReject # Python package for automatically rejecting bad epochs in EEG/MEG data
 import json
+import pandas as pd
 # ~~~~~~~~~~~~~~ Libraries ~~~~~~~~~~~~~~
 
 
@@ -30,7 +31,7 @@ from utils import create_if_not_exist, download_datashare_dir, update_eeg_header
 
 
 # ~~~~~~~~~~~~~~ Pre-processing Parameters
-group = 'adult'
+group = 'baby'
 sub_name = 'sub-02'
 modality = 'visual'
 session = 1
@@ -60,7 +61,21 @@ download_datashare_dir(datashare_dir = datashare_dir_path,
                        datashare_user = DATASHARE_USER) # "DATASHARE_USER": "kazma",
 # get eeg headers from datashare
 update_eeg_headers(target_file_name) 
+
+# remove mp4 file
+if os.path.exists(raw_target_dir_path): # Check if the directory exists
+    # Iterate through the files in the directory
+    for filename in os.listdir(raw_target_dir_path):
+        file_path = os.path.join(raw_target_dir_path, filename)
+        
+        # If the file is an .mp4 file, remove it
+        if os.path.isfile(file_path) and filename.endswith('.mp4'):
+            os.remove(file_path)
+            print(f"Removed: {file_path}")
+else:
+    print(f"Directory {raw_target_dir_path} does not exist.")
 # ~~~~~~~~~~~~~~ load data from datashare ~~~~~~~~~~~~~~
+
 
 
 ###############################################################################
@@ -241,7 +256,21 @@ if PREPROC_PARAMS["ar"] != "False":
 # ~~~~~~~~~~~~~~  autoreject  ~~~~~~~~~~~~~~ 
 
 
-# ~~~~~~~~~~~~~~ delete surplus trials: SKIP
+# ~~~~~~~~~~~~~~ Remove trials not paied attention
+# Remove specific epochs by index
+csv_file = next((f for f in os.listdir(raw_target_dir_path) if f.endswith('.csv')), None)
+csv_file_path = os.path.join(raw_target_dir_path, csv_file)
+
+# Read from a CSV file
+csv_df = pd.read_csv(csv_file_path)
+# Filter the rows where the 'Attention' column is 0
+attention_zero_indices = csv_df[csv_df['Attention'] == 0].index
+# Convert the indices to a list (if needed)
+attention_zero_indices_list = attention_zero_indices.tolist()
+
+epochs.drop(indices= attention_zero_indices_list)  # Removes epochs at indices 0, 5, and 10
+# ~~~~~~~~~~~~~~ Remove trials not paied attention ~~~~~~~~~~~~~~
+
 
 
 # ~~~~~~~~~~~~~~ save epochs
