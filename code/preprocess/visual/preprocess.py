@@ -272,6 +272,34 @@ epochs.drop(indices= attention_zero_indices_list)  # Removes epochs at indices 0
 # ~~~~~~~~~~~~~~ Remove trials not paied attention ~~~~~~~~~~~~~~
 
 
+# ~~~~~~~~~~~~~~ Count trials left
+# filter rows when attention is 1
+filtered_csv_df = csv_df[csv_df['Attention'] == 1]
+filtered_csv_df['group'] = filtered_csv_df['condition'].str.split('_').str[-1]
+
+# Group by 'group' and 'condition' and count occurrences
+grouped_counts = filtered_csv_df.groupby(['numerosity', 'group']).size().unstack(fill_value=0)
+
+# Plot a stacked bar chart
+grouped_counts.plot(kind='bar', stacked=True, figsize=(10, 6), colormap='viridis')
+
+# Add labels and title
+plt.xlabel('Numerosity', size=25)
+plt.ylabel('Number of trials', size=25)
+plt.yticks(np.arange(0,211,30))
+plt.tick_params(axis='x', labelsize=15, rotation=0)
+plt.tick_params(axis='y', labelsize=15)
+# Add legend with a title
+legend = plt.legend(title="Legend Title")
+# Remove the legend title
+legend.set_title(None)
+plt.legend(fontsize=15)
+
+# save the figure
+plt.savefig(f"{interim_target_dir_path}/trials-available.png", dpi=100)
+print("counts of trial's figure is saved")
+# ~~~~~~~~~~~~~~ Count trials left ~~~~~~~~~~~~~~
+
 
 # ~~~~~~~~~~~~~~ save epochs
 epochs.save(f"{interim_target_dir_path}/epochs-epo.fif", overwrite=True)
