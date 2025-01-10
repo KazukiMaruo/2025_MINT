@@ -132,7 +132,7 @@ for subject in sub_folders_sorted:
 
 
     # ~~~~~~~~~~~~~~~~ Save the decoding accuracy
-    save_folder = f"/u/kazma/MINT/data/adult/processed/{modality}/{subject}"
+    save_folder = f"/u/kazma/MINT/data/{group}/processed/{modality}/{subject}"
     save_path = os.path.join(save_folder, "accuracy_pairwise.pkl") #  a pickle file
     with open(save_path, "wb") as f:
         pickle.dump(all_decoding_accuracy, f)
@@ -180,7 +180,7 @@ for subject in sub_folders_sorted:
 
 
     # ~~~~~~~~~~~~~~~~ Save the list of accuracy matrices
-    save_folder = f"/u/kazma/MINT/data/adult/processed/{modality}/{subject}"
+    save_folder = f"/u/kazma/MINT/data/{group}/processed/{modality}/{subject}"
     save_path = os.path.join(save_folder, "accuracy_matrices.pkl") #  a pickle file
     with open(save_path, "wb") as f:
         pickle.dump(all_accuracy_matrices, f)
