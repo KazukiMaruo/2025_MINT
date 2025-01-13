@@ -32,9 +32,9 @@ from utils import create_if_not_exist, download_datashare_dir, update_eeg_header
 
 # ~~~~~~~~~~~~~~ Pre-processing Parameters
 group = 'adult'
-sub_name = 'sub-03'
+sub_name = 'sub-05'
 modality = 'visual'
-session = 'ses-01'
+session = 'ses-03'
 print(f"\n\n Processing {modality} EEG session {session} of {group}: {sub_name}\n\n")
 # ~~~~~~~~~~~~~~ Pre-processing Parameters ~~~~~~~~~~~~~~
 
