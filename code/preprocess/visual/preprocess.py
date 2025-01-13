@@ -31,10 +31,10 @@ from utils import create_if_not_exist, download_datashare_dir, update_eeg_header
 
 
 # ~~~~~~~~~~~~~~ Pre-processing Parameters
-group = 'baby'
-sub_name = 'sub-02'
+group = 'adult'
+sub_name = 'sub-03'
 modality = 'visual'
-session = 1
+session = 'ses-01'
 print(f"\n\n Processing {modality} EEG session {session} of {group}: {sub_name}\n\n")
 # ~~~~~~~~~~~~~~ Pre-processing Parameters ~~~~~~~~~~~~~~
 
@@ -42,16 +42,16 @@ print(f"\n\n Processing {modality} EEG session {session} of {group}: {sub_name}\
 
 # ~~~~~~~~~~~~~~ Path settings and make folders
 group_name = f"raw-{group}"
-datashare_dir_path = os.path.join('MINT', group_name, sub_name, modality) #  "DATASHARE_RAW_FOLDER": "MINT/raw/",
+datashare_dir_path = os.path.join('MINT', group_name, sub_name, modality, session) #  "DATASHARE_RAW_FOLDER": "MINT/raw/",
 # create directories
-raw_target_dir_path = os.path.join(BASE_DIR, 'data', group,'raw', modality, sub_name) # BASE_DIR: "/u/kazma/MINT/"
-interim_target_dir_path = os.path.join(BASE_DIR, 'data', group, 'interim', modality, sub_name)
-processed_target_dir_path = os.path.join(BASE_DIR, 'data', group, 'processed', modality, sub_name)
+raw_target_dir_path = os.path.join(BASE_DIR, 'data', group,'raw', modality, sub_name, session) # BASE_DIR: "/u/kazma/MINT/"
+interim_target_dir_path = os.path.join(BASE_DIR, 'data', group, 'interim', modality, sub_name, session)
+processed_target_dir_path = os.path.join(BASE_DIR, 'data', group, 'processed', modality, sub_name, session)
 create_if_not_exist(raw_target_dir_path) 
 create_if_not_exist(interim_target_dir_path)
 create_if_not_exist(processed_target_dir_path) 
 # the interested file name
-target_file_name = f"{raw_target_dir_path}/{sub_name}_ses-0{session}_{modality}.vhdr"
+target_file_name = f"{raw_target_dir_path}/{sub_name}_{modality}_{session}.vhdr"
 # ~~~~~~~~~~~~~~ Path settings and make folders ~~~~~~~~~~~~~~
 
 
@@ -256,49 +256,54 @@ if PREPROC_PARAMS["ar"] != "False":
 # ~~~~~~~~~~~~~~  autoreject  ~~~~~~~~~~~~~~ 
 
 
+
 # ~~~~~~~~~~~~~~ Remove trials not paied attention
-# Remove specific epochs by index
-csv_file = next((f for f in os.listdir(raw_target_dir_path) if f.endswith('.csv')), None)
-csv_file_path = os.path.join(raw_target_dir_path, csv_file)
+if group == 'baby':
 
-# Read from a CSV file
-csv_df = pd.read_csv(csv_file_path)
-# Filter the rows where the 'Attention' column is 0
-attention_zero_indices = csv_df[csv_df['Attention'] == 0].index
-# Convert the indices to a list (if needed)
-attention_zero_indices_list = attention_zero_indices.tolist()
+    # Remove specific epochs by index
+    csv_file = next((f for f in os.listdir(raw_target_dir_path) if f.endswith('.csv')), None)
+    csv_file_path = os.path.join(raw_target_dir_path, csv_file)
 
-epochs.drop(indices= attention_zero_indices_list)  # Removes epochs at indices 0, 5, and 10
-# ~~~~~~~~~~~~~~ Remove trials not paied attention ~~~~~~~~~~~~~~
+    # Read from a CSV file
+    csv_df = pd.read_csv(csv_file_path)
+    # Filter the rows where the 'Attention' column is 0
+    attention_zero_indices = csv_df[csv_df['Attention'] == 0].index
+    # Convert the indices to a list (if needed)
+    attention_zero_indices_list = attention_zero_indices.tolist()
 
+    epochs.drop(indices= attention_zero_indices_list)  # Removes epochs at indices 0, 5, and 10
+    # ~~~~~~~~~~~~~~ Remove trials not paied attention ~~~~~~~~~~~~~~
 
-# ~~~~~~~~~~~~~~ Count trials left
-# filter rows when attention is 1
-filtered_csv_df = csv_df[csv_df['Attention'] == 1]
-filtered_csv_df['group'] = filtered_csv_df['condition'].str.split('_').str[-1]
+    # ~~~~~~~~~~~~~~ Count trials left
+    # filter rows when attention is 1
+    filtered_csv_df = csv_df[csv_df['Attention'] == 1]
+    filtered_csv_df['group'] = filtered_csv_df['condition'].str.split('_').str[-1]
 
-# Group by 'group' and 'condition' and count occurrences
-grouped_counts = filtered_csv_df.groupby(['numerosity', 'group']).size().unstack(fill_value=0)
+    # Group by 'group' and 'condition' and count occurrences
+    grouped_counts = filtered_csv_df.groupby(['numerosity', 'group']).size().unstack(fill_value=0)
 
-# Plot a stacked bar chart
-grouped_counts.plot(kind='bar', stacked=True, figsize=(10, 6), colormap='viridis')
+    # Plot a stacked bar chart
+    grouped_counts.plot(kind='bar', stacked=True, figsize=(10, 6), colormap='viridis')
 
-# Add labels and title
-plt.xlabel('Numerosity', size=25)
-plt.ylabel('Number of trials', size=25)
-plt.yticks(np.arange(0,211,30))
-plt.tick_params(axis='x', labelsize=15, rotation=0)
-plt.tick_params(axis='y', labelsize=15)
-# Add legend with a title
-legend = plt.legend(title="Legend Title")
-# Remove the legend title
-legend.set_title(None)
-plt.legend(fontsize=15)
+    # Add labels and title
+    plt.xlabel('Numerosity', size=25)
+    plt.ylabel('Number of trials', size=25)
+    plt.yticks(np.arange(0,211,30))
+    plt.tick_params(axis='x', labelsize=15, rotation=0)
+    plt.tick_params(axis='y', labelsize=15)
+    # Add legend with a title
+    legend = plt.legend(title="Legend Title")
+    # Remove the legend title
+    legend.set_title(None)
+    plt.legend(fontsize=15)
 
-# save the figure
-plt.savefig(f"{interim_target_dir_path}/trials-available.png", dpi=100)
-print("counts of trial's figure is saved")
-# ~~~~~~~~~~~~~~ Count trials left ~~~~~~~~~~~~~~
+    # save the figure
+    plt.savefig(f"{interim_target_dir_path}/trials-available.png", dpi=100)
+    print("counts of trial's figure is saved")
+    # ~~~~~~~~~~~~~~ Count trials left ~~~~~~~~~~~~~~
+else:
+    pass
+
 
 
 # ~~~~~~~~~~~~~~ save epochs
