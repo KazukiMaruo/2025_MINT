@@ -63,10 +63,10 @@ for vector_name, current_vector in vectors.items():
     for i in range(n): # Compute the Euclidean distance between each pair of numerosities
         for j in range(n):
             RDM[i, j] = np.abs(current_vector[i] - current_vector[j])
-    RDM = RDM / np.max(RDM) # Normalize the RDM
     np.fill_diagonal(RDM, np.nan)  # Remove diagonal elements
     upper_tri_mask = np.triu(np.ones(RDM.shape), k=0).astype(bool) # Create an upper triangular mask (including the diagonal)
     RDM[upper_tri_mask] = np.nan   # Apply the mask and set the upper triangle to NaN
+    RDM = (RDM - np.nanmin(RDM)) / (np.nanmax(RDM) - np.nanmin(RDM)) # Normalize the RDM
     # ~~~~~~~~~~~~~~~~ RDM computation ~~~~~~~~~~~~~~~~
 
 

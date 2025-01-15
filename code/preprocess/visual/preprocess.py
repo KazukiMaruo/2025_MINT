@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from mne.preprocessing import ICA # ICA (Independent Component Analysis) algorithm, which is for artifact removal
 from autoreject import AutoReject # Python package for automatically rejecting bad epochs in EEG/MEG data
 import json
+import pandas as pd
 # ~~~~~~~~~~~~~~ Libraries ~~~~~~~~~~~~~~
 
 
@@ -30,25 +31,27 @@ from utils import create_if_not_exist, download_datashare_dir, update_eeg_header
 
 
 # ~~~~~~~~~~~~~~ Pre-processing Parameters
+group = 'adult'
+sub_name = 'sub-05'
 modality = 'visual'
-session = 1
-sub_name = 'sub-01_ses-01'
-print(f"\n\n Processing {modality} EEG session {session} of {sub_name}\n\n")
+session = 'ses-03'
+print(f"\n\n Processing {modality} EEG session {session} of {group}: {sub_name}\n\n")
 # ~~~~~~~~~~~~~~ Pre-processing Parameters ~~~~~~~~~~~~~~
 
 
 
 # ~~~~~~~~~~~~~~ Path settings and make folders
-datashare_dir_path = os.path.join(DATASHARE_RAW_FOLDER, modality, sub_name) #  "DATASHARE_RAW_FOLDER": "MINT/raw/",
+group_name = f"raw-{group}"
+datashare_dir_path = os.path.join('MINT', group_name, sub_name, modality, session) #  "DATASHARE_RAW_FOLDER": "MINT/raw/",
 # create directories
-raw_target_dir_path = os.path.join(BASE_DIR, 'data', 'raw', modality, sub_name)
-interim_target_dir_path = os.path.join(BASE_DIR, 'data', 'interim', modality, sub_name)
-processed_target_dir_path = os.path.join(BASE_DIR, 'data', 'processed', modality, sub_name)
+raw_target_dir_path = os.path.join(BASE_DIR, 'data', group,'raw', modality, sub_name, session) # BASE_DIR: "/u/kazma/MINT/"
+interim_target_dir_path = os.path.join(BASE_DIR, 'data', group, 'interim', modality, sub_name, session)
+processed_target_dir_path = os.path.join(BASE_DIR, 'data', group, 'processed', modality, sub_name, session)
 create_if_not_exist(raw_target_dir_path) 
 create_if_not_exist(interim_target_dir_path)
 create_if_not_exist(processed_target_dir_path) 
 # the interested file name
-target_file_name = f"{raw_target_dir_path}/{sub_name}.vhdr"
+target_file_name = f"{raw_target_dir_path}/{sub_name}_{modality}_{session}.vhdr"
 # ~~~~~~~~~~~~~~ Path settings and make folders ~~~~~~~~~~~~~~
 
 
@@ -58,7 +61,21 @@ download_datashare_dir(datashare_dir = datashare_dir_path,
                        datashare_user = DATASHARE_USER) # "DATASHARE_USER": "kazma",
 # get eeg headers from datashare
 update_eeg_headers(target_file_name) 
+
+# remove mp4 file
+if os.path.exists(raw_target_dir_path): # Check if the directory exists
+    # Iterate through the files in the directory
+    for filename in os.listdir(raw_target_dir_path):
+        file_path = os.path.join(raw_target_dir_path, filename)
+        
+        # If the file is an .mp4 file, remove it
+        if os.path.isfile(file_path) and filename.endswith('.mp4'):
+            os.remove(file_path)
+            print(f"Removed: {file_path}")
+else:
+    print(f"Directory {raw_target_dir_path} does not exist.")
 # ~~~~~~~~~~~~~~ load data from datashare ~~~~~~~~~~~~~~
+
 
 
 ###############################################################################
@@ -73,7 +90,7 @@ raw = mne.io.read_raw_brainvision(target_file_name,  # Brain vision file format 
                                   preload=True, # the data is loaded directly into memory. This allows for faster processing 
                                   verbose=False) # Suppresses output during the loading process (helpful when you don’t want too much logging information
 raw.rename_channels({'VP': 'Fp2',  # In this case, the channel labeled VP is renamed to Fp2, and VM is renamed to Fp1.
-                     'VM': 'Fp1'})
+                     'VM': 'Fp1'}) # VM is under the eye channel
 raw.set_montage(make_31_montage(raw))
 
 # Trigger value is converted to condition label name (e.g., from 106 to 6_con_totaldot)
@@ -184,7 +201,7 @@ if PREPROC_PARAMS["emc"] == "True":
 
 
 # ~~~~~~~~~~~~~~ remove eye-movement related channels
-channels_to_remove = ['Fp1', 'Fp2', 'eyeV', 'eyeH']  
+channels_to_remove = ['Fp1', 'eyeV', 'eyeH']  
 raw.drop_channels(channels_to_remove) # former eye channel (dummy name)
 # ~~~~~~~~~~~~~~ remove eye-movement related channels ~~~~~~~~~~~~~~
 
@@ -239,7 +256,54 @@ if PREPROC_PARAMS["ar"] != "False":
 # ~~~~~~~~~~~~~~  autoreject  ~~~~~~~~~~~~~~ 
 
 
-# ~~~~~~~~~~~~~~ delete surplus trials: SKIP
+
+# ~~~~~~~~~~~~~~ Remove trials not paied attention
+if group == 'baby':
+
+    # Remove specific epochs by index
+    csv_file = next((f for f in os.listdir(raw_target_dir_path) if f.endswith('.csv')), None)
+    csv_file_path = os.path.join(raw_target_dir_path, csv_file)
+
+    # Read from a CSV file
+    csv_df = pd.read_csv(csv_file_path)
+    # Filter the rows where the 'Attention' column is 0
+    attention_zero_indices = csv_df[csv_df['Attention'] == 0].index
+    # Convert the indices to a list (if needed)
+    attention_zero_indices_list = attention_zero_indices.tolist()
+
+    epochs.drop(indices= attention_zero_indices_list)  # Removes epochs at indices 0, 5, and 10
+    # ~~~~~~~~~~~~~~ Remove trials not paied attention ~~~~~~~~~~~~~~
+
+    # ~~~~~~~~~~~~~~ Count trials left
+    # filter rows when attention is 1
+    filtered_csv_df = csv_df[csv_df['Attention'] == 1]
+    filtered_csv_df['group'] = filtered_csv_df['condition'].str.split('_').str[-1]
+
+    # Group by 'group' and 'condition' and count occurrences
+    grouped_counts = filtered_csv_df.groupby(['numerosity', 'group']).size().unstack(fill_value=0)
+
+    # Plot a stacked bar chart
+    grouped_counts.plot(kind='bar', stacked=True, figsize=(10, 6), colormap='viridis')
+
+    # Add labels and title
+    plt.xlabel('Numerosity', size=25)
+    plt.ylabel('Number of trials', size=25)
+    plt.yticks(np.arange(0,211,30))
+    plt.tick_params(axis='x', labelsize=15, rotation=0)
+    plt.tick_params(axis='y', labelsize=15)
+    # Add legend with a title
+    legend = plt.legend(title="Legend Title")
+    # Remove the legend title
+    legend.set_title(None)
+    plt.legend(fontsize=15)
+
+    # save the figure
+    plt.savefig(f"{interim_target_dir_path}/trials-available.png", dpi=100)
+    print("counts of trial's figure is saved")
+    # ~~~~~~~~~~~~~~ Count trials left ~~~~~~~~~~~~~~
+else:
+    pass
+
 
 
 # ~~~~~~~~~~~~~~ save epochs
