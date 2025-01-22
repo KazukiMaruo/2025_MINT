@@ -1,6 +1,6 @@
 {
     "BASE_DIR": "/u/kazma/MINT/",
-    "COMPUTE_DIR": "/ptmp/kazma/MINT/",
+    "COMPUTE_DIR": "/ptmp/kazma/DATA-MINT/",
 
     "DATASHARE_USER": "kazma",
     "DATASHARE_RAW_FOLDER": "MINT/raw/",

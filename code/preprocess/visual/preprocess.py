@@ -32,7 +32,7 @@ from utils import create_if_not_exist, download_datashare_dir, update_eeg_header
 
 # ~~~~~~~~~~~~~~ Pre-processing Parameters
 group = 'adult'
-sub_name = 'sub-05'
+sub_name = 'sub-08'
 modality = 'visual'
 session = 'ses-03'
 print(f"\n\n Processing {modality} EEG session {session} of {group}: {sub_name}\n\n")
@@ -44,9 +44,9 @@ print(f"\n\n Processing {modality} EEG session {session} of {group}: {sub_name}\
 group_name = f"raw-{group}"
 datashare_dir_path = os.path.join('MINT', group_name, sub_name, modality, session) #  "DATASHARE_RAW_FOLDER": "MINT/raw/",
 # create directories
-raw_target_dir_path = os.path.join(BASE_DIR, 'data', group,'raw', modality, sub_name, session) # BASE_DIR: "/u/kazma/MINT/"
-interim_target_dir_path = os.path.join(BASE_DIR, 'data', group, 'interim', modality, sub_name, session)
-processed_target_dir_path = os.path.join(BASE_DIR, 'data', group, 'processed', modality, sub_name, session)
+raw_target_dir_path = os.path.join(COMPUTE_DIR, 'data', group,'raw', modality, sub_name, session) # BASE_DIR: "/u/kazma/MINT/"
+interim_target_dir_path = os.path.join(COMPUTE_DIR, 'data', group, 'interim', modality, sub_name, session)
+processed_target_dir_path = os.path.join(COMPUTE_DIR, 'data', group, 'processed', modality, sub_name, session)
 create_if_not_exist(raw_target_dir_path) 
 create_if_not_exist(interim_target_dir_path)
 create_if_not_exist(processed_target_dir_path) 

@@ -41,6 +41,7 @@ def datashare_establish_connection(datashare_user):
         datashare_user = getpass.getuser()  # get username from system (only works in MPCDF HPC)
 
     datashare_pass = keyring.get_password('datashare', datashare_user)
+    # datashare_pass = 'Xt98iCm4XQHH!vf'
     if datashare_pass is None:
         datashare_pass = getpass.getpass()
         keyring.set_password('datashare', datashare_user, datashare_pass)        

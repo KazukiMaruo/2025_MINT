@@ -27,7 +27,7 @@ from braindecode import EEGClassifier
 # ~~~~~~~~~~~~~~ Parameters
 group = 'adult'
 modality = 'visual' # 'visual' or 'audio'
-subject = 'sub-05'
+subject = 'sub-08'
 
 # EEGNET parameters
 
