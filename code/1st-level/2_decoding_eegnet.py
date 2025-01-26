@@ -27,7 +27,7 @@ from braindecode import EEGClassifier
 # ~~~~~~~~~~~~~~ Parameters
 group = 'adult'
 modality = 'visual' # 'visual' or 'audio'
-subject = 'sub-08'
+subject = 'sub-06'
 
 # EEGNET parameters
 
@@ -145,10 +145,13 @@ for i in range(n_conditions):
                             module__F2=16,                     # Number of pointwise filters in the separable convolution. Usually set to ``F1 * D``.
                             module__kernel_length=64,         # Length of the temporal convolution kernel. Usally sampling rate / 2 = 500/2 = 250
                             module__third_kernel_size=(8, 4), 
-                            module__drop_prob=0.5,             # Dropout probability after the second conv block and before the last layer. 0.5 for within-subject classification, 0.25 in cross-subject clasification
+                            module__drop_prob=0.25,            # Dropout probability after the second conv block and before the last layer. 0.5 for within-subject classification, 0.25 in cross-subject clasification
                             module__chs_info=None,             # (list of dict) – Information about each individual EEG channel. This should be filled with info["chs"]. Refer to mne.Info for more details.
                             module__input_window_seconds=None, # Length of the input window in seconds.
-                            module__sfreq=None
+                            module__sfreq=500,
+                            max_epochs=200,
+                            batch_size=16,
+                            train_split=None,
             )
 
 
@@ -187,5 +190,5 @@ print(f"{subject}: saved in 'EEGNet_accuracy_std_pairwise.pkl'")
 save_path = os.path.join(save_folder, "EEGNet_pairwise_estimator.pkl") #  a pickle file
 with open(save_path, "wb") as f:
     pickle.dump(pairwise_decoding_estimators, f)
-print(f"{subject}: saved in '_EEGNet_pairwise_estimator.pkl'")
+print(f"{subject}: saved in 'EEGNet_pairwise_estimator.pkl'")
 # ~~~~~~~~~~~~~~~~ Save the EEGNet estimation ~~~~~~~~~~~~~~~~

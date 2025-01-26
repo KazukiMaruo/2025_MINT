@@ -24,7 +24,7 @@ from sklearn.linear_model import LogisticRegression
 # ~~~~~~~~~~~~~~ Parameters
 group = 'adult'
 modality = 'visual' # 'visual' or 'audio'
-subject = 'sub-05'
+subject = 'sub-08'
 
 # ML parameters
 window_size = 1 # 1 sample = 2ms, 5 samples = 10 ms
@@ -41,7 +41,7 @@ print(f"  Classifier: {clf.__class__.__name__}")
 
 
 # ~~~~~~~~~~~~~~ Set the working directory
-path = f"/u/kazma/MINT/data/{group}/interim/{modality}"
+path = f"/ptmp/kazma/DATA-MINT/data/{group}/interim/{modality}"
 sub_folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
 sub_folders_sorted = sorted(sub_folders, key=lambda x: int(re.search(r'\d+', x).group())) # Sort the folders based on the numeric part after "sub-"
 # ~~~~~~~~~~~~~~ Set the working directory ~~~~~~~~~~~~~~
@@ -49,7 +49,7 @@ sub_folders_sorted = sorted(sub_folders, key=lambda x: int(re.search(r'\d+', x).
 
 
 # ~~~~~~~~~~~~~~ Concatanating 3 sessions
-each_sub_path = f"/u/kazma/MINT/data/{group}/interim/{modality}/{subject}"
+each_sub_path = f"/ptmp/kazma/DATA-MINT/data/{group}/interim/{modality}/{subject}"
 each_sub_folders = [f for f in os.listdir(each_sub_path) if os.path.isdir(os.path.join(each_sub_path, f))]
 each_sub_folders_sorted = sorted(each_sub_folders, key=lambda x: int(re.search(r'\d+', x).group()))
 
@@ -144,7 +144,7 @@ for timepoint in range(n_samples): # Loop over the each time point
 
 
 # ~~~~~~~~~~~~~~~~ Save the decoding accuracy
-save_folder = f"/u/kazma/MINT/data/{group}/processed/{modality}/{subject}"
+save_folder = f"/ptmp/kazma/DATA-MINT/data/{group}/processed/{modality}/{subject}"
 save_path = os.path.join(save_folder, "accuracy_pairwise.pkl") #  a pickle file
 with open(save_path, "wb") as f:
     pickle.dump(all_decoding_accuracy, f)
@@ -189,7 +189,7 @@ for idx, x in enumerate(all_decoding_accuracy):
 
 
 # ~~~~~~~~~~~~~~~~ Save the list of accuracy matrices
-save_folder = f"/u/kazma/MINT/data/{group}/processed/{modality}/{subject}"
+save_folder = f"/ptmp/kazma/DATA-MINT/data/{group}/processed/{modality}/{subject}"
 save_path = os.path.join(save_folder, "accuracy_matrices.pkl") #  a pickle file
 with open(save_path, "wb") as f:
     pickle.dump(all_accuracy_matrices, f)
