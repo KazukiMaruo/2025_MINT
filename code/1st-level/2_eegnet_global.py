@@ -24,29 +24,43 @@ from skorch.helper import predefined_split
 from braindecode import EEGClassifier
 # ~~~~~~~~~~~~~~ Libraries ~~~~~~~~~~~~~~
 
+
 # ~~~~~~~~~~~~~~ Parameters
 group = 'adult'
 modality = 'visual' # 'visual' or 'audio'
 subject = 'sub-06'
 
+
 # EEGNET parameters
+# Load the JSON file
+code_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(code_directory) 
+os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+with open("config.json") as f: # import variables from config.json
+    config = json.load(f) 
+globals().update(config)
+print(os.getcwd())
 
 
 # Print out each parameter
 print(f"{modality} data of {subject} is processed")
 print("EEGNET parameters:")
+print(f"====== CV: {EEGNET_CV}")
+print(f"====== Max epochs: {EEGNET_MAX_EPOCHS}")
+print(f"====== Batch size: {EEGNET_BATCH_SIZE}")
 # ~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~
 
 
+
 # ~~~~~~~~~~~~~~ Set the working directory
-path = f"/ptmp/kazma/DATA-MINT/data/{group}/interim/{modality}"
+path = f"{COMPUTE_DIR}/data/{group}/interim/{modality}"
 sub_folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
 sub_folders_sorted = sorted(sub_folders, key=lambda x: int(re.search(r'\d+', x).group())) # Sort the folders based on the numeric part after "sub-"
 # ~~~~~~~~~~~~~~ Set the working directory ~~~~~~~~~~~~~~
 
 
 # ~~~~~~~~~~~~~~ Concatanating 3 sessions
-each_sub_path = f"/ptmp/kazma/DATA-MINT/data/{group}/interim/{modality}/{subject}"
+each_sub_path = f"{COMPUTE_DIR}/data/{group}/interim/{modality}/{subject}"
 each_sub_folders = [f for f in os.listdir(each_sub_path) if os.path.isdir(os.path.join(each_sub_path, f))]
 each_sub_folders_sorted = sorted(each_sub_folders, key=lambda x: int(re.search(r'\d+', x).group()))
 
@@ -62,7 +76,7 @@ epochs = mne.concatenate_epochs([eegdata_dict['ses-01'], eegdata_dict['ses-02'],
 
 
 # Crop epochs to the desired time range
-cropped_epochs = epochs.copy().crop(tmin=0, tmax=0.5)
+cropped_epochs = epochs.copy().crop(tmin=EEGNET_MIN_TIME, tmax=EEGNET_MAX_TIME)
 
 # Get the info about the cropped data
 conditions = list(cropped_epochs.event_id.keys()) # list of conditions
@@ -126,7 +140,7 @@ for i in range(n_conditions):
 
             y = np.where(filtered_epochs.events[:, -1] == label_0, 0, 1)
 
-            skfold = StratifiedKFold(n_splits=10, shuffle=True, random_state=23)
+            skfold = StratifiedKFold(n_splits=EEGNET_CV, shuffle=True, random_state=23)
 
             # exp. moving std. for each trial
             for s in range(X.shape[0]):
@@ -148,9 +162,9 @@ for i in range(n_conditions):
                             module__drop_prob=0.25,            # Dropout probability after the second conv block and before the last layer. 0.5 for within-subject classification, 0.25 in cross-subject clasification
                             module__chs_info=None,             # (list of dict) – Information about each individual EEG channel. This should be filled with info["chs"]. Refer to mne.Info for more details.
                             module__input_window_seconds=None, # Length of the input window in seconds.
-                            module__sfreq=500,
-                            max_epochs=200,
-                            batch_size=16,
+                            module__sfreq=SFREQ,
+                            max_epochs=EEGNET_MAX_EPOCHS,
+                            batch_size=EEGNET_BATCH_SIZE,
                             train_split=None,
             )
 
@@ -172,7 +186,7 @@ for i in range(n_conditions):
 
 
 # ~~~~~~~~~~~~~~~~ Save the decoding accuracy
-save_folder = f"/ptmp/kazma/DATA-MINT/data/{group}/processed/{modality}/{subject}"
+save_folder = f"{COMPUTE_DIR}/data/{group}/processed/{modality}/{subject}"
 save_path = os.path.join(save_folder, "EEGNet_accuracy_pairwise.pkl") #  a pickle file
 with open(save_path, "wb") as f:
     pickle.dump(pairwise_decoding_accuracies, f)
