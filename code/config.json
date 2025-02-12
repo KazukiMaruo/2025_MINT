@@ -1,6 +1,6 @@
 {
     "BASE_DIR": "/u/kazma/MINT/",
-    "COMPUTE_DIR": "/ptmp/kazma/MINT/",
+    "COMPUTE_DIR": "/ptmp/kazma/DATA-MINT/",
 
     "DATASHARE_USER": "kazma",
     "DATASHARE_RAW_FOLDER": "MINT/raw/",
@@ -70,6 +70,8 @@
     "EEGNET_CV": 10,
     "EEGNET_MAX_EPOCHS": 200,
     "EEGNET_BATCH_SIZE": 16,
+    "EEGNET_MIN_TIME": 0,
+    "EEGNET_MAX_TIME": 0.5,
     "N_SURROGATES_EEGNET": 1000,
 
     "TR_CV": 10,

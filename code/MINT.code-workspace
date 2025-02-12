@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../../ptmp/kazma/DATA-MINT"
+		},
+		{
+			"path": "../../../../ptmp/kazma/miniforge3"
+		}
+	],
+	"settings": {}
+}

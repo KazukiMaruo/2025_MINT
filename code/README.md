@@ -17,8 +17,9 @@ This repository contains scripts for data analysis and outlines the steps. The g
 ## Objective
 
 The objective is to test whether the EEG data is distinct by numerosity using:
-- Time-resolved multivariate pattern analysis (MVPA).
-- Representational similarity analysis (RSA).
+- Decoding: Time-resolved logistic regression.
+- Decoding: EEGNetV4 (=Convolutional Neural Network).
+- Representational Similarity Analysis.
 
 
 ## EEG preprocessing
@@ -38,12 +39,30 @@ python preprocess.py
 
 
 ## Single level analysis
-
-### 1. Generate representational dissimilarity matrix.
+### 1. Decoding: Time-resolved logistic regression.
 1. go to '1st-level' folder
-2. run '1_rdm_generator.py'
+2. run '1_logistic_multisessions.py'
  ```bash
-python 1_rdm_generator.py
+python 1_logistic_multisessions.py
+ ```
+
+### 2. Decoding: EEGNetV4 (=Convolutional Neural Network).
+1. go to '1st-level' folder
+2. run '2_eegnet_global.py'
+ ```bash
+python 2_eegnet_global.py
+ ```
+
+### 3. Visualize the decoding results
+1. go to '1st-level' folder
+2. run '3_logistic_visualization.ipynb' or '3_eegnet_visualization.ipynb'
+
+
+### 3. Generate representational dissimilarity matrix.
+1. go to '1st-level' folder
+2. run '4_rdm_generator.py'
+ ```bash
+python 4_rdm_generator.py
  ```
 - **NOTE:** 'param.json' in [stimuli folder](../experiment/stimuli/visual) is necessary.
 3. output 4 different dissimilarity matrixes by .png and .npy, and the color bar in [RDM folder](./1st-level/RDM), larger value indicates more dissimilar
@@ -52,9 +71,9 @@ python 1_rdm_generator.py
 -  'rdm_circumference_of_total_dots' represents dissimilarity based on the circumference of total dots in an image.
 -  'rdm_numerosity' represents dissimilarity based on the number of dot in an image.
 
-4. run '1_rdm_generator_spatialfrequency.py' 
+4. run '4_rdm_generator_spatialfrequency.py' 
  ```bash
-python 1_rdm_generator_spatialfrequency.py
+python 4_rdm_generator_spatialfrequency.py
  ```
 - **NOTE:** more than 10 hours will be needed until completed
 5. output 1 dissimilarity matrix by .png and .npy in [RDM folder](./1st-level/RDM)
@@ -63,29 +82,22 @@ python 1_rdm_generator_spatialfrequency.py
 
 
 ## Group level analysis
+1. go to '2nd-level' folder
+2. run '1_logistic.ipynb' or '2_eegnet.ipynb'
+
 
 ## Directory Structure
 The code folder should be configured like this:
 ```bash
 experiment/
     ├── 1st-level/   # single level analysis
-    │   ├── RDM/   # representational dissimilarity matrix
-    │   │   ├── rdm_.png
-    │   │   ├── rdm_.npy
-    │   │   └── colorbar_only.png
-    │   ├── 1_rdm_generator.py        
-    │   └── 1_rdm_generator_spatialfrequency.py   
     │
     ├── 2nd-level/   # group level analysis 
-    │   ├──    
-    │   ├──   
-    │   └── 
     │
-    ├── Preprocess   # EEG preprocessing
-    │   ├── preprocess.py       
-    │   ├──   
-    │   └── 
+    ├── Preprocess/   # EEG preprocessing
+    │
     ├── config.json   # general info for analysis
+    ├── MINT.code-workspace   # setting up VScode interface
     ├── README.md   # overview of the directory
     └── utils.py  # function lists
 ```
