@@ -3,7 +3,7 @@
 ## Overview
 
 This repository includes all used for MINT project.
-- NOTE!: This project has been already terminated after six adults data collection
+- **NOTE:** This project has been already terminated after six adults data collection
 
 ## Table of Contents
 
