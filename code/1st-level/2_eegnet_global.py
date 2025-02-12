@@ -28,7 +28,7 @@ from braindecode import EEGClassifier
 # ~~~~~~~~~~~~~~ Parameters
 group = 'adult'
 modality = 'visual' # 'visual' or 'audio'
-subject = 'sub-06'
+subject = 'sub-05'
 
 
 # EEGNET parameters
@@ -187,22 +187,22 @@ for i in range(n_conditions):
 
 # ~~~~~~~~~~~~~~~~ Save the decoding accuracy
 save_folder = f"{COMPUTE_DIR}/data/{group}/processed/{modality}/{subject}"
-save_path = os.path.join(save_folder, "EEGNet_accuracy_pairwise.pkl") #  a pickle file
+save_path = os.path.join(save_folder, "EEGNet_accuracy_all.pkl") #  a pickle file
 with open(save_path, "wb") as f:
     pickle.dump(pairwise_decoding_accuracies, f)
-print(f"{subject}: saved in 'EEGNet_accuracy_pairwise.pkl'")
+print(f"{subject}: saved in 'EEGNet_accuracy_all.pkl'")
 # ~~~~~~~~~~~~~~~~ Save the decoding accuracy ~~~~~~~~~~~~~~~~
 
 # ~~~~~~~~~~~~~~~~ Save the decoding accuracy standard deviation
-save_path = os.path.join(save_folder, "EEGNet_accuracy_std_pairwise.pkl") #  a pickle file
+save_path = os.path.join(save_folder, "EEGNet_std_all.pkl") #  a pickle file
 with open(save_path, "wb") as f:
     pickle.dump(pairwise_decoding_accuracies_std, f)
-print(f"{subject}: saved in 'EEGNet_accuracy_std_pairwise.pkl'")
+print(f"{subject}: saved in 'EEGNet_std_all.pkl'")
 # ~~~~~~~~~~~~~~~~ Save the decoding accuracy standard deviation ~~~~~~~~~~~~~~~~
 
 # ~~~~~~~~~~~~~~~~ Save the EEGNet estimation
-save_path = os.path.join(save_folder, "EEGNet_pairwise_estimator.pkl") #  a pickle file
+save_path = os.path.join(save_folder, "EEGNet_estimator_all.pkl") #  a pickle file
 with open(save_path, "wb") as f:
     pickle.dump(pairwise_decoding_estimators, f)
-print(f"{subject}: saved in 'EEGNet_pairwise_estimator.pkl'")
+print(f"{subject}: saved in 'EEGNet_estimator_all.pkl'")
 # ~~~~~~~~~~~~~~~~ Save the EEGNet estimation ~~~~~~~~~~~~~~~~
