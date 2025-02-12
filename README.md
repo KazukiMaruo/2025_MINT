@@ -3,7 +3,7 @@
 ## Overview
 
 This repository includes all used for MINT project.
-NOTE!: This project has been already terminated after six adults data collection
+- NOTE!: This project has been already terminated after six adults data collection
 
 ## Table of Contents
 
@@ -47,7 +47,7 @@ MINT/
     ├── .gitignore # ignore some folders not to upload to GitHub.
     ├── README.md
     ├── debugging_tips.txt # My debugging notes.
-
+```
 
 ## Contact
 If you have any questions, feel free to ask me!
