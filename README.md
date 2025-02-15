@@ -18,6 +18,14 @@ This repository includes all used for MINT project.
 The objective of this project was to:
 - Explore electrophysiological representation (= EEG) of numerosity in infants.
 
+Methods:
+- 6 adults
+- EEG
+- Psychopy
+- Multivariate decoding
+
+Figures:
+![Stimuli](images/exp_figure.jpg)
 
 ## Steps for Reproducibility
 
@@ -44,6 +52,7 @@ MINT/
     │
     ├── experiment/ # psychopy scripts and stimuli
     │
+    ├── images/ # includes figures
     ├── .gitignore # ignore some folders not to upload to GitHub.
     ├── README.md
     ├── debugging_tips.txt # My debugging notes.
